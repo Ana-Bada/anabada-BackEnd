@@ -20,9 +20,14 @@ public class BeachEntity {
     private String beachName;
 
     @Column(nullable = false)
-    private String x;
+    private Double x;
 
     @Column(nullable = false)
-    private String y;
+    private Double y;
 
+    public BeachEntity(String beachName, Double x, Double y){
+        this.beachName = beachName;
+        this.x = x;
+        this.y = y;
+    }
 }

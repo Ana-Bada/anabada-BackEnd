@@ -46,7 +46,7 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         responseJson.put("response", true);
         responseJson.put("access_token", TOKEN_TYPE + " " + token);
         responseJson.put("refresh_token", TOKEN_TYPE + " " + token);
-        responseJson.put("userId", user.getId());
+        responseJson.put("userId", user.getUserId());
         responseJson.put("email", user.getEmail());
         responseJson.put("nickname", user.getNickname());
         response.getWriter().print(responseJson);

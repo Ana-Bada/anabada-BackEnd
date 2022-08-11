@@ -57,6 +57,8 @@ dependencies {
 	// 테스트 코드를 위한 Lombok 라이브러리
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+	//JSON simple
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
 }
 

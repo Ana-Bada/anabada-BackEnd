@@ -105,6 +105,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // 회원 관리 처리 API 전부를 login 없이 허용
                 .antMatchers(HttpMethod.POST ,"/api/users/signup").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/login").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beaches").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beaches/**").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
 // 그 외 어떤 요청이든 '인증'
@@ -163,6 +165,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/api/users/reissue");
         skipPathList.add("GET,/socket");
         skipPathList.add("GET,/socket/**");
+        skipPathList.add("GET,/api/beaches");
+        skipPathList.add("GET,/api/beaches/**");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
