@@ -17,4 +17,5 @@ public class ThunderMemberEntity {
     @GeneratedValue
     @Id
     private Long ThunderMemberId;
+
 }
