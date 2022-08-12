@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 //    public static final String AUTH_HEADER = "Authorization";
-    public static final String JWT_HEADER = "X-ACCESS-TOKEN";
-    public static final String REFRESH_HEADER = "X-REFRESH-TOKEN";
+    public static final String JWT_HEADER = "Authorization";
+    public static final String REFRESH_HEADER = "RefreshToken";
     public static final String TOKEN_TYPE = "BEARER";
     private final RedisService redisService;
 
@@ -30,9 +30,10 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         final ObjectMapper objectMapper = new ObjectMapper();
 
         final UserDetailsImpl userDetails = ((UserDetailsImpl) authentication.getPrincipal());
+        String email = userDetails.getUsername();
         // Token 생성
-        final String token = JwtTokenUtils.generateJwtToken(userDetails);
-        final String refreshToken = JwtTokenUtils.generateRefreshToken(userDetails);
+        final String token = JwtTokenUtils.generateJwtToken(email);
+        final String refreshToken = JwtTokenUtils.generateRefreshToken();
         response.addHeader(JWT_HEADER, TOKEN_TYPE + " " + token);
         response.addHeader(REFRESH_HEADER, TOKEN_TYPE + " " + refreshToken);
         if(redisService.getValues(userDetails.getUsername())!=null)
@@ -43,9 +44,8 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
         response.setContentType("application/json;charset=UTF-8");
         UserEntity user = userDetails.getUser();
         JSONObject responseJson = new JSONObject();
-        responseJson.put("response", true);
-        responseJson.put("access_token", TOKEN_TYPE + " " + token);
-        responseJson.put("refresh_token", TOKEN_TYPE + " " + token);
+        responseJson.put("accessToken", TOKEN_TYPE + " " + token);
+        responseJson.put("refreshToken", TOKEN_TYPE + " " + refreshToken);
         responseJson.put("userId", user.getUserId());
         responseJson.put("email", user.getEmail());
         responseJson.put("nickname", user.getNickname());

@@ -1,14 +1,9 @@
 package com.anabada.anabadaBackend.beach;
 
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Component
 @RequiredArgsConstructor
@@ -16,7 +11,7 @@ public class BeachDataRunner implements ApplicationRunner {
     private final BeachRepository beachRepository;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         beachRepository.save(new BeachEntity("38해수욕장",38.005,128.731));
         beachRepository.save(new BeachEntity("가진해수욕장",38.373,128.509));
         beachRepository.save(new BeachEntity("강문해수욕장",37.794,128.918));
@@ -28,9 +23,9 @@ public class BeachDataRunner implements ApplicationRunner {
         beachRepository.save(new BeachEntity("사천해수욕장",37.831,128.878));
     }
 
-    public void getWeather(String x, String y) throws IOException, ParseException {
-        LocalDate now = LocalDate.now(ZoneId.of("Asis/Seoul"));
-        System.out.println(now);
+//    public void getWeather(String x, String y) throws IOException, ParseException {
+//        LocalDate now = LocalDate.now(ZoneId.of("Asis/Seoul"));
+//        System.out.println(now);
 //        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"); /*URL*/
 //        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=Gkq3x%2BhZLTP7L2d7zyEr5j3yIDbHiIelfcjNUUbz2S%2FR0WzvQ3GiDZ31JBA%2Btq6pv4tdNK8q6lco7qyT9C5MZg%3D%3D"); /*Service Key*/
 //        urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
@@ -76,5 +71,5 @@ public class BeachDataRunner implements ApplicationRunner {
 //                System.out.println(category + " " + fcstValue);
 //            }
 //        }
-    }
+//    }
 }
