@@ -10,6 +10,7 @@ import com.anabada.anabadaBackend.post.dto.PostResponseDto;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +25,6 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
-
     public PostResponseDto createPost(PostRequestDto postRequestDto, UserEntity user) {
         PostEntity post = new PostEntity(postRequestDto, user);
         postRepository.save(post);
@@ -33,8 +32,8 @@ public class PostService {
     }
 
     public List<PostResponseDto> getAllPosts() {
-        List<PostEntity> postEntityList = postRepository.findAllByOderByCreatedAtDesc();
-        return postEntityList.stream()
+        List<PostEntity> postList = postRepository.findAll();
+        return postList.stream()
                 .map(PostResponseDto::new)
                 .collect(Collectors.toList());
     }
@@ -43,7 +42,7 @@ public class PostService {
     public PostDetailsResponseDto getPostDetails(Long postId) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + postId + " is not found"));
-        List<CommentEntity> comments = commentRepository.findAllByPostIdOderByCreatedAtDesc(postId);
+        List<CommentEntity> comments = commentRepository.findByPost(postId);
 //        List<CommentResponseDto>  commentResponseDtoList = new ArrayList<>();
 //        for(CommentEntity comment : comments){
 //            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
