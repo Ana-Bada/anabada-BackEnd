@@ -1,7 +1,7 @@
 package com.anabada.anabadaBackend.post;
 
 
-import com.anabada.anabadaBackend.like.QLikeEntity;
+//import com.anabada.anabadaBackend.like.QLikeEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class PostRepositoryImpl {
     private final JPAQueryFactory queryFactory;
 
-    QPostEntity post = QPostEntity.postEntity;
-
-    QLikeEntity like = QLikeEntity.likeEntity;
+//    QPostEntity post = QPostEntity.postEntity;
+//
+//    QLikeEntity like = QLikeEntity.likeEntity;
 }

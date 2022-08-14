@@ -28,4 +28,5 @@ public class CommentEntity extends TimeStamped {
 
     @Column(nullable = false)
     private String content;
+
 }
