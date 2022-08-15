@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -14,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/users/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid SignupRequestDto signupRequestDto) {
         return userService.registerUser(signupRequestDto);
     }
 
