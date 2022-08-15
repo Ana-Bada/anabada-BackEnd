@@ -1,12 +1,11 @@
 package com.anabada.anabadaBackend.thunderpost;
 
+import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @NoArgsConstructor
@@ -18,4 +17,11 @@ public class ThunderMemberEntity {
     @Id
     private Long ThunderMemberId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "thunderPostId")
+    private ThunderPostEntity thunderPost;
 }

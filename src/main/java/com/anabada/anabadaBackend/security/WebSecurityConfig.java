@@ -106,6 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST ,"/api/users/signup").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/beaches").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beach").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/beaches/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/reissue").permitAll()
                 .antMatchers("/socket").permitAll()
@@ -169,6 +170,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/api/beaches");
         skipPathList.add("GET,/api/beaches/**");
         skipPathList.add("POST,/api/users/reissue");
+        skipPathList.add("GET,/api/beach");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
