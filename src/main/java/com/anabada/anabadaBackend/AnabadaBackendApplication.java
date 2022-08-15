@@ -9,6 +9,5 @@ public class AnabadaBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AnabadaBackendApplication.class, args);
-
     }
 }

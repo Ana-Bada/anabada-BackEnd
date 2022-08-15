@@ -1,7 +1,7 @@
 package com.anabada.anabadaBackend.post;
 
-import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
+import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +38,4 @@ public class PostEntity extends TimeStamped {
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<LikeEntity> likeList;
-
 }
