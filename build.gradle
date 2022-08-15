@@ -59,6 +59,8 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 	//JSON simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	// 유효성 검사
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 }
 
