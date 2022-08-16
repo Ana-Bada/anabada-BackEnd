@@ -61,4 +61,9 @@ public class ThunderPostEntity extends TimeStamped {
         this.endDate = thunderPostRequestDto.getEndDate();
         this.user = userDetails.getUser();
     }
+
+    public void updateThunderPost(ThunderPostRequestDto thunderPostRequestDto) {
+
+
+    }
 }

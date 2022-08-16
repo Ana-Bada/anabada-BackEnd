@@ -22,6 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtDecoder jwtDecoder;
     private final RedisService redisService;
+    private final RefreshTokenRepository refreshTokenRepository;
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
         String email = signupRequestDto.getEmail();
         String nickname = signupRequestDto.getNickname();
@@ -53,13 +54,14 @@ public class UserService {
 
         if(checkRefreshToken(email).equals(refreshToken)){
             token = JwtTokenUtils.generateJwtToken(email);
-            return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("리프레쉬 토큰 재발급");
+            return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("액세스 토큰 재발급");
         } else return new ResponseEntity<>("리프레쉬 토큰 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
 
     }
 
     public String checkRefreshToken(String email) {
-        return redisService.getValues(email);
+//        return redisService.getValues(email);
+        return refreshTokenRepository.findByEmail(email).getRefreshToken();
     }
 
     public ResponseEntity<?> checkEmail(String email) {

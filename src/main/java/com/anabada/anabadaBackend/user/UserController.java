@@ -1,6 +1,7 @@
 package com.anabada.anabadaBackend.user;
 
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
+import com.anabada.anabadaBackend.user.dto.EmailChkRequestDto;
 import com.anabada.anabadaBackend.user.dto.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class UserController {
         return userService.registerUser(signupRequestDto);
     }
 
-    @GetMapping("/api/users/{email}")
-    public ResponseEntity<?> checkEmail(@PathVariable String email) {
-        return userService.checkEmail(email);
+    @PostMapping("/api/users/validation")
+    public ResponseEntity<?> checkEmail(@RequestBody @Valid EmailChkRequestDto emailChkRequestDto) {
+        return userService.checkEmail(emailChkRequestDto.getEmail());
     }
 
     @GetMapping("/api/users/info")
