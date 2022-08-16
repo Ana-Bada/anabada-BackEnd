@@ -27,17 +27,17 @@ public class CommentController {
 
     @PutMapping("/api/comments/{commentId}")
     public ResponseEntity<?> updateComment(@PathVariable Long commentId,
-                                           @AuthenticationPrincipal UserEntity user,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails,
                                            @RequestBody CommentRequestDto commentRequestDto) {
-        commentService.updateComment(commentId, user, commentRequestDto);
+        commentService.updateComment(commentId, userDetails, commentRequestDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/api/comments/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId,
-                                           @AuthenticationPrincipal UserEntity user) {
-        commentService.deleteComment(commentId, user);
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        commentService.deleteComment(commentId, userDetails);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
