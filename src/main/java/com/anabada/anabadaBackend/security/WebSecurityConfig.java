@@ -6,6 +6,7 @@ import com.anabada.anabadaBackend.security.filter.JwtAuthFilter;
 import com.anabada.anabadaBackend.security.jwt.HeaderTokenExtractor;
 import com.anabada.anabadaBackend.security.provider.FormLoginAuthProvider;
 import com.anabada.anabadaBackend.security.provider.JwtAuthProvider;
+import com.anabada.anabadaBackend.user.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,15 +47,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
     private final RedisService redisService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public WebSecurityConfig(
             JwtAuthProvider jwtAuthProvider,
             HeaderTokenExtractor headerTokenExtractor,
-            RedisService redisService
+            RedisService redisService,
+            RefreshTokenRepository refreshTokenRepository
     ) {
         this.jwtAuthProvider = jwtAuthProvider;
         this.headerTokenExtractor = headerTokenExtractor;
         this.redisService = redisService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Bean
@@ -109,7 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/beach").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/beaches/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/reissue").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users/{email}").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/validation").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
 // 그 외 어떤 요청이든 '인증'
@@ -143,7 +147,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FormLoginSuccessHandler formLoginSuccessHandler() {
-        return new FormLoginSuccessHandler(redisService);
+        return new FormLoginSuccessHandler(redisService, refreshTokenRepository);
     }
 
     @Bean
@@ -172,7 +176,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/api/beaches/**");
         skipPathList.add("POST,/api/users/reissue");
         skipPathList.add("GET,/api/beach");
-        skipPathList.add("GET,/api/users/{email}");
+        skipPathList.add("POST,/api/users/validation");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
@@ -202,6 +206,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://dryblack.shop.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("RefreshToken");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

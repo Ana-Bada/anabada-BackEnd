@@ -25,6 +25,5 @@ public class BeachDataRunner implements ApplicationRunner {
             double y = Double.parseDouble(line.split(",")[2]);
             beachRepository.save(new BeachEntity(line.split(",")[0], x, y));
         }
-
     }
 }

@@ -27,10 +27,23 @@ public class ThunderPostService {
 
     public ResponseEntity<?> updateThunderPost(Long meetId, ThunderPostRequestDto thunderPostRequestDto,
                                                UserDetailsImpl userDetails) {
+        ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        if(!userDetails.getUser().equals(thunderPost.getUser())) {
+            throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
+        }
+        thunderPost.updateThunderPost(thunderPostRequestDto);
+        thunderPostRepository.save(thunderPost);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<?> deleteThunderPost(Long meetId, UserDetailsImpl userDetails) {
+        ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
+                .orElseThrow( () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+        if(!userDetails.getUser().equals(thunderPost.getUser())) {
+            throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
+        }
+        thunderPostRepository.deleteById(meetId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
