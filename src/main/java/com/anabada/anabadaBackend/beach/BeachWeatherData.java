@@ -32,7 +32,8 @@ public class BeachWeatherData {
     private final BeachRepository beachRepository;
 
 //    @Scheduled(cron = "0 0/1 * * * *")
-    @Scheduled(cron = "0 0 0/1 * * *")
+//    @Scheduled(cron = "0 0 0/1 * * *", initialDelay = 5000)
+    @Scheduled(fixedDelay = 3600000, initialDelay = 5000)
     public void getBeachesWeather() throws IOException, ParseException {
         HashMap<String, String> hm = new HashMap<>();
         List<BeachEntity> beachList = beachRepository.findAll();
