@@ -6,11 +6,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.InputStreamReader;
 
 @Component
 @RequiredArgsConstructor
@@ -18,21 +16,15 @@ public class BeachDataRunner implements ApplicationRunner {
     private final BeachRepository beachRepository;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(ApplicationArguments args) throws IOException {
         ClassPathResource resource = new ClassPathResource("data/beach.txt");
-        try {
-            Path path = Paths.get(resource.getURI());
-            List<String> content = Files.readAllLines(path);
-//            System.out.println(content.get(0).split(",")[0]);
-//            content.forEach(System.out::println);
-            for (int i = 0; i < content.size(); i++) {
-                double x = Double.parseDouble(content.get(i).split(",")[1]);
-                double y = Double.parseDouble(content.get(i).split(",")[2]);
-                beachRepository.save(new BeachEntity(content.get(i).split(",")[0], x, y));
-            }
-        } catch (
-                IOException e) {
-            throw new RuntimeException(e);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            double x = Double.parseDouble(line.split(",")[1]);
+            double y = Double.parseDouble(line.split(",")[2]);
+            beachRepository.save(new BeachEntity(line.split(",")[0], x, y));
         }
+
     }
 }
