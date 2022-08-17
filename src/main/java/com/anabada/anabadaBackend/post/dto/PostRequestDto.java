@@ -1,4 +1,5 @@
 package com.anabada.anabadaBackend.post.dto;
+import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,7 +15,11 @@ public class PostRequestDto {
 
     private String content;
 
-    private String thumbnailUrl;
+//    private String thumbnailUrl;
 
     private String amenity;
+
+    private List<S3ImageUploadRequestDto> imageList;
+
+    private String address;
 }

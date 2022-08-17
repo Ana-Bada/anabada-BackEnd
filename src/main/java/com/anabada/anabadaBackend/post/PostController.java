@@ -17,6 +17,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
+//    게시글 작성
     @PostMapping("/api/posts")
     public ResponseEntity<?> createPost(@RequestBody PostRequestDto postRequestDto,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -26,13 +27,34 @@ public class PostController {
         );
     }
 
+
+//    게시글 목록 불러오기
     @GetMapping("/api/posts")
     public List<PostResponseDto> getAllPosts(){
         return postService.getAllPosts();
     }
 
+
+//    게시글 상세보기
     @GetMapping("/api/posts/{postId}")
     public PostDetailsResponseDto getPostDetails(@PathVariable Long postId){
         return postService.getPostDetails(postId);
+    }
+
+
+//    게시글 삭제
+    @DeleteMapping("/api/posts/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable Long postId,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.deletePost(postId, userDetails.getUser());
+    }
+
+
+//    게시글 수정
+    @PutMapping("/api/posts/{postId}")
+    public ResponseEntity<?> updatePost(@PathVariable Long postId,
+                                        @RequestBody PostRequestDto postRequestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.updatePost(postId, postRequestDto, userDetails.getUser());
     }
 }
