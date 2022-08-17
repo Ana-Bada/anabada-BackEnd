@@ -1,4 +1,5 @@
 package com.anabada.anabadaBackend.post.dto;
+import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.like.LikeResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import lombok.AllArgsConstructor;
@@ -26,21 +27,23 @@ public class PostResponseDto {
 
     private List<LikeResponseDto> likeList;
 
-    private Long likePoint;
-
     private String amenity;
+
+    private String address;
+
+    private List<S3ImageUploadEntity> imageList;
 
     public PostResponseDto(PostEntity postEntity) {
         this.postId = postEntity.getPostId();
         this.title = postEntity.getTitle();
         this.area = postEntity.getArea();
         this.content = postEntity.getContent();
-        this.thumbnailUrl = postEntity.getThumbnailUrl();
+        this.imageList = postEntity.getS3ImageUploadEntityList();
+        this.address = postEntity.getAddress();
         this.userId = postEntity.getUser().getUserId();
 //        this.likeList = postEntity.getLikeList().stream()
 //                .map(LikeResponseDto::new)
 //                .collect(Collectors.toList());
-        this.likePoint = postEntity.getLikePoint();
         this.amenity = postEntity.getAmenity();
 
     }

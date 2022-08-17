@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.post;
 
+import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
@@ -34,10 +35,12 @@ public class PostEntity extends TimeStamped {
     private String area; //areaEnum 사용?
 
     @Column(nullable = false)
+    private String address;
+    @Column(nullable = false)
     private String content;
 
-    @Column
-    private String thumbnailUrl;
+//    @Column
+//    private String thumbnailUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -47,22 +50,34 @@ public class PostEntity extends TimeStamped {
     private List<LikeEntity> likeList;
 
     @Column
-    private Long likePoint;
-
-    @Column
     private String amenity;
+
+    @OneToMany(mappedBy = "post")
+    private List<S3ImageUploadEntity> imageList;
 
     public PostEntity(PostRequestDto postRequestDto, UserEntity user) {
         this.title = postRequestDto.getTitle();
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
-        this.thumbnailUrl = postRequestDto.getThumbnailUrl();
-        this.user = user;
-//        this.likeList = likeList;
-        this.likePoint = 0L;
+        this.address  = postRequestDto.getAddress();
+//        this.thumbnailUrl = postRequestDto.getThumbnailUrl();
         this.likeList = getLikeList();
 //        this.amenityList = amenityList;
         this.amenity = postRequestDto.getAmenity();
-//        리스트 대체 어떻게 가져오는거죠....
+        this.imageList = postRequestDto.getImageList().stream()
+                .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
+                        .collect(Collectors.toList());
+
     }
-   }
+
+    public void update(PostRequestDto postRequestDto) {
+        this.title = postRequestDto.getTitle();
+        this.area = postRequestDto.getArea();
+        this.content = postRequestDto.getContent();
+        this.amenity = postRequestDto.getAmenity();
+        this.imageList = postRequestDto.getImageList().stream()
+                .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
+                .collect(Collectors.toList());
+
+    }
+}
