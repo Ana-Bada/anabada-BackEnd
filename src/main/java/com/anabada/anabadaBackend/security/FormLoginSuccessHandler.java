@@ -20,7 +20,6 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
     public static final String TOKEN_TYPE = "BEARER";
     private final RedisService redisService;
     private final RefreshTokenRepository refreshTokenRepository;
-
     public FormLoginSuccessHandler(RedisService redisService, RefreshTokenRepository refreshTokenRepository) {
         this.redisService = redisService;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -48,15 +47,6 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
 //            redisService.delValues(userDetails.getUsername());
 //        redisService.setValues(userDetails.getUsername(), refreshToken);
 //        System.out.println(redisService.getValues(userDetails.getUsername())); //TODO
-        //body로도 토큰값 보내기
-//        response.setContentType("application/json;charset=UTF-8");
-//        UserEntity user = userDetails.getUser();
-//        JSONObject responseJson = new JSONObject();
-//        responseJson.put("AccessToken", TOKEN_TYPE + " " + token);
-//        responseJson.put("RefreshToken", TOKEN_TYPE + " " + refreshToken);
-//        responseJson.put("nickname", user.getNickname());
-//        responseJson.put("profileImg", user.getProfileImg());
-//        response.getWriter().print(responseJson);
 
     }
 
