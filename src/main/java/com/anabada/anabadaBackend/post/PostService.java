@@ -83,10 +83,10 @@ public class PostService {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
         if (!post.getUser().getUserId().equals(user.getUserId())) {
-            return new ResponseEntity<>(HttpStatus.valueOf(403));
+            throw new IllegalArgumentException("삭제 권한이 없습니다.");
         } else {
             postRepository.deleteById(postId);
-            return new ResponseEntity<>(HttpStatus.valueOf(204));
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -98,10 +98,10 @@ public class PostService {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
         if (!post.getUser().getUserId().equals(user.getUserId())) {
-            return new ResponseEntity<>(HttpStatus.valueOf(403));
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
         } else {
             post.update(postRequestDto);
-            return new ResponseEntity<>(postRepository.save(post).getPostId(), HttpStatus.valueOf(200));
+            return new ResponseEntity<>(postRepository.save(post).getPostId(), HttpStatus.OK);
         }
     }
 }
