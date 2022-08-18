@@ -51,12 +51,6 @@ public class PostEntity extends TimeStamped {
     @Column
     private int viewCount;
 
-    @Column
-    private int likeCount;
-
-    @Column
-    private boolean isLiked;
-
     @OneToMany(mappedBy = "post")
     private List<S3ImageUploadEntity> imageList;
 
