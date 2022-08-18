@@ -14,18 +14,18 @@ public class PostDetailsResponseDto {
 
     private String title;
 
+    private String thumbnailUrl;
     private String area;
+
+    private String address;
 
     private String content;
 
-    private Long userId;
+    private String nickname;
 
-
-    private List<LikeResponseDto> likeList;
+    private String profileImg;
 
     private String amenity;
-
-    private String address;
 
     private int viewCount;
 ////////////
@@ -43,15 +43,18 @@ public class PostDetailsResponseDto {
     public PostDetailsResponseDto(PostEntity postEntity, List<CommentResponseDto> commentResponseDtoList) {
         this.postId = postEntity.getPostId();
         this.title = postEntity.getTitle();
+        this.thumbnailUrl = postEntity.getThumbnailUrl();
         this.area = postEntity.getArea();
-        this.content = postEntity.getContent();
-        this.userId = postEntity.getUser().getUserId();
         this.address = postEntity.getAddress();
+        this.content = postEntity.getContent();
+        this.nickname = postEntity.getUser().getNickname();
+        this.profileImg = postEntity.getUser().getProfileImg();
         this.amenity = postEntity.getAmenity();
         this.imageList = postEntity.getImageList();
         this.viewCount = postEntity.getViewCount();
 ///////////////
         this.likeCount = postEntity.getLikeList().size();
+        this.isLiked = false;
         this.createdAt = postEntity.getCreatedAt();
         this.comments = commentResponseDtoList;
     }

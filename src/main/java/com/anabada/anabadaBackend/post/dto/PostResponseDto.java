@@ -18,17 +18,15 @@ public class PostResponseDto {
 
     private String title;
 
-    private String area;
-
-    private String content;
-
     private String thumbnailUrl;
 
-    private Long userId;
+    private String area;
+
+    private String nickname;
+
+    private String profileImg;
 
     private String amenity;
-
-    private String address;
 
     //////////////
     private int likeCount;
@@ -37,21 +35,18 @@ public class PostResponseDto {
 
     private LocalDateTime createdAt;
 
-    private List<S3ImageUploadEntity> imageList;
-
     public PostResponseDto(PostEntity postEntity) {
         this.postId = postEntity.getPostId();
         this.title = postEntity.getTitle();
+        this.thumbnailUrl = postEntity.getThumbnailUrl();
         this.area = postEntity.getArea();
-        this.content = postEntity.getContent();
-        this.userId = postEntity.getUser().getUserId();
+        this.nickname = postEntity.getUser().getNickname();
+        this.profileImg = postEntity.getUser().getProfileImg();
         this.amenity = postEntity.getAmenity();
-        this.address = postEntity.getAddress();
         this.createdAt = postEntity.getCreatedAt();
         //////////
         this.likeCount = postEntity.getLikeList().size();
         this.isLiked = false;
-        this.imageList = postEntity.getImageList();
 
     }
 

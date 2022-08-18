@@ -36,12 +36,14 @@ public class PostEntity extends TimeStamped {
     @Column(nullable = false)
     private String title;
 
+    @Column
+    private String thumbnailUrl;
+
     @Column(nullable = false)
     private String area; //areaEnum 사용?
 
     @Column(nullable = false)
     private String content;
-
 
     @Column
     private String amenity;
