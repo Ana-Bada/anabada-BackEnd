@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.ThunderRequest.dto;
+package com.anabada.anabadaBackend.thunderrequest.dto;
 
 import lombok.Getter;
 

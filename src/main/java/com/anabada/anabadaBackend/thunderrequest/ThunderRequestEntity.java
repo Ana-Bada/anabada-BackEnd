@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.ThunderRequest;
+package com.anabada.anabadaBackend.thunderrequest;
 
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ThunderRequestEntity {
     @GeneratedValue
     @Id
-    private Long ThunderMemberId;
+    private Long ThunderRequestId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
