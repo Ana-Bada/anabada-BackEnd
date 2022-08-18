@@ -1,6 +1,11 @@
 package com.anabada.anabadaBackend.user;
 
+import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.security.UserDetailsImpl;
+import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
+import com.anabada.anabadaBackend.security.jwt.JwtTokenUtils;
 import com.anabada.anabadaBackend.user.dto.SignupRequestDto;
+import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +20,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtDecoder jwtDecoder;
+    private final RedisService redisService;
+    private final RefreshTokenRepository refreshTokenRepository;
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
         String email = signupRequestDto.getEmail();
         String nickname = signupRequestDto.getNickname();
@@ -39,7 +47,32 @@ public class UserService {
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
-//    public ResponseEntity<?> reissueAccessToken() {
-//
-//    }
+    public ResponseEntity<?> reissueAccessToken(String token, String refreshToken) {
+        String email = jwtDecoder.decodeEmail(token);
+        if(jwtDecoder.isValidRefreshToken(refreshToken))
+            return new ResponseEntity<>("리프레쉬 토큰의 기간이 만료되었습니다.", HttpStatus.BAD_REQUEST);
+
+        if(checkRefreshToken(email).equals(refreshToken)){
+            token = JwtTokenUtils.generateJwtToken(email);
+            return ResponseEntity.ok().header("Authorization", "Bearer " + token).body("액세스 토큰 재발급");
+        } else return new ResponseEntity<>("리프레쉬 토큰 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+
+    }
+
+    public String checkRefreshToken(String email) {
+//        return redisService.getValues(email);
+        return refreshTokenRepository.findByEmail(email).getRefreshToken();
+    }
+
+    public ResponseEntity<?> checkEmail(String email) {
+        if(userRepository.findByEmail(email).isPresent())
+            return new ResponseEntity<>(HttpStatus.valueOf(409));
+        else return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
+
+    public ResponseEntity<?> getUserInfo(UserDetailsImpl userDetails) {
+        UserEntity user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        return new ResponseEntity<>(new UserInfoResponseDto(user), HttpStatus.OK);
+    }
 }

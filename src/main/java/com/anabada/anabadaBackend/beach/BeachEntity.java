@@ -25,9 +25,32 @@ public class BeachEntity {
     @Column(nullable = false)
     private Double y;
 
+    @Column
+    private String tmp;
+
+    @Column
+    private String wav;
+
+    @Column
+    private String wsd;
+
+    @Column
+    private String pop;
+
+    @Column
+    private String pcp;
+
     public BeachEntity(String beachName, Double x, Double y){
         this.beachName = beachName;
         this.x = x;
         this.y = y;
+    }
+
+    public void updateBeach(String tmp, String wav, String wsd, String pop, String pcp) {
+        this.tmp = tmp;
+        this.wav = wav;
+        this.wsd = wsd;
+        this.pop = pop;
+        this.pcp = pcp;
     }
 }

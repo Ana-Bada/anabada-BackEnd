@@ -4,6 +4,8 @@ import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
+import com.anabada.anabadaBackend.common.TimeStamped;
+import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,7 +62,7 @@ public class PostEntity extends TimeStamped {
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<LikeEntity> likeList;
-
+    
     public PostEntity(PostRequestDto postRequestDto, UserEntity user) {
         this.user = user;
         this.title = postRequestDto.getTitle();
@@ -72,7 +74,6 @@ public class PostEntity extends TimeStamped {
         this.imageList = postRequestDto.getImageList().stream()
                 .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
                         .collect(Collectors.toList());
-
     }
 
     public void update(PostRequestDto postRequestDto) {
@@ -84,7 +85,6 @@ public class PostEntity extends TimeStamped {
         this.imageList = postRequestDto.getImageList().stream()
                 .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
                 .collect(Collectors.toList());
-
     }
 
     public void IncreaseViewCount(){
