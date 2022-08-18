@@ -30,15 +30,18 @@ public class PostController {
 
 //    게시글 목록 불러오기
     @GetMapping("/api/posts")
-    public List<PostResponseDto> getAllPosts(){
-        return postService.getAllPosts();
+    public List<PostResponseDto> getAllPosts(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.getAllPosts(userDetails.getUser().getUserId());
     }
 
 
 //    게시글 상세보기
     @GetMapping("/api/posts/{postId}")
-    public PostDetailsResponseDto getPostDetails(@PathVariable Long postId){
-        return postService.getPostDetails(postId);
+    public PostDetailsResponseDto getPostDetails(@PathVariable Long postId,
+                                                 @RequestParam int page,
+                                                 @RequestParam int size,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.getPostDetails(postId, userDetails.getUser().getUserId(), page, size);
     }
 
 

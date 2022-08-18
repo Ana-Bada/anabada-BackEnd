@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,11 +26,16 @@ public class PostResponseDto {
 
     private Long userId;
 
-    private List<LikeResponseDto> likeList;
-
     private String amenity;
 
     private String address;
+
+    //////////////
+    private int likeCount;
+
+    private boolean isLiked;
+
+    private LocalDateTime createdAt;
 
     private List<S3ImageUploadEntity> imageList;
 
@@ -38,13 +44,18 @@ public class PostResponseDto {
         this.title = postEntity.getTitle();
         this.area = postEntity.getArea();
         this.content = postEntity.getContent();
-        this.imageList = postEntity.getS3ImageUploadEntityList();
-        this.address = postEntity.getAddress();
         this.userId = postEntity.getUser().getUserId();
-//        this.likeList = postEntity.getLikeList().stream()
-//                .map(LikeResponseDto::new)
-//                .collect(Collectors.toList());
         this.amenity = postEntity.getAmenity();
+        this.address = postEntity.getAddress();
+        this.createdAt = postEntity.getCreatedAt();
+        //////////
+        this.likeCount = postEntity.getLikeList().size();
+        this.isLiked = false;
+        this.imageList = postEntity.getImageList();
 
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 }

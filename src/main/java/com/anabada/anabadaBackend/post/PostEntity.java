@@ -28,6 +28,9 @@ public class PostEntity extends TimeStamped {
     @Id
     private Long postId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private UserEntity user;
     @Column(nullable = false)
     private String title;
 
@@ -35,35 +38,37 @@ public class PostEntity extends TimeStamped {
     private String area; //areaEnum 사용?
 
     @Column(nullable = false)
-    private String address;
-    @Column(nullable = false)
     private String content;
 
-//    @Column
-//    private String thumbnailUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private UserEntity user;
-
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<LikeEntity> likeList;
 
     @Column
     private String amenity;
 
+    @Column(nullable = false)
+    private String address;
+    @Column
+    private int viewCount;
+
+    @Column
+    private int likeCount;
+
+    @Column
+    private boolean isLiked;
+
     @OneToMany(mappedBy = "post")
     private List<S3ImageUploadEntity> imageList;
 
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
+    private List<LikeEntity> likeList;
+
     public PostEntity(PostRequestDto postRequestDto, UserEntity user) {
+        this.user = user;
         this.title = postRequestDto.getTitle();
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
-        this.address  = postRequestDto.getAddress();
-//        this.thumbnailUrl = postRequestDto.getThumbnailUrl();
-        this.likeList = getLikeList();
-//        this.amenityList = amenityList;
         this.amenity = postRequestDto.getAmenity();
+        this.address  = postRequestDto.getAddress();
+        this.viewCount = 0;
         this.imageList = postRequestDto.getImageList().stream()
                 .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
                         .collect(Collectors.toList());
@@ -75,9 +80,14 @@ public class PostEntity extends TimeStamped {
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
         this.amenity = postRequestDto.getAmenity();
+        this.address  = postRequestDto.getAddress();
         this.imageList = postRequestDto.getImageList().stream()
                 .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
                 .collect(Collectors.toList());
 
+    }
+
+    public void IncreaseViewCount(){
+        viewCount++;
     }
 }
