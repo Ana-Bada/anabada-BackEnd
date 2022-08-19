@@ -28,9 +28,9 @@ public class ThunderPostService {
     private final ThunderLikeRepositoryImpl thunderLikeRepositoryimpl;
     private final ThunderPostRepositoryImpl thunderPostRepositoryImpl;
 
-    public ResponseEntity<?> getThunderPosts(int page, int size, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getThunderPosts(String area, int page, int size, UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page, size);
-        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAll(pageable);
+        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAll(area, pageable);
         for(ThunderPostResponseDto responseDto : responseDtos)
             responseDto.setLiked(thunderLikeRepositoryimpl.findByThunderPostIdAndUserId(responseDto.getThunderpostId(), userDetails.getUser().getUserId()) != null);
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);

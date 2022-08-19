@@ -13,9 +13,9 @@ public class ThunderPostController {
     private final ThunderPostService thunderPostService;
 
     @GetMapping("/api/meets")
-    public ResponseEntity<?> getThunderPosts(@RequestParam int page, @RequestParam int size,
+    public ResponseEntity<?> getThunderPosts(@RequestParam String area, @RequestParam int page, @RequestParam int size,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.getThunderPosts(page, size, userDetails);
+        return thunderPostService.getThunderPosts(area, page, size, userDetails);
     }
 
     @PostMapping("/api/meets")

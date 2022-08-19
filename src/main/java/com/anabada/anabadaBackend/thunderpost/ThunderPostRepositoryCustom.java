@@ -5,6 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface ThunderPostRepositoryCustom {
-    Slice<ThunderPostResponseDto> findAll(Pageable pageable);
+    Slice<ThunderPostResponseDto> findAll(String area, Pageable pageable);
     ThunderPostResponseDto findByThunderPostId(Long thunderPostId);
 }

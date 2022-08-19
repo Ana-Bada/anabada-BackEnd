@@ -48,5 +48,4 @@ public class S3ImageUploadService {
         }
         return filenames;
     }
-
 }

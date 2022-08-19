@@ -16,7 +16,7 @@ public class ThunderPostResponseDto {
     private Long thunderpostId;
     private String title;
     private String nickname;
-    private String place;
+    private String area;
     private String address;
     private int goalMember;
     private int currentMember;
@@ -33,7 +33,7 @@ public class ThunderPostResponseDto {
     public ThunderPostResponseDto(ThunderPostEntity thunderPost, List<UserInfoResponseDto> users) {
         this.title = thunderPost.getTitle();
         this.nickname = thunderPost.getUser().getNickname();
-        this.place = thunderPost.getPlace();
+        this.area = thunderPost.getArea();
         this.address = thunderPost.getAddress();
         this.goalMember = thunderPost.getGoalMember();
         this.currentMember = thunderPost.getCurrentMember();
