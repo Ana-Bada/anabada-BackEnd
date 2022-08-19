@@ -3,24 +3,18 @@ package com.anabada.anabadaBackend.post;
 import com.anabada.anabadaBackend.comment.CommentEntity;
 import com.anabada.anabadaBackend.comment.CommentRepository;
 import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
-import com.anabada.anabadaBackend.like.LikeRepository;
 import com.anabada.anabadaBackend.like.LikeRepositoryImpl;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
-import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -39,7 +33,7 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto postRequestDto, UserEntity user) {
         PostEntity post = new PostEntity(postRequestDto, user);
         postRepository.save(post);
-        return new PostResponseDto();
+        return new PostResponseDto(post);
     }
 
 //    게시글 목록 불러오기
