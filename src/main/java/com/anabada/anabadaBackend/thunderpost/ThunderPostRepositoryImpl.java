@@ -25,14 +25,14 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     QThunderRequestEntity thunderRequestEntity = QThunderRequestEntity.thunderRequestEntity;
 
     @Override
-    public Slice<ThunderPostResponseDto> findAll(Pageable pageable) {
+    public Slice<ThunderPostResponseDto> findAll(String area, Pageable pageable) {
         List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,
                         thunderPost.title,
                         thunderPost.user.nickname,
                         thunderPost.address,
-                        thunderPost.place,
+                        thunderPost.area,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
                         thunderPost.thumbnailUrl,
@@ -60,7 +60,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,
                         thunderPost.title,
-                        thunderPost.place,
+                        thunderPost.area,
                         thunderPost.address,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
@@ -80,4 +80,8 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .where(thunderPost.thunderPostId.eq(thunderPostId))
                 .fetchOne();
     }
+
+//    private BooleanExpression areaEq(String area) {
+//        return area.equals("ALL") ? null : thunderPost.place.eq(AreaEnum.valueOf(area));
+//    }
 }

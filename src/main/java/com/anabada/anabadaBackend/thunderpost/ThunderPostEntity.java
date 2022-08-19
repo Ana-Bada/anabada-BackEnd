@@ -23,7 +23,7 @@ public class ThunderPostEntity extends TimeStamped {
     private String title;
 
     @Column(nullable = false)
-    private String place;
+    private String area;
 
     @Column(nullable = false)
     private String address;
@@ -52,7 +52,7 @@ public class ThunderPostEntity extends TimeStamped {
 
     public ThunderPostEntity(ThunderPostRequestDto thunderPostRequestDto, UserDetailsImpl userDetails) {
         this.title = thunderPostRequestDto.getTitle();
-        this.place = thunderPostRequestDto.getPlace();
+        this.area = thunderPostRequestDto.getArea();
         this.address = thunderPostRequestDto.getAddress();
         this.goalMember = thunderPostRequestDto.getGoalMember();
         this.currentMember = 0;
@@ -64,7 +64,7 @@ public class ThunderPostEntity extends TimeStamped {
 
     public void updateThunderPost(ThunderPostRequestDto thunderPostRequestDto) {
         this.title = thunderPostRequestDto.getTitle();
-        this.place = thunderPostRequestDto.getPlace();
+        this.area = thunderPostRequestDto.getArea();
         this.address = thunderPostRequestDto.getAddress();
         this.goalMember = thunderPostRequestDto.getGoalMember();
         this.thumbnailUrl = thunderPostRequestDto.getThumbnailUrl();

@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 public interface ThunderPostRepository extends JpaRepository<ThunderPostEntity, Long> {
     @Modifying
     @Query("update ThunderPostEntity p set p.viewCount = p.viewCount + 1 where p.thunderPostId = :id")
-    int updateViewCount(Long id);
+    void updateViewCount(Long id);
 
     @Modifying
     @Query("update ThunderPostEntity p set p.currentMember = p.currentMember + 1 where p.thunderPostId = :id")
-    int addCurrentMember(Long id);
+    void addCurrentMember(Long id);
 
     @Modifying
     @Query("update ThunderPostEntity p set p.currentMember = p.currentMember - 1 where p.thunderPostId = :id")
-    int minusCurrentMember(Long id);
+    void minusCurrentMember(Long id);
 
 }
