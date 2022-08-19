@@ -4,6 +4,7 @@ import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -12,8 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class ThunderPostResponseDto {
-    private Long thunderpostId;
+    private Long thunderPostId;
     private String title;
     private String nickname;
     private String area;
@@ -25,7 +27,7 @@ public class ThunderPostResponseDto {
     private String endDate;
     private int viewCount;
     private boolean isLiked = false;
-    private int likeCount;
+    private long likeCount;
     private boolean isJoined = false;
     private LocalDateTime createdAt;
     private List<UserInfoResponseDto> members;
