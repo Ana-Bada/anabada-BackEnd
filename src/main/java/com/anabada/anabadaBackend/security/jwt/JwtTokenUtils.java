@@ -12,7 +12,7 @@ public final class JwtTokenUtils {
     private static final int HOUR = 60 * MINUTE;
     private static final int DAY = 24 * HOUR;
 
-    private static final int JWT_TOKEN_VALID_SEC = 10 * SEC;
+    private static final int JWT_TOKEN_VALID_SEC = 30 * MINUTE;
     private static final int REFRESH_TOKEN_VALID_SEC = 7 * DAY;
     private static final int JWT_TOKEN_VALID_MILLI_SEC = JWT_TOKEN_VALID_SEC * 1000;
     private static final int REFRESH_TOKEN_VALID_MILLI_SEC = REFRESH_TOKEN_VALID_SEC * 1000;

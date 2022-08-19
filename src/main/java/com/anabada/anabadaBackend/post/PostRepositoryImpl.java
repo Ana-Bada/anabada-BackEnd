@@ -14,4 +14,6 @@ public class PostRepositoryImpl {
     QPostEntity post = QPostEntity.postEntity;
 
     QLikeEntity like = QLikeEntity.likeEntity;
+
+
 }
