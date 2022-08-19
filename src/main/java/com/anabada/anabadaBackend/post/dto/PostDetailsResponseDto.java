@@ -3,10 +3,12 @@ package com.anabada.anabadaBackend.post.dto;
 import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 public class PostDetailsResponseDto {
 
     private Long postId;

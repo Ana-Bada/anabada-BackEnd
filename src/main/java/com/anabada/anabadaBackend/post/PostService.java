@@ -33,7 +33,7 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto postRequestDto, UserEntity user) {
         PostEntity post = new PostEntity(postRequestDto, user);
         postRepository.save(post);
-        return new PostResponseDto();
+        return new PostResponseDto(post);
     }
 
 //    게시글 목록 불러오기

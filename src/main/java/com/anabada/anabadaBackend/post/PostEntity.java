@@ -1,11 +1,9 @@
 package com.anabada.anabadaBackend.post;
 
 import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
-import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
+import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
-import com.anabada.anabadaBackend.common.TimeStamped;
-import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +56,7 @@ public class PostEntity extends TimeStamped {
     private List<S3ImageUploadEntity> imageList;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<LikeEntity> likeList;
+    private List<LikeEntity> likeList = new ArrayList<>();
     
     public PostEntity(PostRequestDto postRequestDto, UserEntity user) {
         this.user = user;
