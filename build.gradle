@@ -59,6 +59,8 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 	//JSON simple
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	//Aws S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	// 유효성 검사
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -93,4 +95,5 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
+
 targetCompatibility = JavaVersion.VERSION_11

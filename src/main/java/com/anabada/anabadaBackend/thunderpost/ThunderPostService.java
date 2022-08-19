@@ -1,22 +1,39 @@
 package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
+import com.anabada.anabadaBackend.thunderlike.ThunderLikeRepositoryImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
+import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
+import com.anabada.anabadaBackend.thunderrequest.ThunderRequestEntity;
+import com.anabada.anabadaBackend.thunderrequest.ThunderRequestRepository;
+import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class ThunderPostService {
     private final ThunderPostRepository thunderPostRepository;
-    public ResponseEntity<?> getMeets() {
+    private final ThunderRequestRepository thunderRequestRepository;
+    private final ThunderLikeRepositoryImpl thunderLikeRepositoryimpl;
+    private final ThunderPostRepositoryImpl thunderPostRepositoryImpl;
 
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+    public ResponseEntity<?> getThunderPosts(int page, int size, UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAll(pageable);
+        for(ThunderPostResponseDto responseDto : responseDtos)
+            responseDto.setLiked(thunderLikeRepositoryimpl.findByThunderPostIdAndUserId(responseDto.getThunderpostId(), userDetails.getUser().getUserId()) != null);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     public ResponseEntity<?> createThunderPost(ThunderPostRequestDto thunderPostRequestDto, UserDetailsImpl userDetails) {
@@ -44,6 +61,21 @@ public class ThunderPostService {
             throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
         }
         thunderPostRepository.deleteById(meetId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getThunderPost(Long thunderPostId, UserDetailsImpl userDetails) {
+        ThunderPostResponseDto responseDto = thunderPostRepositoryImpl.findByThunderPostId(thunderPostId);
+        responseDto.setLiked(thunderLikeRepositoryimpl.findByThunderPostIdAndUserId(thunderPostId, userDetails.getUser().getUserId()) != null);
+        responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(thunderPostId, userDetails.getUser().getUserId()) != null);
+        List<ThunderRequestEntity> requestEntityList = thunderRequestRepository.findAllByThunderPostThunderPostId(thunderPostId);
+        List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
+        for (int i = 0; i < requestEntityList.size(); i++) {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(requestEntityList.get(i).getUser());
+            userInfoResponseDtoList.add(userInfoResponseDto);
+        }
+        responseDto.setMembers(userInfoResponseDtoList);
+        thunderPostRepository.updateViewCount(thunderPostId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

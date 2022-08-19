@@ -13,8 +13,9 @@ public class ThunderPostController {
     private final ThunderPostService thunderPostService;
 
     @GetMapping("/api/meets")
-    public ResponseEntity<?> getMeets() {
-        return thunderPostService.getMeets();
+    public ResponseEntity<?> getThunderPosts(@RequestParam int page, @RequestParam int size,
+                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.getThunderPosts(page, size, userDetails);
     }
 
     @PostMapping("/api/meets")
@@ -34,5 +35,11 @@ public class ThunderPostController {
     public ResponseEntity<?> deleteThunderPost(@PathVariable Long meetId,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.deleteThunderPost(meetId, userDetails);
+    }
+
+    @GetMapping("/api/meets/{thunderPostId}")
+    public ResponseEntity<?> getThunderPost(@PathVariable Long thunderPostId,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.getThunderPost(thunderPostId, userDetails);
     }
 }

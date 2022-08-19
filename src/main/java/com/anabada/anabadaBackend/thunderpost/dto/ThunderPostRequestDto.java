@@ -6,9 +6,9 @@ import lombok.Getter;
 public class ThunderPostRequestDto {
     private String title;
     private String place;
+    private String address;
     private int goalMember;
     private String thumbnailUrl;
-    private String thumbnailFileName;
     private String startDate;
     private String endDate;
 }

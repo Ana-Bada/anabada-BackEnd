@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class LikeRepositoryImpl implements LikeRepositoryCustom{
     private final JPAQueryFactory queryFactory;
+    public boolean findByPostIdAndUserId;
 
     QLikeEntity like = QLikeEntity.likeEntity;
 
