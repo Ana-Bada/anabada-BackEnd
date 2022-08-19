@@ -35,8 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### properties ###
-application.properties
-cloud.aws.properties
-application-API-KEY.properties
