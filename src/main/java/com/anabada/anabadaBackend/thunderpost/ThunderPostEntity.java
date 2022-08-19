@@ -44,7 +44,7 @@ public class ThunderPostEntity extends TimeStamped {
     private String endDate;
 
     @Column
-    private int viewCount;
+    private long viewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")

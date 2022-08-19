@@ -2,9 +2,9 @@ package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.thunderlike.QThunderLikeEntity;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
-import com.anabada.anabadaBackend.thunderrequest.QThunderRequestEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
 
     QThunderPostEntity thunderPost = QThunderPostEntity.thunderPostEntity;
     QThunderLikeEntity thunderLike = QThunderLikeEntity.thunderLikeEntity;
-    QThunderRequestEntity thunderRequestEntity = QThunderRequestEntity.thunderRequestEntity;
 
     @Override
     public Slice<ThunderPostResponseDto> findAll(String area, Pageable pageable) {
@@ -31,13 +30,14 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         thunderPost.thunderPostId,
                         thunderPost.title,
                         thunderPost.user.nickname,
-                        thunderPost.address,
                         thunderPost.area,
+                        thunderPost.address,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
                         thunderPost.thumbnailUrl,
                         thunderPost.startDate,
                         thunderPost.endDate,
+                        thunderPost.viewCount,
                         thunderPost.createdAt,
                         ExpressionUtils.as(
                                 JPAExpressions
@@ -47,6 +47,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         )
                 ))
                 .from(thunderPost)
+                .where(areaEq(area))
                 .orderBy(thunderPost.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -81,7 +82,30 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .fetchOne();
     }
 
-//    private BooleanExpression areaEq(String area) {
-//        return area.equals("ALL") ? null : thunderPost.place.eq(AreaEnum.valueOf(area));
-//    }
+    public long addViewCount(Long thunderPostId) {
+        return queryFactory
+                .update(thunderPost)
+                .set(thunderPost.viewCount, thunderPost.viewCount.add(1))
+                .where(thunderPost.thunderPostId.eq(thunderPostId))
+                .execute();
+    }
+
+    public long addCurrentMember(Long thunderPostId) {
+        return queryFactory
+                .update(thunderPost)
+                .set(thunderPost.currentMember, thunderPost.currentMember.add(1))
+                .where(thunderPost.thunderPostId.eq(thunderPostId))
+                .execute();
+    }
+
+    public long minusCurrentMember(Long thunderPostId) {
+        return queryFactory
+                .update(thunderPost)
+                .set(thunderPost.currentMember, thunderPost.currentMember.subtract(1))
+                .where(thunderPost.thunderPostId.eq(thunderPostId))
+                .execute();
+    }
+    private BooleanExpression areaEq(String area) {
+        return area.equals("ALL") ? null : thunderPost.area.eq(area);
+    }
 }
