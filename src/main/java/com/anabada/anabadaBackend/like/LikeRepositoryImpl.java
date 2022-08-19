@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class LikeRepositoryImpl implements LikeRepositoryCustom{
     private final JPAQueryFactory queryFactory;
-    public boolean findByPostIdAndUserId;
 
     QLikeEntity like = QLikeEntity.likeEntity;
 
@@ -20,10 +19,4 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom{
                 .fetchOne();
     }
 
-    @Override
-    public LikeEntity findOneByUsername(String nickname) {
-        return queryFactory.selectFrom(like)
-                .where(like.user.nickname.eq(nickname))
-                .fetchOne();
-    }
 }

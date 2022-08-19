@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.like;
 
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.post.PostRepository;
+import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,8 @@ public class LikeService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteLike(Long postId, Long userId){
-        Long likeId = likeRepositoryImpl.findByPostIdAndUserId(postId, userId);
+    public ResponseEntity<?> deleteLike(Long postId, UserDetailsImpl userDetails){
+        Long likeId = likeRepositoryImpl.findByPostIdAndUserId(postId, userDetails.getUser().getUserId());
         likeRepository.deleteById(likeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
