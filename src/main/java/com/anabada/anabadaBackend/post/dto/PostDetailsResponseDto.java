@@ -15,6 +15,7 @@ public class PostDetailsResponseDto {
     private String title;
 
     private String thumbnailUrl;
+
     private String area;
 
     private String address;
