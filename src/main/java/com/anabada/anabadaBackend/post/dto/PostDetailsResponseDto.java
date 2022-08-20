@@ -4,6 +4,7 @@ import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,12 +38,12 @@ public class PostDetailsResponseDto {
 
     private LocalDateTime createdAt;
 
-    private List<CommentResponseDto> comments;
+    private Page<CommentResponseDto> comments;
 
     private List<S3ImageUploadEntity> imageList;
 
 
-    public PostDetailsResponseDto(PostEntity postEntity, List<CommentResponseDto> commentResponseDtoList) {
+    public PostDetailsResponseDto(PostEntity postEntity, Page<CommentResponseDto> commentResponseDtoList) {
         this.postId = postEntity.getPostId();
         this.title = postEntity.getTitle();
         this.thumbnailUrl = postEntity.getThumbnailUrl();

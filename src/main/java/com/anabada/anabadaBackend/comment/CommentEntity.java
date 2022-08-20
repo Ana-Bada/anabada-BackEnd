@@ -21,11 +21,11 @@ public class CommentEntity extends TimeStamped {
     private Long commentId;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "postId", nullable = false)
     private PostEntity post;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private UserEntity user;
 
     @Column(nullable = false)

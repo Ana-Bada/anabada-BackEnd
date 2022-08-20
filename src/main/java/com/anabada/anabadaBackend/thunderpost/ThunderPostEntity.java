@@ -23,6 +23,9 @@ public class ThunderPostEntity extends TimeStamped {
     private String title;
 
     @Column(nullable = false)
+    private String content;
+
+    @Column(nullable = false)
     private String area;
 
     @Column(nullable = false)

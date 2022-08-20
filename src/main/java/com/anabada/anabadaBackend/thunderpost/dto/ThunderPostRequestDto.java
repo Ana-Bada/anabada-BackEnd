@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class ThunderPostRequestDto {
     private String title;
+    private String content;
     private String area;
     private String address;
     private int goalMember;

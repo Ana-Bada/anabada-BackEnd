@@ -24,11 +24,12 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     QThunderLikeEntity thunderLike = QThunderLikeEntity.thunderLikeEntity;
 
     @Override
-    public Slice<ThunderPostResponseDto> findAll(String area, Pageable pageable) {
+    public Slice<ThunderPostResponseDto> findAllByArea(String area, Pageable pageable) {
         List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,
                         thunderPost.title,
+                        thunderPost.content,
                         thunderPost.user.nickname,
                         thunderPost.area,
                         thunderPost.address,
@@ -61,6 +62,8 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,
                         thunderPost.title,
+                        thunderPost.content,
+                        thunderPost.user.nickname,
                         thunderPost.area,
                         thunderPost.address,
                         thunderPost.goalMember,
@@ -80,6 +83,40 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .from(thunderPost)
                 .where(thunderPost.thunderPostId.eq(thunderPostId))
                 .fetchOne();
+    }
+
+    @Override
+    public Slice<ThunderPostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable) {
+        List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                        ThunderPostResponseDto.class,
+                        thunderPost.thunderPostId,
+                        thunderPost.title,
+                        thunderPost.content,
+                        thunderPost.user.nickname,
+                        thunderPost.area,
+                        thunderPost.address,
+                        thunderPost.goalMember,
+                        thunderPost.currentMember,
+                        thunderPost.thumbnailUrl,
+                        thunderPost.startDate,
+                        thunderPost.endDate,
+                        thunderPost.viewCount,
+                        thunderPost.createdAt,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(thunderLike.count())
+                                        .from(thunderLike)
+                                        .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                        )
+                ))
+                .from(thunderPost)
+                .where(areaEq(area).and(thunderPost.title.contains(keyword)
+                        .or(areaEq(area).and(thunderPost.content.contains(keyword)))))
+                .orderBy(thunderPost.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
     }
 
     public long addViewCount(Long thunderPostId) {
