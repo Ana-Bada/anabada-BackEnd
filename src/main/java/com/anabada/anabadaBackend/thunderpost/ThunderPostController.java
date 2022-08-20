@@ -42,4 +42,11 @@ public class ThunderPostController {
                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.getThunderPost(thunderPostId, userDetails);
     }
+
+    @GetMapping("api/meets/search")
+    public ResponseEntity<?> searchPosts(@RequestParam String area, @RequestParam String keyword,
+                                         @RequestParam int page, @RequestParam int size,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.searchPosts(area, keyword, page, size, userDetails);
+    }
 }

@@ -1,7 +1,7 @@
 package com.anabada.anabadaBackend.post;
 
-import com.anabada.anabadaBackend.comment.CommentEntity;
 import com.anabada.anabadaBackend.comment.CommentRepository;
+import com.anabada.anabadaBackend.comment.CommentRepositoryImpl;
 import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.like.LikeRepositoryImpl;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
@@ -19,13 +19,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final CommentRepositoryImpl commentRepositoryImpl;
 
     private final LikeRepositoryImpl likeRepository;
 
@@ -57,16 +57,17 @@ public class PostService {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + postId + " is not found"));
         post.IncreaseViewCount();
-        Page<CommentEntity> comments = commentRepository.findAllByPostPostId(postId, pageable);
+        Page<CommentResponseDto> comments = commentRepositoryImpl.findAllByPostId(postId, pageable);
+//        Page<CommentEntity> comments = commentRepository.findAllByPostPostId(postId, pageable);
 //        List<CommentResponseDto>  commentResponseDtoList = new ArrayList<>();
 //        for(CommentEntity comment : comments){
 //            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
 //            commentResponseDtoList.add(commentResponseDto);
 //        }
-        List<CommentResponseDto> commentResponseDtoList= comments.stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
-        PostDetailsResponseDto postDetailsResponseDto = new PostDetailsResponseDto(post,commentResponseDtoList);
+//        List<CommentResponseDto> commentResponseDtoList= comments.stream()
+//                .map(CommentResponseDto::new)
+//                .collect(Collectors.toList());
+        PostDetailsResponseDto postDetailsResponseDto = new PostDetailsResponseDto(post,comments);
         postDetailsResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postId, userId) != null);
         return postDetailsResponseDto;
     }

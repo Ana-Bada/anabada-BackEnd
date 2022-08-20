@@ -1,12 +1,11 @@
 package com.anabada.anabadaBackend.post.dto;
+
 import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadRequestDto;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-@Builder
 public class PostRequestDto {
 
     private String title;
