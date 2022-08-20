@@ -1,26 +1,30 @@
 package com.anabada.anabadaBackend.comment.dto;
 
 import com.anabada.anabadaBackend.comment.CommentEntity;
-import com.anabada.anabadaBackend.post.PostEntity;
-import com.anabada.anabadaBackend.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class CommentResponseDto {
 
+    private Long commentId;
 
-    private PostEntity post;
-
-
-
-    private UserEntity user;
-
+    private String email;
+    private String nickname;
+    private String profileImg;
     private String content;
+    private LocalDateTime createdAt;
+    private Long postId;
+
     public CommentResponseDto(CommentEntity comment) {
-        this.post = comment.getPost();
-        this.user = comment.getUser();
+
         this.content = comment.getContent();
     }
 

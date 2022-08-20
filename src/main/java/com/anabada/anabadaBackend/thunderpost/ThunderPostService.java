@@ -30,7 +30,7 @@ public class ThunderPostService {
 
     public ResponseEntity<?> getThunderPosts(String area, int page, int size, UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page, size);
-        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAll(area, pageable);
+        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByArea(area, pageable);
         for(ThunderPostResponseDto responseDto : responseDtos) {
             responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
                     userDetails.getUser().getUserId()) != null);
@@ -81,5 +81,12 @@ public class ThunderPostService {
         }
         responseDto.setMembers(userInfoResponseDtoList);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+
+    public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByAreaAndKeyword(area, keyword, pageable);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }

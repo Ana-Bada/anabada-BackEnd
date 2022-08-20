@@ -17,6 +17,7 @@ import java.util.List;
 public class ThunderPostResponseDto {
     private Long thunderPostId;
     private String title;
+    private String content;
     private String nickname;
     private String area;
     private String address;
