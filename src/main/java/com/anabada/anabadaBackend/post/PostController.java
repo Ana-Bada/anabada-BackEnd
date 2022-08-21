@@ -30,8 +30,9 @@ public class PostController {
 
 //    게시글 목록 불러오기
     @GetMapping("/api/posts")
-    public List<PostResponseDto> getAllPosts(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.getAllPosts(userDetails.getUser().getUserId());
+    public List<PostResponseDto> getAllPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                             @RequestParam(defaultValue = "all") String area){
+        return postService.getAllPosts(userDetails.getUser().getUserId(), area);
     }
 
 

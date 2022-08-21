@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final CommentRepositoryImpl commentRepositoryImpl;
+    private final PostRepositoryImpl postrepositoryImpl;
 
     private final LikeRepositoryImpl likeRepository;
 
@@ -37,16 +37,15 @@ public class PostService {
     }
 
 //    게시글 목록 불러오기
-    public List<PostResponseDto> getAllPosts(Long userId) {
-        List<PostEntity> postList = postRepository.findAllByOrderByCreatedAt();
-        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+    public List<PostResponseDto> getAllPosts(Long userId, String area) {
+        List<PostResponseDto> postResponseDtoList = postrepositoryImpl.findAllByArea(area);
+        System.out.println(postResponseDtoList);
+//        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
 //        return postList.stream()
 //                .map(PostResponseDto::new)
 //                .collect(Collectors.toList());    //스트림 중간에 isLiked값을 넣울숙가 없따...
-        for(PostEntity post : postList){
-            PostResponseDto postResponseDto = new PostResponseDto(post);
-            postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(post.getPostId(), userId) != null);
-            postResponseDtoList.add(postResponseDto);
+        for(PostResponseDto postResponseDto : postResponseDtoList){
+            postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postResponseDto.getPostId(), userId) != null);
         }
         return postResponseDtoList;
     }
@@ -54,9 +53,9 @@ public class PostService {
 //    게시글 상세페이지
     public PostDetailsResponseDto getPostDetails(Long postId, Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+        postrepositoryImpl.addViewCount(postId);
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + postId + " is not found"));
-        post.IncreaseViewCount();
         Page<CommentResponseDto> comments = commentRepositoryImpl.findAllByPostId(postId, pageable);
 //        Page<CommentEntity> comments = commentRepository.findAllByPostPostId(postId, pageable);
 //        List<CommentResponseDto>  commentResponseDtoList = new ArrayList<>();
