@@ -80,7 +80,4 @@ public class PostEntity extends TimeStamped {
                 .collect(Collectors.toList());
     }
 
-    public void IncreaseViewCount(){
-        viewCount++;
-    }
 }
