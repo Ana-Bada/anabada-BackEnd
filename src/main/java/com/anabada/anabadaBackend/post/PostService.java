@@ -32,10 +32,10 @@ public class PostService {
     private final LikeRepositoryImpl likeRepository;
 
 //    게시글 작성
-    public PostResponseDto createPost(PostRequestDto postRequestDto, UserEntity user) {
+    public ResponseEntity<?> createPost(PostRequestDto postRequestDto, UserEntity user) {
         PostEntity post = new PostEntity(postRequestDto, user);
         postRepository.save(post);
-        return new PostResponseDto(post);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    게시글 목록 불러오기
