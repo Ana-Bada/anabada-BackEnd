@@ -64,7 +64,7 @@ public class PostEntity extends TimeStamped {
         this.amenity = postRequestDto.getAmenity();
         this.address  = postRequestDto.getAddress();
         this.viewCount = 0;
-        if (postRequestDto.getImageList().size() == 0){
+        if (postRequestDto.getImageList() == null){
             this.imageList = null;
         }
         else {
@@ -79,7 +79,7 @@ public class PostEntity extends TimeStamped {
         this.content = postRequestDto.getContent();
         this.amenity = postRequestDto.getAmenity();
         this.address  = postRequestDto.getAddress();
-        if (postRequestDto.getImageList().size() == 0){
+        if (postRequestDto.getImageList() == null){
             this.imageList = null;
         }
         else {

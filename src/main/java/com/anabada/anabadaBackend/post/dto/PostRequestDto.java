@@ -14,7 +14,7 @@ public class PostRequestDto {
 
     private String content;
 
-//    private String thumbnailUrl;
+    private String thumbnailUrl;
 
     private String amenity;
 
