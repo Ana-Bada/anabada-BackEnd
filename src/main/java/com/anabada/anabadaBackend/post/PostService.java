@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.post;
 
+import com.anabada.anabadaBackend.comment.CommentEntity;
 import com.anabada.anabadaBackend.comment.CommentRepository;
 import com.anabada.anabadaBackend.comment.CommentRepositoryImpl;
 import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
@@ -79,6 +80,8 @@ public class PostService {
         if (!post.getUser().getUserId().equals(user.getUserId())) {
             throw new IllegalArgumentException("삭제 권한이 없습니다.");
         } else {
+            List<CommentEntity> commentEntityList = commentRepository.findAllByPostPostId(postId);
+            commentRepository.deleteAll(commentEntityList);
             postRepository.deleteById(postId);
             return new ResponseEntity<>(HttpStatus.OK);
         }
