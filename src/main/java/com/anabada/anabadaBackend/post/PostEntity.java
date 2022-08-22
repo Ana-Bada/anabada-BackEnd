@@ -64,20 +64,29 @@ public class PostEntity extends TimeStamped {
         this.amenity = postRequestDto.getAmenity();
         this.address  = postRequestDto.getAddress();
         this.viewCount = 0;
-        this.imageList = postRequestDto.getImageList().stream()
+        if (postRequestDto.getImageList().size() == 0){
+            this.imageList = null;
+        }
+        else {
+            this.imageList = postRequestDto.getImageList().stream()
                 .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
                         .collect(Collectors.toList());
+        }
     }
-
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
         this.amenity = postRequestDto.getAmenity();
         this.address  = postRequestDto.getAddress();
-        this.imageList = postRequestDto.getImageList().stream()
-                .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
-                .collect(Collectors.toList());
+        if (postRequestDto.getImageList().size() == 0){
+            this.imageList = null;
+        }
+        else {
+            this.imageList = postRequestDto.getImageList().stream()
+                    .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
+                    .collect(Collectors.toList());
+        }
     }
 
 }
