@@ -2,15 +2,12 @@ package com.anabada.anabadaBackend.post;
 
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
-import com.anabada.anabadaBackend.post.dto.PostResponseDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,9 +27,11 @@ public class PostController {
 
 //    게시글 목록 불러오기
     @GetMapping("/api/posts")
-    public List<PostResponseDto> getAllPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                             @RequestParam(defaultValue = "ALL") String area){
-        return postService.getAllPosts(userDetails.getUser().getUserId(), area);
+    public ResponseEntity<?> getAllPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                             @RequestParam(defaultValue = "ALL") String area,
+                                             @RequestParam(value = "page", defaultValue = "0") int page,
+                                             @RequestParam(value = "size", defaultValue = "20") int size){
+        return postService.getAllPosts(userDetails.getUser().getUserId(), area, page, size);
     }
 
 
