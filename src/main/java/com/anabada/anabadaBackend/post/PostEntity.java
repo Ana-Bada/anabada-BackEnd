@@ -69,11 +69,10 @@ public class PostEntity extends TimeStamped {
         }
         else {
             this.imageList = postRequestDto.getImageList().stream()
-                    .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
-                    .collect(Collectors.toList());
+                .map(uploadRequestDto -> new S3ImageUploadEntity(uploadRequestDto, this))
+                        .collect(Collectors.toList());
         }
     }
-
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.area = postRequestDto.getArea();
