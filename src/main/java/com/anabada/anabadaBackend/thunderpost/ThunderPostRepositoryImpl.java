@@ -13,6 +13,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -119,6 +120,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
         return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
     }
 
+    @Transactional
     public long addViewCount(Long thunderPostId) {
         return queryFactory
                 .update(thunderPost)
@@ -127,6 +129,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .execute();
     }
 
+    @Transactional
     public long addCurrentMember(Long thunderPostId) {
         return queryFactory
                 .update(thunderPost)
@@ -135,6 +138,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .execute();
     }
 
+    @Transactional
     public long minusCurrentMember(Long thunderPostId) {
         return queryFactory
                 .update(thunderPost)

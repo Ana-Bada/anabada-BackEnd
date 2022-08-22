@@ -40,12 +40,14 @@ public class ThunderPostService {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> createThunderPost(ThunderPostRequestDto thunderPostRequestDto, UserDetailsImpl userDetails) {
         ThunderPostEntity thunderPost = new ThunderPostEntity(thunderPostRequestDto, userDetails);
         thunderPostRepository.save(thunderPost);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> updateThunderPost(Long meetId, ThunderPostRequestDto thunderPostRequestDto,
                                                UserDetailsImpl userDetails) {
         ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
@@ -58,6 +60,7 @@ public class ThunderPostService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> deleteThunderPost(Long meetId, UserDetailsImpl userDetails) {
         ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
                 .orElseThrow( () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
