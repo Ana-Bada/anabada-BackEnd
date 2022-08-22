@@ -1,9 +1,9 @@
 package com.anabada.anabadaBackend.post;
 
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface PostRepositoryCutsom {
-    List<PostResponseDto> findAllByArea(String area);
+    Slice<PostResponseDto> findAllByArea(String area, Pageable pageable);
 }

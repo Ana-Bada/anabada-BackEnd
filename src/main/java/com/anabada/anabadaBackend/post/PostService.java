@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,9 +39,9 @@ public class PostService {
     }
 
 //    게시글 목록 불러오기
-    public List<PostResponseDto> getAllPosts(Long userId, String area) {
-        List<PostResponseDto> postResponseDtoList = postrepositoryImpl.findAllByArea(area);
-        System.out.println(postResponseDtoList);
+    public ResponseEntity<?> getAllPosts(Long userId, String area, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<PostResponseDto> postResponseDtoList = postrepositoryImpl.findAllByArea(area, pageable);
 //        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
 //        return postList.stream()
 //                .map(PostResponseDto::new)
@@ -48,7 +49,7 @@ public class PostService {
         for(PostResponseDto postResponseDto : postResponseDtoList){
             postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postResponseDto.getPostId(), userId) != null);
         }
-        return postResponseDtoList;
+        return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
     }
 
 //    게시글 상세페이지

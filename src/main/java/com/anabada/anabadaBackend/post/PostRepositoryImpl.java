@@ -7,6 +7,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.ExpressionUtils;
@@ -25,29 +28,31 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
     QLikeEntity like = QLikeEntity.likeEntity;
 
     @Override
-    public List<PostResponseDto> findAllByArea(String area){
+    public Slice<PostResponseDto> findAllByArea(String area, Pageable pageable) {
         List<PostResponseDto> postResponseDtoList = queryFactory.select(Projections.fields(
-                PostResponseDto.class,
-                post.postId,
-                post.title,
-                post.thumbnailUrl,
-                post.area,
-                post.user.nickname,
-                post.user.profileImg,
-                post.amenity,
-                post.createdAt,
-                ExpressionUtils.as(
-                        JPAExpressions
-                                .select(like.count())
-                                .from(like)
-                                .where(like.post.postId.eq(post.postId)), "likeCount"
+                        PostResponseDto.class,
+                        post.postId,
+                        post.title,
+                        post.thumbnailUrl,
+                        post.area,
+                        post.user.nickname,
+                        post.user.profileImg,
+                        post.amenity,
+                        post.createdAt,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(like.count())
+                                        .from(like)
+                                        .where(like.post.postId.eq(post.postId)), "likeCount"
                         )
-        ))
-        .from(post)
-        .where(areaEq(area))
-        .orderBy(post.createdAt.desc())
-        .fetch();
-        return postResponseDtoList;
+                ))
+                .from(post)
+                .where(areaEq(area))
+                .orderBy(post.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return new SliceImpl<>(postResponseDtoList, pageable, postResponseDtoList.iterator().hasNext());
 
 
     }
