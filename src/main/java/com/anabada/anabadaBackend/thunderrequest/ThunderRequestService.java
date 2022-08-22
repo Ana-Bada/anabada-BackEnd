@@ -19,6 +19,8 @@ public class ThunderRequestService {
     private final ThunderRequestRepository thunderRequestRepository;
     private final ThunderPostRepository thunderPostRepository;
     private final ThunderPostRepositoryImpl thunderPostRepositoryImpl;
+
+    @Transactional
     public ResponseEntity<?> requestThunder(Long thunderPostId, UserDetailsImpl userDetails) {
         ThunderPostEntity thunderPost = thunderPostRepository.findById(thunderPostId)
                 .orElseThrow( () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
@@ -30,6 +32,7 @@ public class ThunderRequestService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> cancelThunder(Long thunderPostId, UserDetailsImpl userDetails) {
         Long thunderRequestId = thunderRequestRepository
                 .findByThunderPostThunderPostIdAndUserUserId(thunderPostId,userDetails.getUser().getUserId()).getThunderRequestId();

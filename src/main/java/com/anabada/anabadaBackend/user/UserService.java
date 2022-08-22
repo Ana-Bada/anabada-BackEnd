@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +24,8 @@ public class UserService {
     private final JwtDecoder jwtDecoder;
     private final RedisService redisService;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    @Transactional
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
         String email = signupRequestDto.getEmail();
         String nickname = signupRequestDto.getNickname();
@@ -46,7 +49,6 @@ public class UserService {
         userRepository.save(user);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
-
     public ResponseEntity<?> reissueAccessToken(String token, String refreshToken) {
         String email = jwtDecoder.decodeEmail(token);
         if(jwtDecoder.isValidRefreshToken(refreshToken))
