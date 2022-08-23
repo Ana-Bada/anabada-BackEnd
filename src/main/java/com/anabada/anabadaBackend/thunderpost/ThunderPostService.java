@@ -86,10 +86,15 @@ public class ThunderPostService {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-
     public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByAreaAndKeyword(area, keyword, pageable);
+        for(ThunderPostResponseDto responseDto : responseDtos) {
+            responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
+                    userDetails.getUser().getUserId()) != null);
+            responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(
+                    responseDto.getThunderPostId(), userDetails.getUser().getUserId()) != null);
+        }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 

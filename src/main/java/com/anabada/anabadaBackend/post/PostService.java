@@ -8,6 +8,7 @@ import com.anabada.anabadaBackend.like.LikeRepositoryImpl;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
+import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -101,5 +102,14 @@ public class PostService {
             post.update(postRequestDto);
             return new ResponseEntity<>(postRepository.save(post).getPostId(), HttpStatus.OK);
         }
+    }
+
+    public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<PostResponseDto> postResponseDtoList = postrepositoryImpl.findAllByAreaAndKeyword(area, keyword, pageable);
+        for(PostResponseDto postResponseDto : postResponseDtoList){
+            postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postResponseDto.getPostId(), userDetails.getUser().getUserId()) != null);
+        }
+        return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
     }
 }
