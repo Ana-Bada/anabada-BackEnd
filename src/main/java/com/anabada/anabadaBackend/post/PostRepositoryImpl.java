@@ -38,6 +38,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                         post.user.nickname,
                         post.user.profileImg,
                         post.amenity,
+                        post.createdAt.as("after"),
                         post.createdAt,
                         ExpressionUtils.as(
                                 JPAExpressions
@@ -68,6 +69,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             post.thumbnailUrl,
                             post.user.nickname,
                             post.user.profileImg,
+                            post.createdAt.as("after"),
                             post.createdAt,
                             post.amenity,
                             ExpressionUtils.as(
@@ -94,6 +96,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             post.thumbnailUrl,
                             post.user.nickname,
                             post.user.profileImg,
+                            post.createdAt.as("after"),
                             post.createdAt,
                             post.amenity,
                             ExpressionUtils.as(
