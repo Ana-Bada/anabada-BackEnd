@@ -21,12 +21,12 @@ public class ThunderPostResponseDto {
     private String nickname;
     private String area;
     private String address;
-    private int goalMember;
-    private int currentMember;
+    private long goalMember;
+    private long currentMember;
     private String thumbnailUrl;
     private String startDate;
     private String endDate;
-    private int viewCount;
+    private long viewCount;
     private boolean isLiked = false;
     private long likeCount;
     private boolean isJoined = false;

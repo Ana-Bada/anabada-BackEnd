@@ -13,7 +13,9 @@ public class ThunderPostController {
     private final ThunderPostService thunderPostService;
 
     @GetMapping("/api/meets")
-    public ResponseEntity<?> getThunderPosts(@RequestParam String area, @RequestParam int page, @RequestParam int size,
+    public ResponseEntity<?> getThunderPosts(@RequestParam(defaultValue = "ALL") String area,
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "5") int size,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.getThunderPosts(area, page, size, userDetails);
     }
@@ -24,17 +26,17 @@ public class ThunderPostController {
         return thunderPostService.createThunderPost(thunderPostRequestDto, userDetails);
     }
 
-    @PutMapping("/api/meets/{meetId}")
-    public ResponseEntity<?> updateThunderPost(@PathVariable Long meetId,
+    @PutMapping("/api/meets/{thunderPostId}")
+    public ResponseEntity<?> updateThunderPost(@PathVariable Long thunderPostId,
                                                @RequestBody ThunderPostRequestDto thunderPostRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.updateThunderPost(meetId, thunderPostRequestDto, userDetails);
+        return thunderPostService.updateThunderPost(thunderPostId, thunderPostRequestDto, userDetails);
     }
 
-    @DeleteMapping("/api/meets/{meetId}")
-    public ResponseEntity<?> deleteThunderPost(@PathVariable Long meetId,
+    @DeleteMapping("/api/meets/{thunderPostId}")
+    public ResponseEntity<?> deleteThunderPost(@PathVariable Long thunderPostId,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.deleteThunderPost(meetId, userDetails);
+        return thunderPostService.deleteThunderPost(thunderPostId, userDetails);
     }
 
     @GetMapping("/api/meets/{thunderPostId}")
@@ -43,10 +45,16 @@ public class ThunderPostController {
         return thunderPostService.getThunderPost(thunderPostId, userDetails);
     }
 
-    @GetMapping("api/meets/search")
-    public ResponseEntity<?> searchPosts(@RequestParam String area, @RequestParam String keyword,
+    @GetMapping("/api/meets/search")
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area, @RequestParam String keyword,
                                          @RequestParam int page, @RequestParam int size,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.searchPosts(area, keyword, page, size, userDetails);
+    }
+
+    @GetMapping("/api/meets/hot")
+    public ResponseEntity<?> getHotPosts(@RequestParam(defaultValue = "ALL") String area,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.getHotPosts(area, userDetails);
     }
 }

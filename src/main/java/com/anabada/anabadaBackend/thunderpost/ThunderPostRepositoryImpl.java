@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.thunderlike.QThunderLikeEntity;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
+import com.anabada.anabadaBackend.user.UserEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -118,6 +119,38 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
         return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+    }
+
+    @Override
+    public List<ThunderPostResponseDto> findHotPost(String area, UserEntity user) {
+        List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                        ThunderPostResponseDto.class,
+                        thunderPost.thunderPostId,
+                        thunderPost.title,
+                        thunderPost.content,
+                        thunderPost.user.nickname,
+                        thunderPost.area,
+                        thunderPost.address,
+                        thunderPost.goalMember,
+                        thunderPost.currentMember,
+                        thunderPost.thumbnailUrl,
+                        thunderPost.startDate,
+                        thunderPost.endDate,
+                        thunderPost.viewCount,
+                        thunderPost.createdAt,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(thunderLike.count())
+                                        .from(thunderLike)
+                                        .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                        )
+                ))
+                .from(thunderPost)
+                .where(areaEq(area))
+                .orderBy(thunderPost.viewCount.desc())
+                .limit(5)
+                .fetch();
+        return responseDtos;
     }
 
     @Transactional
