@@ -77,4 +77,10 @@ public class UserService {
                 .orElseThrow( () -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
         return new ResponseEntity<>(new UserInfoResponseDto(user), HttpStatus.OK);
     }
+
+    public ResponseEntity<?> checkNickname(String nickname) {
+        if(userRepository.findByNickname(nickname).isPresent())
+            return new ResponseEntity<>(HttpStatus.valueOf(409));
+        else return new ResponseEntity<>(HttpStatus.valueOf(200));
+    }
 }

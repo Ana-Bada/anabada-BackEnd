@@ -21,9 +21,14 @@ public class UserController {
         return userService.registerUser(signupRequestDto);
     }
 
-    @PostMapping("/api/users/validation")
+    @PostMapping("/api/users/validation/email")
     public ResponseEntity<?> checkEmail(@RequestBody @Valid EmailChkRequestDto emailChkRequestDto) {
         return userService.checkEmail(emailChkRequestDto.getEmail());
+    }
+
+    @PostMapping("/api/users/validation/nickname")
+    public ResponseEntity<?> checkNickname(@RequestBody String nickname) {
+        return userService.checkNickname(nickname);
     }
 
     @GetMapping("/api/users/info")
