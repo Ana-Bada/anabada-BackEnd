@@ -59,6 +59,7 @@ public class PostEntity extends TimeStamped {
     public PostEntity(PostRequestDto postRequestDto, UserEntity user) {
         this.user = user;
         this.title = postRequestDto.getTitle();
+        this.thumbnailUrl = postRequestDto.getThumbnailUrl();
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
         this.amenity = postRequestDto.getAmenity();
@@ -75,6 +76,7 @@ public class PostEntity extends TimeStamped {
     }
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
+        this.thumbnailUrl = postRequestDto.getThumbnailUrl();
         this.area = postRequestDto.getArea();
         this.content = postRequestDto.getContent();
         this.amenity = postRequestDto.getAmenity();

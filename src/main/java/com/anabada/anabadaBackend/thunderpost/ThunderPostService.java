@@ -48,9 +48,9 @@ public class ThunderPostService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateThunderPost(Long meetId, ThunderPostRequestDto thunderPostRequestDto,
+    public ResponseEntity<?> updateThunderPost(Long thunderPostId, ThunderPostRequestDto thunderPostRequestDto,
                                                UserDetailsImpl userDetails) {
-        ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
+        ThunderPostEntity thunderPost = thunderPostRepository.findById(thunderPostId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
         if(!userDetails.getUser().getUserId().equals(thunderPost.getUser().getUserId())) {
             throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
@@ -61,13 +61,13 @@ public class ThunderPostService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteThunderPost(Long meetId, UserDetailsImpl userDetails) {
-        ThunderPostEntity thunderPost = thunderPostRepository.findById(meetId)
+    public ResponseEntity<?> deleteThunderPost(Long thunderPostId, UserDetailsImpl userDetails) {
+        ThunderPostEntity thunderPost = thunderPostRepository.findById(thunderPostId)
                 .orElseThrow( () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
         if(!userDetails.getUser().getUserId().equals(thunderPost.getUser().getUserId())) {
             throw new IllegalArgumentException("작성자만 글을 삭제할 수 있습니다.");
         }
-        thunderPostRepository.deleteById(meetId);
+        thunderPostRepository.deleteById(thunderPostId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -90,6 +90,11 @@ public class ThunderPostService {
     public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByAreaAndKeyword(area, keyword, pageable);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getHotPosts(String area, UserDetailsImpl userDetails) {
+        List<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findHotPost(area, userDetails.getUser());
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }

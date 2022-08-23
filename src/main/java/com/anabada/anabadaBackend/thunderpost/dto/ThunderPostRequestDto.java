@@ -8,7 +8,7 @@ public class ThunderPostRequestDto {
     private String content;
     private String area;
     private String address;
-    private int goalMember;
+    private long goalMember;
     private String thumbnailUrl;
     private String startDate;
     private String endDate;
