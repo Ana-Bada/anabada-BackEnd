@@ -59,45 +59,73 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
 
     @Override
     public Slice<PostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable) {
-        List<PostResponseDto> responseDtos = queryFactory.select(Projections.fields(
-                        PostResponseDto.class,
-                        post.postId,
-                        post.title,
-                        post.area,
-                        post.thumbnailUrl,
-                        post.user.nickname,
-                        post.user.profileImg,
-                        post.createdAt,
-                        post.amenity,
-                        ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(like.count())
-                                        .from(like)
-                                        .where(like.post.postId.eq(post.postId)), "likeCount"
-                        )
-                ))
-                .from(post)
-                .where(areaEq(area).and(post.title.contains(keyword)
-                        .or(areaEq(area).and(post.content.contains(keyword)))))
-                .orderBy(post.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-        return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        if (area.equals("ALL")) {
+            List<PostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                            PostResponseDto.class,
+                            post.postId,
+                            post.title,
+                            post.area,
+                            post.thumbnailUrl,
+                            post.user.nickname,
+                            post.user.profileImg,
+                            post.createdAt,
+                            post.amenity,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(like.count())
+                                            .from(like)
+                                            .where(like.post.postId.eq(post.postId)), "likeCount"
+                            )
+                    ))
+                    .from(post)
+                    .where(post.title.contains(keyword).or(post.content.contains(keyword))
+                            .or(post.address.contains(keyword)))
+                    .orderBy(post.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        } else {
+            List<PostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                            PostResponseDto.class,
+                            post.postId,
+                            post.title,
+                            post.area,
+                            post.thumbnailUrl,
+                            post.user.nickname,
+                            post.user.profileImg,
+                            post.createdAt,
+                            post.amenity,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(like.count())
+                                            .from(like)
+                                            .where(like.post.postId.eq(post.postId)), "likeCount"
+                            )
+                    ))
+                    .from(post)
+                    .where(areaEq(area).and(post.title.contains(keyword)).or(areaEq(area).and(post.content.contains(keyword)))
+                            .or(areaEq(area).and(post.address.contains(keyword))))
+                    .orderBy(post.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        }
     }
 
-    private BooleanExpression areaEq(String area) {
-        return area.equals("ALL") ? null : post.area.eq(area);
+        private BooleanExpression areaEq (String area){
+            return area.equals("ALL") ? null : post.area.eq(area);
 
-    }
+        }
 
-    @Transactional
-    @Modifying
-    public long addViewCount(Long postId) {
-        return queryFactory
-                .update(post)
-                .set(post.viewCount, post.viewCount.add(1))
-                .where(post.postId.eq(postId))
-                .execute();
+        @Transactional
+        @Modifying
+        public long addViewCount (Long postId){
+            return queryFactory
+                    .update(post)
+                    .set(post.viewCount, post.viewCount.add(1))
+                    .where(post.postId.eq(postId))
+                    .execute();
+        }
     }
-}

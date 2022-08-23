@@ -89,41 +89,76 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
 
     @Override
     public Slice<ThunderPostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable) {
-        List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
-                        ThunderPostResponseDto.class,
-                        thunderPost.thunderPostId,
-                        thunderPost.title,
-                        thunderPost.content,
-                        thunderPost.user.nickname,
-                        thunderPost.area,
-                        thunderPost.address,
-                        thunderPost.goalMember,
-                        thunderPost.currentMember,
-                        thunderPost.thumbnailUrl,
-                        thunderPost.startDate,
-                        thunderPost.endDate,
-                        thunderPost.viewCount,
-                        thunderPost.createdAt,
-                        ExpressionUtils.as(
-                                JPAExpressions
-                                        .select(thunderLike.count())
-                                        .from(thunderLike)
-                                        .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
-                        )
-                ))
-                .from(thunderPost)
-                .where(areaEq(area).and(thunderPost.title.contains(keyword)
-                        .or(areaEq(area).and(thunderPost.content.contains(keyword)))))
-                .orderBy(thunderPost.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-        return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        if(area.equals("ALL")){
+            List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                            ThunderPostResponseDto.class,
+                            thunderPost.thunderPostId,
+                            thunderPost.title,
+                            thunderPost.content,
+                            thunderPost.user.nickname,
+                            thunderPost.area,
+                            thunderPost.address,
+                            thunderPost.goalMember,
+                            thunderPost.currentMember,
+                            thunderPost.thumbnailUrl,
+                            thunderPost.startDate,
+                            thunderPost.endDate,
+                            thunderPost.viewCount,
+                            thunderPost.createdAt,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(thunderLike.count())
+                                            .from(thunderLike)
+                                            .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                            )
+                    ))
+                    .from(thunderPost)
+                    .where(thunderPost.title.contains(keyword).or(thunderPost.content.contains(keyword))
+                            .or(thunderPost.address.contains(keyword)))
+                    .orderBy(thunderPost.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        }
+        else {
+            List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+                            ThunderPostResponseDto.class,
+                            thunderPost.thunderPostId,
+                            thunderPost.title,
+                            thunderPost.content,
+                            thunderPost.user.nickname,
+                            thunderPost.area,
+                            thunderPost.address,
+                            thunderPost.goalMember,
+                            thunderPost.currentMember,
+                            thunderPost.thumbnailUrl,
+                            thunderPost.startDate,
+                            thunderPost.endDate,
+                            thunderPost.viewCount,
+                            thunderPost.createdAt,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(thunderLike.count())
+                                            .from(thunderLike)
+                                            .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                            )
+                    ))
+                    .from(thunderPost)
+                    .where(areaEq(area).and(thunderPost.title.contains(keyword))
+                            .or(areaEq(area).and(thunderPost.content.contains(keyword)))
+                            .or(areaEq(area).and(thunderPost.address.contains(keyword))))
+                    .orderBy(thunderPost.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+        }
     }
 
     @Override
     public List<ThunderPostResponseDto> findHotPost(String area, UserEntity user) {
-        List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+        return queryFactory.select(Projections.fields(
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,
                         thunderPost.title,
@@ -150,7 +185,6 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .orderBy(thunderPost.viewCount.desc())
                 .limit(5)
                 .fetch();
-        return responseDtos;
     }
 
     @Transactional
@@ -182,4 +216,5 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     private BooleanExpression areaEq(String area) {
         return area.equals("ALL") ? null : thunderPost.area.eq(area);
     }
+
 }
