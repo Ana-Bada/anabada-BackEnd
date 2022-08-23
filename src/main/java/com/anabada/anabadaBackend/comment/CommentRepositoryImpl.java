@@ -27,6 +27,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                         comment.user.nickname,
                         comment.user.profileImg,
                         comment.content,
+                        comment.createdAt.as("after"),
                         comment.createdAt,
                         comment.post.postId
                 ))

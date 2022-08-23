@@ -33,6 +33,8 @@ public class PostResponseDto {
 
     private boolean isLiked;
 
+    private LocalDateTime after;
+
     private LocalDateTime createdAt;
 
     public PostResponseDto(PostEntity postEntity) {
@@ -52,5 +54,25 @@ public class PostResponseDto {
 
     public void setLiked(boolean liked) {
         isLiked = liked;
+    }
+
+    public String getAfter() {
+        LocalDateTime now = LocalDateTime.now();
+        String timestamp = "";
+
+        if(now.getYear() != after.getYear()){
+            timestamp = timestamp + (now.getYear()-after.getYear()) + "년 전";
+        }else if(now.getMonthValue() != after.getMonthValue()){
+            timestamp = timestamp + (now.getMonthValue()-after.getMonthValue()) + "달 전";
+        }else if(now.getDayOfMonth() != after.getDayOfMonth()){
+            timestamp = timestamp + (now.getDayOfMonth()-after.getDayOfMonth()) + "일 전";
+        }else if(now.getHour() != after.getHour()){
+            timestamp = timestamp + (now.getHour()-after.getHour()) + "시간 전";
+        }else if(now.getMinute() != after.getMinute()) {
+            timestamp = timestamp + (now.getMinute() - after.getMinute()) + "분 전";
+        }else {
+            timestamp = "방금 전";
+        }
+        return timestamp;
     }
 }
