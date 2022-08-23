@@ -56,4 +56,11 @@ public class PostController {
                                         @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.updatePost(postId, postRequestDto, userDetails.getUser());
     }
+
+    @GetMapping("/api/posts/search")
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area, @RequestParam String keyword,
+                                         @RequestParam int page, @RequestParam int size,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.searchPosts(area, keyword, page, size, userDetails);
+    }
 }
