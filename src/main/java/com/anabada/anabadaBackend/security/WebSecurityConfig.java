@@ -113,7 +113,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/beach").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/beaches/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/reissue").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users/validation").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/validation/email").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/users/validation/nickname/**").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
 // 그 외 어떤 요청이든 '인증'
@@ -176,7 +177,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/api/beaches/**");
         skipPathList.add("POST,/api/users/reissue");
         skipPathList.add("GET,/api/beach");
-        skipPathList.add("POST,/api/users/validation");
+        skipPathList.add("POST,/api/users/validation/email");
+        skipPathList.add("POST,/api/users/validation/nickname/**");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

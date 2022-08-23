@@ -26,8 +26,8 @@ public class UserController {
         return userService.checkEmail(emailChkRequestDto.getEmail());
     }
 
-    @PostMapping("/api/users/validation/nickname")
-    public ResponseEntity<?> checkNickname(@RequestBody String nickname) {
+    @PostMapping("/api/users/validation/nickname/{nickname}")
+    public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
         return userService.checkNickname(nickname);
     }
 
