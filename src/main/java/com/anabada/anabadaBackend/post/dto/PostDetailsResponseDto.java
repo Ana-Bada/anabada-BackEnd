@@ -36,6 +36,8 @@ public class PostDetailsResponseDto {
 
     private boolean isLiked;
 
+    private String after;
+
     private LocalDateTime createdAt;
 
     private Page<CommentResponseDto> comments;
@@ -55,14 +57,34 @@ public class PostDetailsResponseDto {
         this.amenity = postEntity.getAmenity();
         this.imageList = postEntity.getImageList();
         this.viewCount = postEntity.getViewCount();
-///////////////
         this.likeCount = postEntity.getLikeList().size();
         this.isLiked = false;
+        this.after = getAfter(postEntity.getCreatedAt());
         this.createdAt = postEntity.getCreatedAt();
         this.comments = commentResponseDtoList;
     }
 
     public void setLiked(boolean liked) {
         isLiked = liked;
+    }
+
+    public String getAfter(LocalDateTime after) {
+        LocalDateTime now = LocalDateTime.now();
+        String timestamp = "";
+
+        if(now.getYear() != after.getYear()){
+            timestamp = timestamp + (now.getYear()-after.getYear()) + "년 전";
+        }else if(now.getMonthValue() != after.getMonthValue()){
+            timestamp = timestamp + (now.getMonthValue()-after.getMonthValue()) + "달 전";
+        }else if(now.getDayOfMonth() != after.getDayOfMonth()){
+            timestamp = timestamp + (now.getDayOfMonth()-after.getDayOfMonth()) + "일 전";
+        }else if(now.getHour() != after.getHour()){
+            timestamp = timestamp + (now.getHour()-after.getHour()) + "시간 전";
+        }else if(now.getMinute() != after.getMinute()) {
+            timestamp = timestamp + (now.getMinute() - after.getMinute()) + "분 전";
+        }else {
+            timestamp = "방금 전";
+        }
+        return timestamp;
     }
 }

@@ -75,6 +75,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         thunderPost.startDate,
                         thunderPost.endDate,
                         thunderPost.viewCount,
+                        thunderPost.createdAt.as("after"),
                         thunderPost.createdAt,
                         ExpressionUtils.as(
                                 JPAExpressions

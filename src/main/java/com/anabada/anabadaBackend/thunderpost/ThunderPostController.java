@@ -49,7 +49,6 @@ public class ThunderPostController {
     public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area, @RequestParam String keyword,
                                          @RequestParam int page, @RequestParam int size,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String a = keyword.
         return thunderPostService.searchPosts(area, keyword, page, size, userDetails);
     }
 
