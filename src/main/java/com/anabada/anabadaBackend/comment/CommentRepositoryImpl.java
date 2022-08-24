@@ -35,7 +35,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .where(comment.post.postId.eq(postId))
                 .orderBy(comment.createdAt.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = false;

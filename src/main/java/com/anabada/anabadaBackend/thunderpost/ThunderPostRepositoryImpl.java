@@ -55,7 +55,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .where(areaEq(area))
                 .orderBy(thunderPost.createdAt.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = false;
@@ -128,7 +128,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             .or(thunderPost.address.contains(keyword)))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
@@ -169,7 +169,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             .or(areaEq(area).and(thunderPost.address.contains(keyword))))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
