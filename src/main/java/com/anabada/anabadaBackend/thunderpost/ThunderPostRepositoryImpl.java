@@ -2,7 +2,7 @@ package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.thunderlike.QThunderLikeEntity;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
-import com.anabada.anabadaBackend.user.UserEntity;
+import com.anabada.anabadaBackend.thunderrequest.QThunderRequestEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -24,6 +24,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
 
     QThunderPostEntity thunderPost = QThunderPostEntity.thunderPostEntity;
     QThunderLikeEntity thunderLike = QThunderLikeEntity.thunderLikeEntity;
+    QThunderRequestEntity thunderRequest = QThunderRequestEntity.thunderRequestEntity;
 
     @Override
     public Slice<ThunderPostResponseDto> findAllByArea(String area, Pageable pageable) {
@@ -161,7 +162,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     }
 
     @Override
-    public List<ThunderPostResponseDto> findHotPost(String area, UserEntity user) {
+    public List<ThunderPostResponseDto> findHotPost(String area) {
         return queryFactory.select(Projections.fields(
                         ThunderPostResponseDto.class,
                         thunderPost.thunderPostId,

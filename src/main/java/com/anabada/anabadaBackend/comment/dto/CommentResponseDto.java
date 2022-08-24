@@ -1,6 +1,7 @@
 package com.anabada.anabadaBackend.comment.dto;
 
 import com.anabada.anabadaBackend.comment.CommentEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,18 @@ public class CommentResponseDto {
     private Long commentId;
 
     private String email;
+
     private String nickname;
+
     private String profileImg;
+
     private String content;
+
     private LocalDateTime after;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
+
     private Long postId;
 
     public CommentResponseDto(CommentEntity comment) {

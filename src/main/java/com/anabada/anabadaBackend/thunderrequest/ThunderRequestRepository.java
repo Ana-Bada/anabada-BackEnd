@@ -7,4 +7,5 @@ import java.util.List;
 public interface ThunderRequestRepository extends JpaRepository<ThunderRequestEntity, Long> {
     ThunderRequestEntity findByThunderPostThunderPostIdAndUserUserId(Long thunderPostId, Long userId);
     List<ThunderRequestEntity> findAllByThunderPostThunderPostId(Long thunderPostId);
+
 }
