@@ -2,7 +2,6 @@ package com.anabada.anabadaBackend.comment;
 
 import com.anabada.anabadaBackend.comment.dto.CommentRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
-import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +39,14 @@ public class CommentController {
         commentService.deleteComment(commentId, userDetails);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/api/comments/{postId}")
+    public ResponseEntity<?> getComments(@PathVariable Long postId,
+                                         @RequestParam int page,
+                                         @RequestParam int size,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.getComments(postId, page, size, userDetails);
     }
 
 }

@@ -34,10 +34,8 @@ public class PostController {
 //    게시글 상세보기
     @GetMapping("/api/posts/{postId}")
     public PostDetailsResponseDto getPostDetails(@PathVariable Long postId,
-                                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                                 @RequestParam(value = "size", defaultValue = "20") int size,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.getPostDetails(postId, userDetails.getUser().getUserId(), page, size);
+        return postService.getPostDetails(postId, userDetails.getUser().getUserId());
     }
 
 
