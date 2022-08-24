@@ -6,9 +6,9 @@ import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.post.PostRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class CommentService {
 
     public ResponseEntity<?> getComments(Long postId, int page, int size, UserDetailsImpl userDetails) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<CommentResponseDto> commentResponseDtos = commentRepositoryImpl.findAllByPostId(postId, pageable);
+        Slice<CommentResponseDto> commentResponseDtos = commentRepositoryImpl.findAllByPostId(postId, pageable);
         return new ResponseEntity<>(commentResponseDtos, HttpStatus.OK);
     }
 }
