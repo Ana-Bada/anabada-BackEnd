@@ -51,7 +51,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                 .where(areaEq(area))
                 .orderBy(post.createdAt.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = false;
@@ -91,7 +91,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             .or(post.address.contains(keyword)))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
@@ -125,7 +125,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             .or(areaEq(area).and(post.address.contains(keyword))))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
