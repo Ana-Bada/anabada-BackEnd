@@ -15,7 +15,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     public ResponseEntity<?> getChatRooms(UserDetailsImpl userDetails) {
-        chatRoomRepository.findByReceiverUserIdOrSenderUserId(userDetails.getUser().getUserId(), userDetails.getUser().getUserId());
+//        chatRoomRepository.findByReceiverUserIdOrSenderUserId(userDetails.getUser().getUserId(), userDetails.getUser().getUserId());
         return new ResponseEntity<>("g", HttpStatus.OK);
     }
 }

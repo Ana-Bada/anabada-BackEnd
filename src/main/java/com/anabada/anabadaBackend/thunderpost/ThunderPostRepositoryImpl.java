@@ -57,7 +57,14 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+        boolean hasNext = false;
+        if (responseDtos.size() > pageable.getPageSize()) {
+            responseDtos.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(responseDtos, pageable, hasNext);
     }
 
     @Override
@@ -123,7 +130,14 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (responseDtos.size() > pageable.getPageSize()) {
+                responseDtos.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(responseDtos, pageable, hasNext);
         }
         else {
             List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
@@ -157,7 +171,14 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (responseDtos.size() > pageable.getPageSize()) {
+                responseDtos.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(responseDtos, pageable, hasNext);
         }
     }
 
