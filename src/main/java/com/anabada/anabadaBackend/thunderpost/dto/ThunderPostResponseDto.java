@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.thunderpost.dto;
 
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class ThunderPostResponseDto {
 
     private LocalDateTime after;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
     private List<UserInfoResponseDto> members;

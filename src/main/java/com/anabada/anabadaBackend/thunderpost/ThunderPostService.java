@@ -78,8 +78,8 @@ public class ThunderPostService {
         responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(thunderPostId, userDetails.getUser().getUserId()) != null);
         List<ThunderRequestEntity> requestEntityList = thunderRequestRepository.findAllByThunderPostThunderPostId(thunderPostId);
         List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
-        for (int i = 0; i < requestEntityList.size(); i++) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(requestEntityList.get(i).getUser());
+        for (ThunderRequestEntity thunderRequestEntity : requestEntityList) {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(thunderRequestEntity.getUser());
             userInfoResponseDtoList.add(userInfoResponseDto);
         }
         responseDto.setMembers(userInfoResponseDtoList);
@@ -99,7 +99,13 @@ public class ThunderPostService {
     }
 
     public ResponseEntity<?> getHotPosts(String area, UserDetailsImpl userDetails) {
-        List<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findHotPost(area, userDetails.getUser());
+        List<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findHotPost(area);
+        for (ThunderPostResponseDto responseDto : responseDtos) {
+            responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
+                    userDetails.getUser().getUserId()) != null);
+            responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(
+                    responseDto.getThunderPostId(), userDetails.getUser().getUserId()) != null);
+        }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }

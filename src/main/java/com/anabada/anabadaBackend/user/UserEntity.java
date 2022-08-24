@@ -29,5 +29,6 @@ public class UserEntity {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
+        this.profileImg = "https://applesong.s3.ap-northeast-2.amazonaws.com/97b77cab-712c-422c-b114-2d9faea04a2b_%EC%9C%A0%EC%A0%80%EA%B8%B0%EB%B3%B8%ED%94%84%EC%82%AC.JPG";
     }
 }

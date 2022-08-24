@@ -1,6 +1,7 @@
 package com.anabada.anabadaBackend.post.dto;
 
 import com.anabada.anabadaBackend.post.PostEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class PostResponseDto {
 
     private LocalDateTime after;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
     public PostResponseDto(PostEntity postEntity) {
