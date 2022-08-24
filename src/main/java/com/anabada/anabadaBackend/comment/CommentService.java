@@ -1,10 +1,16 @@
 package com.anabada.anabadaBackend.comment;
 
 import com.anabada.anabadaBackend.comment.dto.CommentRequestDto;
+import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.post.PostRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final CommentRepositoryImpl commentRepositoryImpl;
     private final PostRepository postRepository;
 
     public void createComment(Long postId, UserDetailsImpl userDetails, CommentRequestDto commentRequestDto) {
@@ -46,4 +53,9 @@ public class CommentService {
         }
     }
 
+    public ResponseEntity<?> getComments(Long postId, int page, int size, UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CommentResponseDto> commentResponseDtos = commentRepositoryImpl.findAllByPostId(postId, pageable);
+        return new ResponseEntity<>(commentResponseDtos, HttpStatus.OK);
+    }
 }

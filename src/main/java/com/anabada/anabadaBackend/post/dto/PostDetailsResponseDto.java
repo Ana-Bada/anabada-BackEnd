@@ -1,11 +1,9 @@
 package com.anabada.anabadaBackend.post.dto;
 
 import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
-import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,12 +40,10 @@ public class PostDetailsResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
-    private Page<CommentResponseDto> comments;
-
     private List<S3ImageUploadEntity> imageList;
 
 
-    public PostDetailsResponseDto(PostEntity postEntity, Page<CommentResponseDto> commentResponseDtoList) {
+    public PostDetailsResponseDto(PostEntity postEntity) {
         this.postId = postEntity.getPostId();
         this.title = postEntity.getTitle();
         this.thumbnailUrl = postEntity.getThumbnailUrl();
@@ -63,7 +59,6 @@ public class PostDetailsResponseDto {
         this.isLiked = false;
         this.after = getAfter(postEntity.getCreatedAt());
         this.createdAt = postEntity.getCreatedAt();
-        this.comments = commentResponseDtoList;
     }
 
     public void setLiked(boolean liked) {
