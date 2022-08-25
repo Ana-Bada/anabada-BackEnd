@@ -4,11 +4,13 @@ import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 public class PostDetailsResponseDto {
 
     private Long postId;
@@ -36,6 +38,8 @@ public class PostDetailsResponseDto {
     private boolean isLiked;
 
     private String after;
+
+    private int totalComment;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;

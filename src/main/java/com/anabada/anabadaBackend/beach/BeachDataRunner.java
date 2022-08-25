@@ -26,9 +26,9 @@ public class BeachDataRunner implements ApplicationRunner {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            double x = Double.parseDouble(line.split(",")[1]);
             double y = Double.parseDouble(line.split(",")[2]);
-            beachRepository.save(new BeachEntity(line.split(",")[0], x, y));
+            double x = Double.parseDouble(line.split(",")[3]);
+            beachRepository.save(new BeachEntity(line.split(",")[0], line.split(",")[1], x, y));
         }
         UserEntity testUser1 = new UserEntity("donggyu@gmail.com","안동규", passwordEncoder.encode("qla3456Q!"));
         userRepository.save(testUser1);

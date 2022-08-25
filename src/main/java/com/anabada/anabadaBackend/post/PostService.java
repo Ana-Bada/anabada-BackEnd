@@ -52,6 +52,7 @@ public class PostService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + postId + " is not found"));
         PostDetailsResponseDto postDetailsResponseDto = new PostDetailsResponseDto(post);
         postDetailsResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postId, userId) != null);
+        postDetailsResponseDto.setTotalComment(commentRepository.findAllByPostPostId(postId).size());
         return postDetailsResponseDto;
     }
 
