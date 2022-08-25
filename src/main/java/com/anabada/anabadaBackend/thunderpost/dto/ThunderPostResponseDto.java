@@ -20,11 +20,13 @@ public class ThunderPostResponseDto {
     private String title;
     private String content;
     private String nickname;
+    private String profileImg;
     private String area;
     private String address;
     private long goalMember;
     private long currentMember;
     private String thumbnailUrl;
+    private String meetDate;
     private String startDate;
     private String endDate;
 
