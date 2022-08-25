@@ -40,6 +40,9 @@ public class ThunderPostEntity extends TimeStamped {
     @Column
     private String thumbnailUrl;
 
+    @Column
+    private String meetDate;
+
     @Column(nullable = false)
     private String startDate;
 
