@@ -16,6 +16,9 @@ public class BeachEntity {
     @Id
     private Long beachId;
 
+    @Column
+    private String beachNum;
+
     @Column(nullable = false)
     private String beachName;
 
@@ -40,17 +43,26 @@ public class BeachEntity {
     @Column
     private String pcp;
 
-    public BeachEntity(String beachName, Double x, Double y){
+    @Column
+    private String pty;
+
+    @Column
+    private String sky;
+
+    public BeachEntity(String beachNum, String beachName, Double x, Double y){
+        this.beachNum = beachNum;
         this.beachName = beachName;
         this.x = x;
         this.y = y;
     }
 
-    public void updateBeach(String tmp, String wav, String wsd, String pop, String pcp) {
+    public void updateBeach(String tmp, String wav, String wsd, String pop, String pcp, String pty, String sky) {
         this.tmp = tmp;
         this.wav = wav;
         this.wsd = wsd;
         this.pop = pop;
         this.pcp = pcp;
+        this.pty = pty;
+        this.sky = sky;
     }
 }

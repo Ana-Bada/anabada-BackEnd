@@ -22,6 +22,8 @@ public class BeachResponseDto {
     private String wsd;
     private String pop;
     private String pcp;
+    private String pty;
+    private String sky;
 
     public BeachResponseDto(BeachEntity beach) {
         this.beachId = beach.getBeachId();
@@ -31,5 +33,7 @@ public class BeachResponseDto {
         this.wsd = beach.getWsd();
         this.pop = beach.getPop();
         this.pcp = beach.getPcp();
+        this.pty = beach.getPty();
+        this.sky = beach.getSky();
     }
 }
