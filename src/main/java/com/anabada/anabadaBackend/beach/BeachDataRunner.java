@@ -1,12 +1,9 @@
 package com.anabada.anabadaBackend.beach;
 
-import com.anabada.anabadaBackend.user.UserEntity;
-import com.anabada.anabadaBackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -17,8 +14,6 @@ import java.io.InputStreamReader;
 @RequiredArgsConstructor
 public class BeachDataRunner implements ApplicationRunner {
     private final BeachRepository beachRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
 
     @Override
     public void run(ApplicationArguments args) throws IOException {
@@ -30,7 +25,5 @@ public class BeachDataRunner implements ApplicationRunner {
             double x = Double.parseDouble(line.split(",")[3]);
             beachRepository.save(new BeachEntity(line.split(",")[0], line.split(",")[1], x, y));
         }
-        UserEntity testUser1 = new UserEntity("donggyu@gmail.com","안동규", passwordEncoder.encode("qla3456Q!"));
-        userRepository.save(testUser1);
     }
 }
