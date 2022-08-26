@@ -1,6 +1,7 @@
 package com.anabada.anabadaBackend.ChatMessage;
 
 import com.anabada.anabadaBackend.ChatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.ChatMessage.dto.MessageResponseDto;
 import com.anabada.anabadaBackend.ChatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.ChatRoom.ChatRoomRepository;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
@@ -35,6 +36,7 @@ public class ChatMessageService {
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         ChatMessageEntity chatMessage = new ChatMessageEntity(messageRequestDto, user, room);
         chatMessageRepository.save(chatMessage);
-        return new ResponseEntity<>("gg", HttpStatus.OK);
+        MessageResponseDto messageResponseDto = new MessageResponseDto(chatMessage);
+        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }
 }

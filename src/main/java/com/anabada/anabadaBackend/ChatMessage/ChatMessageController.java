@@ -20,11 +20,13 @@ public class ChatMessageController {
 
     @GetMapping("/api/messages/{roomId}")
     public ResponseEntity<?> getMessages(@PathVariable Long roomId, @RequestHeader("accessToken") String token) {
+        System.out.println(token);
         return chatMessageService.getMessages(roomId, token);
     }
 
     @MessageMapping("/messages/{roomId}")
     public ResponseEntity<?> sendMessage(@RequestHeader("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
+        System.out.println(token);
         template.convertAndSend("/sub/room/" + roomId, messageRequestDto);
         return chatMessageService.sendMessage(token, messageRequestDto, roomId);
     }

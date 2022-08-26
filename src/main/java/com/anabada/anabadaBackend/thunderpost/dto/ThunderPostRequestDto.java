@@ -10,6 +10,7 @@ public class ThunderPostRequestDto {
     private String address;
     private long goalMember;
     private String thumbnailUrl;
+    private String meetDate;
     private String startDate;
     private String endDate;
 }

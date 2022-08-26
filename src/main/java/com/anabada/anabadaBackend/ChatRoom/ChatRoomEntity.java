@@ -1,12 +1,12 @@
 package com.anabada.anabadaBackend.ChatRoom;
 
+import com.anabada.anabadaBackend.ChatMessage.ChatMessageEntity;
+import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,4 +16,20 @@ public class ChatRoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "senderId", nullable = false)
+    private UserEntity sender;
+
+    @ManyToOne
+    @JoinColumn(name = "receiverId", nullable = false)
+    private UserEntity receiver;
+
+    @OneToMany(mappedBy = "chatroom")
+    private List<ChatMessageEntity> chatMessageList;
+
+    public ChatRoomEntity (UserEntity sender, UserEntity receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 }
