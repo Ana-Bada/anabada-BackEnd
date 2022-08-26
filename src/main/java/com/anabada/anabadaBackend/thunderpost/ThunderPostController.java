@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 public class ThunderPostController {
@@ -21,14 +23,14 @@ public class ThunderPostController {
     }
 
     @PostMapping("/api/meets")
-    public ResponseEntity<?> createThunderPost(@RequestBody ThunderPostRequestDto thunderPostRequestDto,
+    public ResponseEntity<?> createThunderPost(@RequestBody @Valid ThunderPostRequestDto thunderPostRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.createThunderPost(thunderPostRequestDto, userDetails);
     }
 
     @PutMapping("/api/meets/{thunderPostId}")
     public ResponseEntity<?> updateThunderPost(@PathVariable Long thunderPostId,
-                                               @RequestBody ThunderPostRequestDto thunderPostRequestDto,
+                                               @RequestBody @Valid ThunderPostRequestDto thunderPostRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.updateThunderPost(thunderPostId, thunderPostRequestDto, userDetails);
     }
