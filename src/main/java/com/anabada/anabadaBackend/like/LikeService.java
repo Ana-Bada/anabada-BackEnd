@@ -1,5 +1,8 @@
 package com.anabada.anabadaBackend.like;
 
+import com.anabada.anabadaBackend.notification.NotificationEntity;
+import com.anabada.anabadaBackend.notification.NotificationRepository;
+import com.anabada.anabadaBackend.notification.dto.NotificationBadgeResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.post.PostRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
@@ -7,6 +10,7 @@ import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,8 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final LikeRepositoryImpl likeRepositoryImpl;
     private final PostRepository postRepository;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final NotificationRepository notificationRepository;
 
     @Transactional
     public ResponseEntity<?> createLike(Long postId, UserEntity user) {
@@ -35,6 +41,8 @@ public class LikeService {
         LikeEntity like = new LikeEntity(post,user);
         likeRepository.save(like);
 
+        sendNotification(user, post);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -43,5 +51,14 @@ public class LikeService {
         Long likeId = likeRepositoryImpl.findByPostIdAndUserId(postId, userDetails.getUser().getUserId());
         likeRepository.deleteById(likeId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void sendNotification(UserEntity user, PostEntity post) {
+        if (user.getUserId() == post.getUser().getUserId()) {
+            NotificationEntity notification = new NotificationEntity(user, post, "like");
+            notificationRepository.save(notification);
+            NotificationBadgeResponseDto notificationBadgeResponseDto = new NotificationBadgeResponseDto(notification.isBadge());
+            simpMessagingTemplate.convertAndSend("/topic/notification/" + post.getUser().getUserId(), notificationBadgeResponseDto);
+        }
     }
 }

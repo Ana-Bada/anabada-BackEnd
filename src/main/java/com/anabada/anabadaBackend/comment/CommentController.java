@@ -2,7 +2,6 @@ package com.anabada.anabadaBackend.comment;
 
 import com.anabada.anabadaBackend.comment.dto.CommentRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
-import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
