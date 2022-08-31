@@ -28,6 +28,6 @@ public class NotificationResponseDto {
         this.post = notification.getPost();
         this.createdAt = notification.getCreatedAt();
         this.isRead = notification.isRead();
-        this.isBadge = isBadge;
+        this.isBadge = notification.isBadge();
     }
 }
