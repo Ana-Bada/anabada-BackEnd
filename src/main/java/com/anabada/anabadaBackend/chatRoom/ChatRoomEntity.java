@@ -1,6 +1,6 @@
-package com.anabada.anabadaBackend.ChatRoom;
+package com.anabada.anabadaBackend.chatRoom;
 
-import com.anabada.anabadaBackend.ChatMessage.ChatMessageEntity;
+import com.anabada.anabadaBackend.chatMessage.ChatMessageEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

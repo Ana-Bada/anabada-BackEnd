@@ -1,6 +1,6 @@
 package com.anabada.anabadaBackend.security;
 
-import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.redis.RedisService;
 import com.anabada.anabadaBackend.security.filter.FormLoginFilter;
 import com.anabada.anabadaBackend.security.filter.JwtAuthFilter;
 import com.anabada.anabadaBackend.security.jwt.HeaderTokenExtractor;
@@ -115,6 +115,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/users/reissue").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/users/validation/email").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/validation/nickname/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/meets").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/meets/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/meets/hot").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
 // 그 외 어떤 요청이든 '인증'
@@ -179,6 +182,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/api/beach");
         skipPathList.add("POST,/api/users/validation/email");
         skipPathList.add("POST,/api/users/validation/nickname/**");
+        skipPathList.add("GET,/api/meets");
+        skipPathList.add("GET,/api/meets/**");
+        skipPathList.add("GET,/api/meets/hot");
+
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.common;
+package com.anabada.anabadaBackend.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

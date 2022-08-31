@@ -1,6 +1,6 @@
 package com.anabada.anabadaBackend.user;
 
-import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.redis.RedisService;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.security.jwt.JwtTokenUtils;

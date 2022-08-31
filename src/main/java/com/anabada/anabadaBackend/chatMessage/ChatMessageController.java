@@ -1,9 +1,10 @@
-package com.anabada.anabadaBackend.ChatMessage;
+package com.anabada.anabadaBackend.chatMessage;
 
-import com.anabada.anabadaBackend.ChatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,12 @@ public class ChatMessageController {
 
     @GetMapping("/api/messages/{roomId}")
     public ResponseEntity<?> getMessages(@PathVariable Long roomId, @RequestHeader("accessToken") String token) {
-        System.out.println(token);
         return chatMessageService.getMessages(roomId, token);
     }
 
     @MessageMapping("/messages/{roomId}")
-    public ResponseEntity<?> sendMessage(@RequestHeader("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
-        System.out.println(token);
-        template.convertAndSend("/sub/room/" + roomId, messageRequestDto);
+    public ResponseEntity<?> sendMessage(@Header("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
+        template.convertAndSend("/sub/rooms/" + roomId, messageRequestDto);
         return chatMessageService.sendMessage(token, messageRequestDto, roomId);
     }
 }

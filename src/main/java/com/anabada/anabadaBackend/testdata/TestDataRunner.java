@@ -29,6 +29,5 @@ public class TestDataRunner implements ApplicationRunner {
         userRepository.save(testUser3);
         userRepository.save(testUser4);
 
-
     }
 }
