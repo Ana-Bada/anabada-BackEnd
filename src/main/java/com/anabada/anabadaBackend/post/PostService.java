@@ -2,8 +2,6 @@ package com.anabada.anabadaBackend.post;
 
 import com.anabada.anabadaBackend.comment.CommentEntity;
 import com.anabada.anabadaBackend.comment.CommentRepository;
-import com.anabada.anabadaBackend.comment.CommentRepositoryImpl;
-import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.like.LikeRepositoryImpl;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
@@ -11,7 +9,6 @@ import com.anabada.anabadaBackend.post.dto.PostResponseDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,7 +24,6 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final CommentRepositoryImpl commentRepositoryImpl;
     private final PostRepositoryImpl postrepositoryImpl;
 
     private final LikeRepositoryImpl likeRepository;
@@ -43,10 +39,6 @@ public class PostService {
     public ResponseEntity<?> getAllPosts(Long userId, String area, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<PostResponseDto> postResponseDtoList = postrepositoryImpl.findAllByArea(area, pageable);
-//        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
-//        return postList.stream()
-//                .map(PostResponseDto::new)
-//                .collect(Collectors.toList());    //스트림 중간에 isLiked값을 넣울숙가 없따...
         for(PostResponseDto postResponseDto : postResponseDtoList){
             postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postResponseDto.getPostId(), userId) != null);
         }
@@ -54,23 +46,13 @@ public class PostService {
     }
 
 //    게시글 상세페이지
-    public PostDetailsResponseDto getPostDetails(Long postId, Long userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PostDetailsResponseDto getPostDetails(Long postId, Long userId) {
         postrepositoryImpl.addViewCount(postId);
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post " + postId + " is not found"));
-        Page<CommentResponseDto> comments = commentRepositoryImpl.findAllByPostId(postId, pageable);
-//        Page<CommentEntity> comments = commentRepository.findAllByPostPostId(postId, pageable);
-//        List<CommentResponseDto>  commentResponseDtoList = new ArrayList<>();
-//        for(CommentEntity comment : comments){
-//            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
-//            commentResponseDtoList.add(commentResponseDto);
-//        }
-//        List<CommentResponseDto> commentResponseDtoList= comments.stream()
-//                .map(CommentResponseDto::new)
-//                .collect(Collectors.toList());
-        PostDetailsResponseDto postDetailsResponseDto = new PostDetailsResponseDto(post,comments);
+        PostDetailsResponseDto postDetailsResponseDto = new PostDetailsResponseDto(post);
         postDetailsResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postId, userId) != null);
+        postDetailsResponseDto.setTotalComment(commentRepository.findAllByPostPostId(postId).size());
         return postDetailsResponseDto;
     }
 

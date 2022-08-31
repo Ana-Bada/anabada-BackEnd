@@ -31,33 +31,34 @@ public class BeachWeatherData {
 
     private final BeachRepository beachRepository;
 
-//    @Scheduled(cron = "0 0/1 * * * *")
-//    @Scheduled(cron = "0 0 0/1 * * *", initialDelay = 5000)
-    @Scheduled(fixedDelay = 3600000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 10800000, initialDelay = 5000)
     public void getBeachesWeather() throws IOException, ParseException {
         HashMap<String, String> hm = new HashMap<>();
         List<BeachEntity> beachList = beachRepository.findAll();
 
         String nowDate = DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now());
-        String nowTime = DateTimeFormatter.ofPattern("HH00").format(LocalTime.now());
-        if (Integer.parseInt(nowTime) > 0 && Integer.parseInt(nowTime) <= 500) {
-            nowDate = Integer.parseInt(nowDate) - 1 + "";
-            nowTime = Integer.parseInt(nowTime) + 2400 + "";
+        String nowTime = DateTimeFormatter.ofPattern("HH").format(LocalTime.now());
+        int n = Integer.parseInt(nowTime);
+        switch ( n % 3) {
+            case 0:
+                n -= 1;
+                break;
+            case 1:
+                n -= 2;
+                break;
+            case 2: break;
         }
-        String page = (Integer.parseInt(nowTime) / 100) - 5 + "";
-
+        if((n+"00").length() == 3)
+            nowTime = "0" + n + "00";
+        else nowTime = n + "00";
         for(BeachEntity beach : beachList) {
-            StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"); /*URL*/
-            String x = Math.round(beach.getX()) + "";
-            String y = Math.round(beach.getY()) + "";
+            StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/BeachInfoservice/getVilageFcstBeach"); /*URL*/
             urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + weatherkey); /*Service Key*/
-            urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=" + URLEncoder.encode(page, "UTF-8")); /*페이지번호*/
-            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("12", "UTF-8")); /*한 페이지 결과 수*/
-            urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*요청자료형식(XML/JSON) Default: XML*/
+            urlBuilder.append("&" + URLEncoder.encode("beach_num", "UTF-8") + "=" + URLEncoder.encode(beach.getBeachNum(), "UTF-8")); /*페이지번호*/
+            urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("12", "UTF-8"));
             urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(nowDate, "UTF-8")); /*‘21년 6월 28일발표*/
-            urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode("0500", "UTF-8")); /*05시 발표*/
-            urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(x.split("\\.")[0], "UTF-8")); /*예보지점의 X 좌표값*/
-            urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(y.split("\\.")[0], "UTF-8")); /*예보지점의 Y 좌표값*/
+            urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(nowTime, "UTF-8")); /*05시 발표*/
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -88,11 +89,11 @@ public class BeachWeatherData {
                 weather = (JSONObject) parse_item.get(i);
                 category = (String) weather.get("category");
                 if (category.equals("TMP") || category.equals("WAV") || category.equals("WSD")
-                        || category.equals("POP") || category.equals("PCP")) {
+                        || category.equals("POP") || category.equals("PCP") || category.equals("PTY") || category.equals("SKY")) {
                     String fcstValue = (String) weather.get("fcstValue");
                     hm.put(category, fcstValue);
                 }
-                beach.updateBeach(hm.get("TMP"), hm.get("WAV"), hm.get("WSD"), hm.get("POP"), hm.get("PCP"));
+                beach.updateBeach(hm.get("TMP"), hm.get("WAV"), hm.get("WSD"), hm.get("POP"), hm.get("PCP"), hm.get("PTY"), hm.get("SKY"));
                 beachRepository.save(beach);
             }
         }

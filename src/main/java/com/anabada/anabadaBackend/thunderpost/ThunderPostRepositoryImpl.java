@@ -34,11 +34,13 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         thunderPost.title,
                         thunderPost.content,
                         thunderPost.user.nickname,
+                        thunderPost.user.profileImg,
                         thunderPost.area,
                         thunderPost.address,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
                         thunderPost.thumbnailUrl,
+                        thunderPost.meetDate,
                         thunderPost.startDate,
                         thunderPost.endDate,
                         thunderPost.viewCount,
@@ -55,9 +57,16 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .where(areaEq(area))
                 .orderBy(thunderPost.createdAt.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
-        return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+        boolean hasNext = false;
+        if (responseDtos.size() > pageable.getPageSize()) {
+            responseDtos.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(responseDtos, pageable, hasNext);
     }
 
     @Override
@@ -68,11 +77,13 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         thunderPost.title,
                         thunderPost.content,
                         thunderPost.user.nickname,
+                        thunderPost.user.profileImg,
                         thunderPost.area,
                         thunderPost.address,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
                         thunderPost.thumbnailUrl,
+                        thunderPost.meetDate,
                         thunderPost.startDate,
                         thunderPost.endDate,
                         thunderPost.viewCount,
@@ -99,11 +110,13 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             thunderPost.title,
                             thunderPost.content,
                             thunderPost.user.nickname,
+                            thunderPost.user.profileImg,
                             thunderPost.area,
                             thunderPost.address,
                             thunderPost.goalMember,
                             thunderPost.currentMember,
                             thunderPost.thumbnailUrl,
+                            thunderPost.meetDate,
                             thunderPost.startDate,
                             thunderPost.endDate,
                             thunderPost.viewCount,
@@ -121,9 +134,16 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             .or(thunderPost.address.contains(keyword)))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (responseDtos.size() > pageable.getPageSize()) {
+                responseDtos.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(responseDtos, pageable, hasNext);
         }
         else {
             List<ThunderPostResponseDto> responseDtos = queryFactory.select(Projections.fields(
@@ -132,11 +152,13 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             thunderPost.title,
                             thunderPost.content,
                             thunderPost.user.nickname,
+                            thunderPost.user.profileImg,
                             thunderPost.area,
                             thunderPost.address,
                             thunderPost.goalMember,
                             thunderPost.currentMember,
                             thunderPost.thumbnailUrl,
+                            thunderPost.meetDate,
                             thunderPost.startDate,
                             thunderPost.endDate,
                             thunderPost.viewCount,
@@ -155,9 +177,16 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             .or(areaEq(area).and(thunderPost.address.contains(keyword))))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (responseDtos.size() > pageable.getPageSize()) {
+                responseDtos.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(responseDtos, pageable, hasNext);
         }
     }
 
@@ -169,11 +198,13 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         thunderPost.title,
                         thunderPost.content,
                         thunderPost.user.nickname,
+                        thunderPost.user.profileImg,
                         thunderPost.area,
                         thunderPost.address,
                         thunderPost.goalMember,
                         thunderPost.currentMember,
                         thunderPost.thumbnailUrl,
+                        thunderPost.meetDate,
                         thunderPost.startDate,
                         thunderPost.endDate,
                         thunderPost.viewCount,

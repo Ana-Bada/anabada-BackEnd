@@ -51,9 +51,16 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                 .where(areaEq(area))
                 .orderBy(post.createdAt.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
-        return new SliceImpl<>(postResponseDtoList, pageable, postResponseDtoList.iterator().hasNext());
+
+        boolean hasNext = false;
+        if (postResponseDtoList.size() > pageable.getPageSize()) {
+            postResponseDtoList.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(postResponseDtoList, pageable, hasNext);
 
 
     }
@@ -61,7 +68,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
     @Override
     public Slice<PostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable) {
         if (area.equals("ALL")) {
-            List<PostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+            List<PostResponseDto> postResponseDtoList = queryFactory.select(Projections.fields(
                             PostResponseDto.class,
                             post.postId,
                             post.title,
@@ -84,11 +91,18 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             .or(post.address.contains(keyword)))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (postResponseDtoList.size() > pageable.getPageSize()) {
+                postResponseDtoList.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(postResponseDtoList, pageable, hasNext);
         } else {
-            List<PostResponseDto> responseDtos = queryFactory.select(Projections.fields(
+            List<PostResponseDto> postResponseDtoList = queryFactory.select(Projections.fields(
                             PostResponseDto.class,
                             post.postId,
                             post.title,
@@ -111,9 +125,16 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             .or(areaEq(area).and(post.address.contains(keyword))))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
-            return new SliceImpl<>(responseDtos, pageable, responseDtos.iterator().hasNext());
+
+            boolean hasNext = false;
+            if (postResponseDtoList.size() > pageable.getPageSize()) {
+                postResponseDtoList.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+
+            return new SliceImpl<>(postResponseDtoList, pageable, hasNext);
         }
     }
 

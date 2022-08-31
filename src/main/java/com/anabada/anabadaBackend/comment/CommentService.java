@@ -4,11 +4,17 @@ import com.anabada.anabadaBackend.comment.dto.CommentRequestDto;
 import com.anabada.anabadaBackend.notification.NotificationEntity;
 import com.anabada.anabadaBackend.notification.NotificationRepository;
 import com.anabada.anabadaBackend.notification.dto.NotificationBadgeResponseDto;
+import com.anabada.anabadaBackend.comment.dto.CommentResponseDto;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.post.PostRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final CommentRepositoryImpl commentRepositoryImpl;
     private final PostRepository postRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final NotificationRepository notificationRepository;
@@ -56,6 +63,11 @@ public class CommentService {
         }
     }
 
+    public ResponseEntity<?> getComments(Long postId, int page, int size, UserDetailsImpl userDetails) {
+        Pageable pageable = PageRequest.of(page, size);
+        Slice<CommentResponseDto> commentResponseDtos = commentRepositoryImpl.findAllByPostId(postId, pageable);
+        return new ResponseEntity<>(commentResponseDtos, HttpStatus.OK);
+    }
 
     private void sendNotification(UserDetailsImpl userDetails, PostEntity post) {
         if (userDetails.getUser().getUserId() == post.getUser().getUserId()) {
@@ -65,5 +77,4 @@ public class CommentService {
             simpMessagingTemplate.convertAndSend("/topic/notification/" + post.getUser().getUserId(), notificationBadgeResponseDto);
         }
     }
-
 }

@@ -40,6 +40,9 @@ public class ThunderPostEntity extends TimeStamped {
     @Column
     private String thumbnailUrl;
 
+    @Column
+    private String meetDate;
+
     @Column(nullable = false)
     private String startDate;
 
@@ -61,6 +64,7 @@ public class ThunderPostEntity extends TimeStamped {
         this.goalMember = thunderPostRequestDto.getGoalMember();
         this.currentMember = 0;
         this.thumbnailUrl = thunderPostRequestDto.getThumbnailUrl();
+        this.meetDate = thunderPostRequestDto.getMeetDate();
         this.startDate = thunderPostRequestDto.getStartDate();
         this.endDate = thunderPostRequestDto.getEndDate();
         this.user = userDetails.getUser();
@@ -73,6 +77,7 @@ public class ThunderPostEntity extends TimeStamped {
         this.address = thunderPostRequestDto.getAddress();
         this.goalMember = thunderPostRequestDto.getGoalMember();
         this.thumbnailUrl = thunderPostRequestDto.getThumbnailUrl();
+        this.meetDate = thunderPostRequestDto.getMeetDate();
         this.startDate = thunderPostRequestDto.getStartDate();
         this.endDate = thunderPostRequestDto.getEndDate();
     }

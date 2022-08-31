@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 public class ThunderPostController {
@@ -16,19 +18,19 @@ public class ThunderPostController {
     public ResponseEntity<?> getThunderPosts(@RequestParam(defaultValue = "ALL") String area,
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "5") int size,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.getThunderPosts(area, page, size, userDetails);
+                                             @RequestHeader(value = "Authorization") String token) {
+        return thunderPostService.getThunderPosts(area, page, size, token);
     }
 
     @PostMapping("/api/meets")
-    public ResponseEntity<?> createThunderPost(@RequestBody ThunderPostRequestDto thunderPostRequestDto,
+    public ResponseEntity<?> createThunderPost(@RequestBody @Valid ThunderPostRequestDto thunderPostRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.createThunderPost(thunderPostRequestDto, userDetails);
     }
 
     @PutMapping("/api/meets/{thunderPostId}")
     public ResponseEntity<?> updateThunderPost(@PathVariable Long thunderPostId,
-                                               @RequestBody ThunderPostRequestDto thunderPostRequestDto,
+                                               @RequestBody @Valid ThunderPostRequestDto thunderPostRequestDto,
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.updateThunderPost(thunderPostId, thunderPostRequestDto, userDetails);
     }
@@ -41,8 +43,8 @@ public class ThunderPostController {
 
     @GetMapping("/api/meets/{thunderPostId}")
     public ResponseEntity<?> getThunderPost(@PathVariable Long thunderPostId,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.getThunderPost(thunderPostId, userDetails);
+                                            @RequestHeader(value = "Authorization") String token) {
+        return thunderPostService.getThunderPost(thunderPostId, token);
     }
 
     @GetMapping("/api/meets/search")
@@ -54,7 +56,7 @@ public class ThunderPostController {
 
     @GetMapping("/api/meets/hot")
     public ResponseEntity<?> getHotPosts(@RequestParam(defaultValue = "ALL") String area,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.getHotPosts(area, userDetails);
+                                         @RequestHeader(value = "Authorization") String token) {
+        return thunderPostService.getHotPosts(area, token);
     }
 }
