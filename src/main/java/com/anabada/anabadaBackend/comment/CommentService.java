@@ -70,7 +70,7 @@ public class CommentService {
     }
 
     private void sendNotification(UserDetailsImpl userDetails, PostEntity post) {
-        if (userDetails.getUser().getUserId() == post.getUser().getUserId()) {
+        if (userDetails.getUser().getUserId() != post.getUser().getUserId()) {
             NotificationEntity notification = new NotificationEntity(userDetails.getUser(), post, "comment");
             notificationRepository.save(notification);
             NotificationBadgeResponseDto notificationBadgeResponseDto = new NotificationBadgeResponseDto(notification.isBadge());

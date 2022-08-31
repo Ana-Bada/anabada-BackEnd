@@ -54,7 +54,7 @@ public class LikeService {
     }
 
     private void sendNotification(UserEntity user, PostEntity post) {
-        if (user.getUserId() == post.getUser().getUserId()) {
+        if (user.getUserId() != post.getUser().getUserId()) {
             NotificationEntity notification = new NotificationEntity(user, post, "like");
             notificationRepository.save(notification);
             NotificationBadgeResponseDto notificationBadgeResponseDto = new NotificationBadgeResponseDto(notification.isBadge());
