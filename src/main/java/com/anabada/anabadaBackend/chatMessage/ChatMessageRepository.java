@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.ChatMessage;
+package com.anabada.anabadaBackend.chatMessage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,7 +1,7 @@
 package com.anabada.anabadaBackend.security;
 
 
-import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.redis.RedisService;
 import com.anabada.anabadaBackend.security.jwt.JwtTokenUtils;
 import com.anabada.anabadaBackend.user.RefreshToken;
 import com.anabada.anabadaBackend.user.RefreshTokenRepository;

@@ -1,7 +1,7 @@
-package com.anabada.anabadaBackend.ChatMessage;
+package com.anabada.anabadaBackend.chatMessage;
 
-import com.anabada.anabadaBackend.ChatMessage.dto.MessageRequestDto;
-import com.anabada.anabadaBackend.ChatRoom.ChatRoomEntity;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;

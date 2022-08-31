@@ -1,7 +1,7 @@
 package com.anabada.anabadaBackend.common;
 
-import com.anabada.anabadaBackend.ChatMessage.ChatMessageService;
-import com.anabada.anabadaBackend.ChatRoom.ChatRoomRepository;
+import com.anabada.anabadaBackend.chatMessage.ChatMessageService;
+import com.anabada.anabadaBackend.chatRoom.ChatRoomRepository;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
