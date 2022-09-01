@@ -1,6 +1,10 @@
 package com.anabada.anabadaBackend.chatMessage;
 
 import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageResponseDto;
+import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
+import com.anabada.anabadaBackend.user.UserEntity;
+import com.anabada.anabadaBackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,6 +22,8 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate template;
+    private final JwtDecoder jwtDecoder;
+    private final UserRepository userRepository;
 
     @GetMapping("/api/messages/{roomId}")
     public ResponseEntity<?> getMessages(@PathVariable Long roomId, @RequestHeader("accessToken") String token) {
@@ -26,7 +32,11 @@ public class ChatMessageController {
 
     @MessageMapping("/messages/{roomId}")
     public ResponseEntity<?> sendMessage(@Header("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
-        template.convertAndSend("/sub/rooms/" + roomId, messageRequestDto);
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        MessageResponseDto messageResponseDto = new MessageResponseDto(user, messageRequestDto);
+        template.convertAndSend("/sub/rooms/" + roomId, messageResponseDto);
         return chatMessageService.sendMessage(token, messageRequestDto, roomId);
     }
 }

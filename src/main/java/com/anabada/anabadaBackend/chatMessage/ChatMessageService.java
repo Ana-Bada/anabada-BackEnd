@@ -31,7 +31,6 @@ public class ChatMessageService {
     public ResponseEntity<?> sendMessage(String token, MessageRequestDto messageRequestDto, Long roomId) {
         ChatRoomEntity room = chatRoomRepository.findById(roomId)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
-        System.out.println(token);
         String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
