@@ -26,8 +26,9 @@ public class ThunderPostResponseDto {
     private long goalMember;
     private long currentMember;
     private String thumbnailUrl;
+
     private String meetDate;
-    private String startDate;
+
     private String endDate;
 
     private long viewCount;
@@ -53,7 +54,6 @@ public class ThunderPostResponseDto {
         this.goalMember = thunderPost.getGoalMember();
         this.currentMember = thunderPost.getCurrentMember();
         this.thumbnailUrl = thunderPost.getThumbnailUrl();
-        this.startDate = thunderPost.getStartDate();
         this.endDate = thunderPost.getEndDate();
         this.createdAt = thunderPost.getCreatedAt();
         this.members = users;
