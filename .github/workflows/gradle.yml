@@ -56,7 +56,9 @@ jobs:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 cp \
-          --region ap-northeast-2 \
-          --acl private \ 
-          ./springboot-intro-build.zip s3://mybada/
+          aws deploy create-deployment \
+          --application-name springboot-deploy \
+          --deployment-group-name springboot-deploy-group \
+          --file-exists-behavior OVERWRITE \
+          --s3-location bucket=mybada,bundleType=zip,key=springboot-deploy.zip \
+          --region ap-northeast-2
