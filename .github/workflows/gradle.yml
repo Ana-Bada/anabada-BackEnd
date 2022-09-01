@@ -59,4 +59,4 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \
-          ./springboot-deploy.zip s3://mybada/springboot-deploy.zip
+          ./springboot-intro-build.zip s3://mybada/springboot-intro-build.zip
