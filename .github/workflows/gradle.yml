@@ -53,12 +53,10 @@ jobs:
       # S3 Bucket으로 copy
       - name: Deliver to AWS S3
         env:
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws deploy create-deployment \
-          --application-name springboot-deploy \
-          --deployment-group-name springboot-deploy-group \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=mybada,bundleType=zip,key=springboot-deploy.zip \
-          --region ap-northeast-2
+          aws s3 cp \
+          --region ap-northeast-2 \
+          --acl private \
+          ./springboot-deploy.zip s3://mybada/springboot-deploy.zip
