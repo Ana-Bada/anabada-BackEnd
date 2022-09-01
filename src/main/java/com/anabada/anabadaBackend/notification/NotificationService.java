@@ -18,18 +18,19 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-
     private final NotificationRepositoryImpl notificationRepositoryImpl;
 
-
     //마지막 알림의 Badge여부 확인하고
-    public NotificationBadgeResponseDto checkBadge(UserDetailsImpl userDetails){
-        List<NotificationEntity> notificationEntityList = notificationRepository
-                .findByUserUserId(userDetails.getUser().getUserId());
+    public NotificationBadgeResponseDto checkBadge(UserDetailsImpl userDetails) {
 
-        int notificationSize = notificationEntityList.size();
-        if ( notificationEntityList.get(notificationSize-1).isBadge() == false){
+        List<NotificationBadgeResponseDto> notificationBadgeResponseDtoList = notificationRepositoryImpl
+                .findByPostUserId(userDetails.getUser().getUserId());
+
+        int notificationSize = notificationBadgeResponseDtoList.size();
+        if (notificationBadgeResponseDtoList.get(notificationSize - 1).isBadge() == false) {
             return new NotificationBadgeResponseDto(false);
+        } else if ( notificationSize == 0 ) {
+            return new NotificationBadgeResponseDto(true);
         } else {
             return new NotificationBadgeResponseDto(true);
         }
@@ -39,19 +40,16 @@ public class NotificationService {
     public Slice<NotificationResponseDto> getNotificationList(UserDetailsImpl userDetails, int page, int size) {
 
         //List로 불러와서 먼저 먼저 isBadge 수정
-        List<NotificationEntity> notificationEntityList = notificationRepository
-                .findByUserUserId(userDetails.getUser().getUserId());
+        List<NotificationEntity> notificationEntityList = notificationRepositoryImpl
+                .findByPostUserIdEntity(userDetails.getUser().getUserId());
         for ( NotificationEntity notification : notificationEntityList ){
             notification.badgeOff();
             notificationRepository.save(notification);
         }
-
         //페이지로 불러와서 컨트롤러에 반환
         Pageable pageable = PageRequest.of(page, size);
         Slice<NotificationResponseDto> notificationResponseDtoList = notificationRepositoryImpl
                 .findByUserId(userDetails.getUser().getUserId(), pageable);
-
-
         return notificationResponseDtoList;
     }
 
@@ -73,10 +71,9 @@ public class NotificationService {
 
     //알림 전체 삭제
     public void deleteAllNotification(UserDetailsImpl userDetails){
-        List<NotificationEntity> notificationEntityList = notificationRepository.findByUserUserId(userDetails.getUser().getUserId());
-
-        for ( NotificationEntity notification : notificationEntityList ){
-            notificationRepository.deleteByUserUserId(notification.getNotificationId());
+        List<NotificationEntity> notificationEntityList = notificationRepositoryImpl.findByPostUserIdEntity(userDetails.getUser().getUserId());
+        for ( NotificationEntity notification : notificationEntityList){
+            notificationRepository.delete(notification);
         }
     }
 

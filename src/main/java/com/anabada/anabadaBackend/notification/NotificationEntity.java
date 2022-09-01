@@ -4,6 +4,7 @@ package com.anabada.anabadaBackend.notification;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +24,13 @@ public class NotificationEntity extends TimeStamped {
     @Column
     private String notificationType; //이넘으로 하나...?? int로 정해놓고 해??
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID")
     private PostEntity post;
 

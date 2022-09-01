@@ -1,11 +1,13 @@
 package com.anabada.anabadaBackend.notification;
 
+import com.anabada.anabadaBackend.notification.dto.NotificationBadgeResponseDto;
 import com.anabada.anabadaBackend.notification.dto.NotificationResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,11 +43,49 @@ public class NotificationRepositoryImpl implements NotificationRepositoryCustom{
             notificationResponseDtoList.remove(pageable.getPageSize());
             hasNext = true;
         }
-        return null;
+        return new SliceImpl<>(notificationResponseDtoList, pageable, hasNext);
+    }
+
+
+    @Override
+    public List<NotificationBadgeResponseDto> findByPostUserId(Long userId) {
+        List<NotificationBadgeResponseDto> notificationBadgeResponseDtoList = queryFactory.select(Projections.fields(
+                NotificationBadgeResponseDto.class,
+                notification.isBadge
+        ))
+                .from(notification)
+                .where(notification.post.user.userId.eq(userId))
+                .orderBy(notification.createdAt.desc())
+                .fetch();
+
+        return notificationBadgeResponseDtoList;
     }
 
     @Override
-    public List<NotificationEntity> findByUserId(Long userId) {
-        return null;
+    public List<NotificationEntity> findByPostUserIdEntity(Long userId) {
+        List<NotificationEntity> notificationBadgeResponseDtoList = queryFactory.select(Projections.fields(
+                        NotificationEntity.class,
+                        notification.notificationId,
+                        notification.notificationType,
+                        notification.user,
+                        notification.post,
+                        notification.createdAt,
+                        notification.isRead,
+                        notification.isBadge
+                ))
+                .from(notification)
+                .where(notification.post.user.userId.eq(userId))
+                .orderBy(notification.createdAt.desc())
+                .fetch();
+
+        return notificationBadgeResponseDtoList;
+    }
+
+    @Override
+    public void deleteByPostUserId(Long userId) {
+        long delete = queryFactory
+                .delete(notification)
+                .where(notification.post.user.userId.eq(userId))
+                .execute();
     }
 }
