@@ -2,13 +2,17 @@ package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
+import com.anabada.anabadaBackend.thunderlike.ThunderLikeEntity;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
+import com.anabada.anabadaBackend.thunderrequest.ThunderRequestEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -52,6 +56,12 @@ public class ThunderPostEntity extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private UserEntity user;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "thunderPost")
+    private List<ThunderRequestEntity> requestList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "thunderPost")
+    private List<ThunderLikeEntity> likeList = new ArrayList<>();
 
     public ThunderPostEntity(ThunderPostRequestDto thunderPostRequestDto, UserDetailsImpl userDetails) {
         this.title = thunderPostRequestDto.getTitle();

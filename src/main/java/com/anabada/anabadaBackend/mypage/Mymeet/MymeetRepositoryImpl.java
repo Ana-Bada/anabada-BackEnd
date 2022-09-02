@@ -34,7 +34,6 @@ public class MymeetRepositoryImpl implements MymeetRepositoryCustom {
                             thunder.goalMember,
                             thunder.currentMember,
                             thunder.thumbnailUrl,
-                            thunder.startDate,
                             thunder.endDate,
                             thunder.createdAt
                     ))
@@ -61,7 +60,6 @@ public class MymeetRepositoryImpl implements MymeetRepositoryCustom {
                             thunder.goalMember,
                             thunder.currentMember,
                             thunder.thumbnailUrl,
-                            thunder.startDate,
                             thunder.endDate,
                             thunder.createdAt
                     ))
@@ -89,7 +87,6 @@ public class MymeetRepositoryImpl implements MymeetRepositoryCustom {
                             thunder.goalMember,
                             thunder.currentMember,
                             thunder.thumbnailUrl,
-                            thunder.startDate,
                             thunder.endDate,
                             thunder.createdAt
                     ))

@@ -34,9 +34,6 @@ public class MymeetEntity extends TimeStamped {
     private String thumbnailUrl;
 
     @Column
-    private String startDate;
-
-    @Column
     private String endDate;
 
 
