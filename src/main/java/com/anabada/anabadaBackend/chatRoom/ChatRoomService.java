@@ -5,12 +5,14 @@ import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import com.anabada.anabadaBackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,12 +20,15 @@ import java.util.List;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepositoryImpl chatRoomRepositoryImpl;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> getRooms(UserDetailsImpl userDetails) {
-        List<ChatRoomEntity> chatRoomList = chatRoomRepository
-                .findAllBySenderOrReceiver(userDetails.getUser(), userDetails.getUser());
-        return new ResponseEntity<>(chatRoomList, HttpStatus.ACCEPTED);
+    public ResponseEntity<?> getRooms(UserDetailsImpl userDetails, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        UserEntity user = userRepository.findById(userDetails.getUser().getUserId()).get();
+        Slice<RoomResponseDto> roomList = chatRoomRepositoryImpl
+                .findByUser(user.getUserId(), pageable);
+        return new ResponseEntity<>(roomList, HttpStatus.OK);
     }
 
     public ResponseEntity<?> createRoom(UserDetailsImpl userDetails, String nickname) {
@@ -32,11 +37,9 @@ public class ChatRoomService {
         ChatRoomEntity chatRoom = chatRoomRepository.findBySenderAndReceiver(user, userDetails.getUser());
         if(chatRoom == null) {
             chatRoom = chatRoomRepository.findBySenderAndReceiver(userDetails.getUser(), user);
-            System.out.println("여기 들림");
         }
         if(chatRoom == null){
             chatRoom = new ChatRoomEntity(userDetails.getUser(), user);
-            System.out.println("여기도 들림");
             chatRoomRepository.save(chatRoom);
             return new ResponseEntity<>(new RoomResponseDto(chatRoom), HttpStatus.OK);
         }

@@ -1,6 +1,6 @@
 package com.anabada.anabadaBackend.chatMessage;
 
-import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageDto;
 import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.user.UserEntity;
@@ -31,7 +31,7 @@ public class ChatMessageEntity extends TimeStamped {
     @Column
     private String content;
 
-    public ChatMessageEntity(MessageRequestDto messageRequestDto, UserEntity user, ChatRoomEntity chatRoom) {
+    public ChatMessageEntity(MessageDto messageRequestDto, UserEntity user, ChatRoomEntity chatRoom) {
         this.content = messageRequestDto.getContent();
         this.user = user;
         this.chatroom = chatRoom;

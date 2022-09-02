@@ -13,8 +13,10 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping("/api/rooms")
-    public ResponseEntity<?> getRooms(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatRoomService.getRooms(userDetails);
+    public ResponseEntity<?> getRooms(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "5") int size) {
+        return chatRoomService.getRooms(userDetails, page, size);
     }
 
     @PostMapping("/api/rooms")
