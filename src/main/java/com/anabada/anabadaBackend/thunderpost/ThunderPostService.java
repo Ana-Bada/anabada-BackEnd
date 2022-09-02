@@ -1,11 +1,14 @@
 package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
+import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.thunderlike.ThunderLikeRepositoryImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
 import com.anabada.anabadaBackend.thunderrequest.ThunderRequestEntity;
 import com.anabada.anabadaBackend.thunderrequest.ThunderRequestRepository;
+import com.anabada.anabadaBackend.user.UserEntity;
+import com.anabada.anabadaBackend.user.UserRepository;
 import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,15 +30,24 @@ public class ThunderPostService {
     private final ThunderRequestRepository thunderRequestRepository;
     private final ThunderLikeRepositoryImpl thunderLikeRepositoryImpl;
     private final ThunderPostRepositoryImpl thunderPostRepositoryImpl;
+    private final UserRepository userRepository;
+    private final JwtDecoder jwtDecoder;
 
-    public ResponseEntity<?> getThunderPosts(String area, int page, int size, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getThunderPosts(String area, int page, int size, String token) {
         Pageable pageable = PageRequest.of(page, size);
+        if(token.equals("null")) {
+            Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByArea(area, pageable);
+            return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+        }
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
         Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByArea(area, pageable);
         for(ThunderPostResponseDto responseDto : responseDtos) {
             responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
-                    userDetails.getUser().getUserId()) != null);
+                    user.getUserId()) != null);
             responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(
-                    responseDto.getThunderPostId(), userDetails.getUser().getUserId()) != null);
+                    responseDto.getThunderPostId(), user.getUserId()) != null);
         }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
@@ -71,11 +83,26 @@ public class ThunderPostService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> getThunderPost(Long thunderPostId, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getThunderPost(Long thunderPostId, String token) {
+        if(token.equals("null")){
+            ThunderPostResponseDto responseDto = thunderPostRepositoryImpl.findByThunderPostId(thunderPostId);
+            List<ThunderRequestEntity> requestEntityList = thunderRequestRepository.findAllByThunderPostThunderPostId(thunderPostId);
+            List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
+            for (ThunderRequestEntity thunderRequestEntity : requestEntityList) {
+                UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(thunderRequestEntity.getUser());
+                userInfoResponseDtoList.add(userInfoResponseDto);
+            }
+            responseDto.setMembers(userInfoResponseDtoList);
+            thunderPostRepositoryImpl.addViewCount(thunderPostId);
+            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        }
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
         ThunderPostResponseDto responseDto = thunderPostRepositoryImpl.findByThunderPostId(thunderPostId);
         thunderPostRepositoryImpl.addViewCount(thunderPostId);
-        responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(thunderPostId, userDetails.getUser().getUserId()) != null);
-        responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(thunderPostId, userDetails.getUser().getUserId()) != null);
+        responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(thunderPostId, user.getUserId()) != null);
+        responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(thunderPostId, user.getUserId()) != null);
         List<ThunderRequestEntity> requestEntityList = thunderRequestRepository.findAllByThunderPostThunderPostId(thunderPostId);
         List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
         for (ThunderRequestEntity thunderRequestEntity : requestEntityList) {
@@ -98,14 +125,22 @@ public class ThunderPostService {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> getHotPosts(String area, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getHotPosts(String area, String token) {
+        if(token.equals("null")) {
+            List<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findHotPost(area);
+            return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+        }
+        String email = jwtDecoder.decodeUsername(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
         List<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findHotPost(area);
         for (ThunderPostResponseDto responseDto : responseDtos) {
             responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
-                    userDetails.getUser().getUserId()) != null);
+                    user.getUserId()) != null);
             responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(
-                    responseDto.getThunderPostId(), userDetails.getUser().getUserId()) != null);
+                    responseDto.getThunderPostId(), user.getUserId()) != null);
         }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+
     }
 }

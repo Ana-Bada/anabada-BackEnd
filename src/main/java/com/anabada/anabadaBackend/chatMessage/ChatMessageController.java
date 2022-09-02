@@ -1,9 +1,14 @@
-package com.anabada.anabadaBackend.ChatMessage;
+package com.anabada.anabadaBackend.chatMessage;
 
-import com.anabada.anabadaBackend.ChatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageResponseDto;
+import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
+import com.anabada.anabadaBackend.user.UserEntity;
+import com.anabada.anabadaBackend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,17 +22,21 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate template;
+    private final JwtDecoder jwtDecoder;
+    private final UserRepository userRepository;
 
     @GetMapping("/api/messages/{roomId}")
     public ResponseEntity<?> getMessages(@PathVariable Long roomId, @RequestHeader("accessToken") String token) {
-        System.out.println(token);
         return chatMessageService.getMessages(roomId, token);
     }
 
     @MessageMapping("/messages/{roomId}")
-    public ResponseEntity<?> sendMessage(@RequestHeader("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
-        System.out.println(token);
-        template.convertAndSend("/sub/room/" + roomId, messageRequestDto);
+    public ResponseEntity<?> sendMessage(@Header("accessToken") String token, MessageRequestDto messageRequestDto, @DestinationVariable Long roomId) {
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        MessageResponseDto messageResponseDto = new MessageResponseDto(user, messageRequestDto);
+        template.convertAndSend("/sub/rooms/" + roomId, messageResponseDto);
         return chatMessageService.sendMessage(token, messageRequestDto, roomId);
     }
 }

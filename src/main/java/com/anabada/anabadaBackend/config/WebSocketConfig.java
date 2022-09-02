@@ -23,13 +23,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("http://127.0.0.1:8080")
                 .setAllowedOrigins("http://localhost:3000")
                 .setAllowedOrigins("http://127.0.0.1:3000")
+                .setAllowedOriginPatterns("*")
                 .withSockJS(); //소켓 지원하지 않는 브라우저는 sockJS 사용하도록 설정.
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/pub");
-        registry.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/sub", "/topic");
     }
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration){

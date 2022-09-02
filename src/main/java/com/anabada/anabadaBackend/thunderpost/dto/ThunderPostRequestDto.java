@@ -29,8 +29,5 @@ public class ThunderPostRequestDto {
     private String meetDate;
 
     @NotBlank
-    private String startDate;
-
-    @NotBlank
     private String endDate;
 }

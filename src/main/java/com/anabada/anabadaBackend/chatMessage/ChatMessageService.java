@@ -1,9 +1,9 @@
-package com.anabada.anabadaBackend.ChatMessage;
+package com.anabada.anabadaBackend.chatMessage;
 
-import com.anabada.anabadaBackend.ChatMessage.dto.MessageRequestDto;
-import com.anabada.anabadaBackend.ChatMessage.dto.MessageResponseDto;
-import com.anabada.anabadaBackend.ChatRoom.ChatRoomEntity;
-import com.anabada.anabadaBackend.ChatRoom.ChatRoomRepository;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageRequestDto;
+import com.anabada.anabadaBackend.chatMessage.dto.MessageResponseDto;
+import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
+import com.anabada.anabadaBackend.chatRoom.ChatRoomRepository;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.user.UserEntity;
 import com.anabada.anabadaBackend.user.UserRepository;
@@ -31,7 +31,7 @@ public class ChatMessageService {
     public ResponseEntity<?> sendMessage(String token, MessageRequestDto messageRequestDto, Long roomId) {
         ChatRoomEntity room = chatRoomRepository.findById(roomId)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
-        String email = jwtDecoder.decodeEmail(token);
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         ChatMessageEntity chatMessage = new ChatMessageEntity(messageRequestDto, user, room);

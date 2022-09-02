@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.ChatRoom;
+package com.anabada.anabadaBackend.chatRoom;
 
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class ChatRoomController {
 
     @PostMapping("/api/rooms")
     public ResponseEntity<?> createRoom(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                        @RequestParam("userId") Long userId) {
-        return chatRoomService.createRoom(userDetails, userId);
+                                        @RequestParam("receiver") String nickname) {
+        return chatRoomService.createRoom(userDetails, nickname);
     }
 
     @GetMapping("/api/rooms/{roomId}")
