@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
     private final NotificationService notificationService;
 
+    //미접속기간동안 생성된 알림이 있는지 체크 ( isBadge 여부 )
     @GetMapping("/api/notifications")
     public NotificationBadgeResponseDto checkBadge(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return notificationService.checkBadge(userDetails);
     }
 
     //알림 전체 불러오기 & isBadge -> true로 변경 ( 뱃지 내림 )
-    @PutMapping("/api/notifications")
+    @PatchMapping("/api/notifications")
     public Slice<NotificationResponseDto> getNotificationList(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                               @RequestParam(value = "page", defaultValue = "0") int page,
-                                                              @RequestParam(value = "size", defaultValue = "20") int size){
+                                                              @RequestParam(value = "size", defaultValue = "10") int size){
         return notificationService.getNotificationList(userDetails, page, size);
     }
 
@@ -33,12 +34,12 @@ public class NotificationController {
         notificationService.getNotificationAndRead(userDetails, notificationId);
     }
 
-    @DeleteMapping("/api/notifications")
+    @DeleteMapping("/api/notifications/{notificationId}")
     public void deleteNotification(@PathVariable Long notificationId){
         notificationService.deleteNotification(notificationId);
     }
 
-    @DeleteMapping("/api/notifications/{notificationId}")
+    @DeleteMapping("/api/notifications")
     public void deleteAllNotification(@AuthenticationPrincipal UserDetailsImpl userDetails){
         notificationService.deleteAllNotification(userDetails);
     }
