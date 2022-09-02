@@ -1,6 +1,7 @@
 package com.anabada.anabadaBackend.user;
 
 import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.user.dto.ProfileimageRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.security.jwt.JwtTokenUtils;
@@ -83,4 +84,15 @@ public class UserService {
             return new ResponseEntity<>(HttpStatus.valueOf(409));
         else return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
-}
+
+    @Transactional
+    public ResponseEntity<?> updateProfileImage(ProfileimageRequestDto profileimageRequestDto,
+                                                UserDetailsImpl userDetails) {
+        UserEntity user = userRepository.findById(userDetails.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+
+        user.updateProfileImage(profileimageRequestDto);
+        userRepository.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }

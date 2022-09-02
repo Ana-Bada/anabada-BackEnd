@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.user;
 
+import com.anabada.anabadaBackend.user.dto.ProfileimageRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.dto.EmailChkRequestDto;
 import com.anabada.anabadaBackend.user.dto.SignupRequestDto;
@@ -40,5 +41,11 @@ public class UserController {
     public ResponseEntity<?> reissueAccessToken(@RequestHeader(value = "AccessToken")String token,
                                                 @RequestHeader(value = "RefreshToken")String refreshToken) {
         return userService.reissueAccessToken(token, refreshToken);
+    }
+
+    @PutMapping("/api/profileimages")
+    public ResponseEntity<?> updateProfileImage(@RequestBody ProfileimageRequestDto profileimageRequestDto,
+                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return userService.updateProfileImage(profileimageRequestDto, userDetails);
     }
 }
