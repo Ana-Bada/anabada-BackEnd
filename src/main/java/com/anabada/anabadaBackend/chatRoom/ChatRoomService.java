@@ -34,6 +34,9 @@ public class ChatRoomService {
     public ResponseEntity<?> createRoom(UserDetailsImpl userDetails, String nickname) {
         UserEntity user = userRepository.findByNickname(nickname)
                 .orElseThrow( () -> new IllegalArgumentException("상대방이 존재하지 않습니다."));
+        if(userDetails.getUser().getUserId().equals(user.getUserId())){
+            throw new IllegalArgumentException("본인에게는 채팅을 할 수 없습니다");
+        }
         ChatRoomEntity chatRoom = chatRoomRepository.findBySenderAndReceiver(user, userDetails.getUser());
         if(chatRoom == null) {
             chatRoom = chatRoomRepository.findBySenderAndReceiver(userDetails.getUser(), user);
@@ -41,10 +44,9 @@ public class ChatRoomService {
         if(chatRoom == null){
             chatRoom = new ChatRoomEntity(userDetails.getUser(), user);
             chatRoomRepository.save(chatRoom);
-            return new ResponseEntity<>(new RoomResponseDto(chatRoom), HttpStatus.OK);
+            return new ResponseEntity<>(new RoomResponseDto(chatRoom, userDetails.getUser()), HttpStatus.OK);
         }
-        RoomResponseDto roomResponseDto = new RoomResponseDto(chatRoom);
-        System.out.println(chatRoom.getId());
+        RoomResponseDto roomResponseDto = new RoomResponseDto(chatRoom, userDetails.getUser());
         return new ResponseEntity<>(roomResponseDto, HttpStatus.valueOf(409));
     }
 
@@ -54,7 +56,7 @@ public class ChatRoomService {
         if (!chatRoom.getSender().equals(userDetails.getUser()) && !chatRoom.getReceiver().equals(userDetails.getUser())){
             return new ResponseEntity<>("해당 채팅방에 속한 유저만 채팅방을 조회할 수 있습니다", HttpStatus.BAD_REQUEST);
         }
-        RoomResponseDto responseDto = new RoomResponseDto(chatRoom);
+        RoomResponseDto responseDto = new RoomResponseDto(chatRoom, userDetails.getUser());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }
