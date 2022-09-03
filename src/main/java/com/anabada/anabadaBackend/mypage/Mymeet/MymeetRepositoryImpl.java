@@ -64,7 +64,7 @@ public class MymeetRepositoryImpl implements MymeetRepositoryCustom {
                             thunder.createdAt
                     ))
                     .from(thunder)
-                    .join(thunder.requestList, thunderRequest)
+//                    .join(thunder.requestList, thunderRequest)
                     .where(thunderRequest.thunderPost.thunderPostId.eq(thunder.thunderPostId))
                     .orderBy(thunder.createdAt.desc())
                     .offset(pageable.getOffset())
@@ -91,7 +91,7 @@ public class MymeetRepositoryImpl implements MymeetRepositoryCustom {
                             thunder.createdAt
                     ))
                     .from(thunder)
-                    .join(thunder.likeList, thunderLike)
+//                    .join(thunder.likeList, thunderLike)
                     .where(thunderLike.thunderPost.thunderPostId.eq(thunder.thunderPostId))
                     .orderBy(thunder.createdAt.desc())
                     .offset(pageable.getOffset())

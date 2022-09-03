@@ -16,23 +16,21 @@ import java.io.Serializable;
 @Getter
 @RedisHash("Chat")
 public class RedisChat implements Serializable {
+
     @Id
-    @Indexed
     private String id;
 
-    private ChatRoomEntity room;
+    @Indexed
+    private String roomId;
 
-    private UserEntity user;
+    private String senderNickname;
 
     private String message;
 
-    @Indexed
-    private String createdAt;
 
-    public RedisChat(ChatRoomEntity room, String message, UserEntity user, String createdAt) {
-        this.room = room;
+    public RedisChat(ChatRoomEntity room, String message, UserEntity user) {
+        this.roomId = Long.toString(room.getId());
         this.message = message;
-        this.user = user;
-        this.createdAt = createdAt;
+        this.senderNickname = user.getNickname();
     }
 }
