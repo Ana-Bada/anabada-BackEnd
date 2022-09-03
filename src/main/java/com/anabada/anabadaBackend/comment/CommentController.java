@@ -44,9 +44,8 @@ public class CommentController {
     @GetMapping("/api/comments/{postId}")
     public ResponseEntity<?> getComments(@PathVariable Long postId,
                                          @RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "5") int size,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return commentService.getComments(postId, page, size, userDetails);
+                                         @RequestParam(value = "size", defaultValue = "5") int size) {
+        return commentService.getComments(postId, page, size);
     }
 
 }

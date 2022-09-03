@@ -63,7 +63,7 @@ public class CommentService {
         }
     }
 
-    public ResponseEntity<?> getComments(Long postId, int page, int size, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> getComments(Long postId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Slice<CommentResponseDto> commentResponseDtos = commentRepositoryImpl.findAllByPostId(postId, pageable);
         return new ResponseEntity<>(commentResponseDtos, HttpStatus.OK);
