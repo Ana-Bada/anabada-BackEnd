@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.chatRoom;
 
+import com.anabada.anabadaBackend.chatMessage.ChatMessageRepository;
 import com.anabada.anabadaBackend.chatRoom.dto.RoomResponseDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
@@ -21,6 +22,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomRepositoryImpl chatRoomRepositoryImpl;
+    private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
 
     public ResponseEntity<?> getRooms(UserDetailsImpl userDetails, int page, int size) {
@@ -28,6 +30,13 @@ public class ChatRoomService {
         UserEntity user = userRepository.findById(userDetails.getUser().getUserId()).get();
         Slice<RoomResponseDto> roomList = chatRoomRepositoryImpl
                 .findByUser(user.getUserId(), pageable);
+        for(RoomResponseDto room : roomList) {
+            if(chatMessageRepository.findTopByChatroomIdOrderByIdDesc(room.getRoomId()).isEmpty()) {
+                room.setLastMsg("");
+            } else {
+                room.setLastMsg(chatMessageRepository.findTopByChatroomIdOrderByIdDesc(room.getRoomId()).get().getContent());
+            }
+        }
         return new ResponseEntity<>(roomList, HttpStatus.OK);
     }
 

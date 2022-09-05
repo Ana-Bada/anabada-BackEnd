@@ -31,8 +31,8 @@ public class ChatMessageEntity extends TimeStamped {
     @Column
     private String content;
 
-    public ChatMessageEntity(MessageDto messageRequestDto, UserEntity user, ChatRoomEntity chatRoom) {
-        this.content = messageRequestDto.getContent();
+    public ChatMessageEntity(MessageDto messageDto, UserEntity user, ChatRoomEntity chatRoom) {
+        this.content = messageDto.getContent();
         this.user = user;
         this.chatroom = chatRoom;
     }
