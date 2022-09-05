@@ -1,6 +1,5 @@
 package com.anabada.anabadaBackend.post;
 
-import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class PostController {
 
 //    게시글 상세보기
     @GetMapping("/api/posts/{postId}")
-    public PostDetailsResponseDto getPostDetails(@PathVariable Long postId,
+    public ResponseEntity<?> getPostDetails(@PathVariable Long postId,
                                                  @RequestHeader(value = "Authorization") String token) {
         return postService.getPostDetails(postId, token);
     }

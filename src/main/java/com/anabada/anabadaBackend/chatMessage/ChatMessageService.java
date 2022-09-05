@@ -3,7 +3,6 @@ package com.anabada.anabadaBackend.chatMessage;
 import com.anabada.anabadaBackend.chatMessage.dto.MessageDto;
 import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.chatRoom.ChatRoomRepository;
-import com.anabada.anabadaBackend.redis.RedisChat;
 import com.anabada.anabadaBackend.redis.RedisPublisher;
 import com.anabada.anabadaBackend.redis.RedisRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
@@ -27,6 +26,8 @@ import javax.transaction.Transactional;
 public class ChatMessageService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepositoryImpl chatMessageRepositoryImpl;
 
     private final UserRepository userRepository;
 
@@ -42,8 +43,9 @@ public class ChatMessageService {
         ChatRoomEntity chatRoom = chatRoomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
         Pageable pageable = PageRequest.of(page, size);
-        Slice<RedisChat> redisChats = redisRepository.findAllByRoomId(Long.toString(roomId), pageable);
-        return new ResponseEntity<>(redisChats, HttpStatus.OK);
+        Slice<MessageDto> messageDtos = chatMessageRepositoryImpl.findAll(roomId, pageable);
+//        Slice<RedisChat> redisChats = redisRepository.findAllByRoomId(Long.toString(roomId), pageable);
+        return new ResponseEntity<>(messageDtos, HttpStatus.OK);
     }
 
     public ResponseEntity<?> sendMessage(String token, MessageDto message, Long roomId) {
@@ -52,11 +54,13 @@ public class ChatMessageService {
         String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        ChatMessageEntity chatMessage = new ChatMessageEntity(message, user, room);
+        chatMessageRepository.save(chatMessage);
         message.setRoomId(roomId);
         message.setNickname(user.getNickname());
         redisPublisher.publish(channelTopic, message);
-        RedisChat redisChat = new RedisChat(room, message.getContent(), user);
-        redisRepository.save(redisChat);
+//        RedisChat redisChat = new RedisChat(room, message.getContent(), user);
+//        redisRepository.save(redisChat);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
