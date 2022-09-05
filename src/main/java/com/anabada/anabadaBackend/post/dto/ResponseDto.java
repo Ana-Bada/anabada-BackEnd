@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.mypage.Mypost;
+package com.anabada.anabadaBackend.post.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

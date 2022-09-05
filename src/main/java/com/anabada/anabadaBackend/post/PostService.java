@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.post;
 import com.anabada.anabadaBackend.comment.CommentEntity;
 import com.anabada.anabadaBackend.comment.CommentRepository;
 import com.anabada.anabadaBackend.like.LikeRepositoryImpl;
+import com.anabada.anabadaBackend.post.dto.ResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
@@ -93,5 +94,15 @@ public class PostService {
             postResponseDto.setLiked(likeRepository.findByPostIdAndUserId(postResponseDto.getPostId(), userDetails.getUser().getUserId()) != null);
         }
         return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
+    }
+
+    // 내가 작성한(또는 좋아요 한) 게시글 조회
+    public ResponseEntity<ResponseDto> getMyPosts(String filter, UserEntity user, int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return new ResponseEntity<>(new ResponseDto(
+                true,
+                user.getNickname(),
+                postrepositoryImpl.findAllByFilter(filter, user.getUserId(), pageable)
+        ), HttpStatus.OK);
     }
 }

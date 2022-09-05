@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.thunderpost;
 
+import com.anabada.anabadaBackend.thunderpost.dto.MymeetResponseDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,14 @@ public class ThunderPostController {
     public ResponseEntity<?> getHotPosts(@RequestParam(defaultValue = "ALL") String area,
                                          @RequestHeader(value = "Authorization") String token) {
         return thunderPostService.getHotPosts(area, token);
+    }
+
+    @GetMapping("/api/mymeets")
+    public ResponseEntity<MymeetResponseDto> getMyMeets(
+            @RequestParam String filter,
+            @RequestParam int page,
+            @RequestParam int size,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.getMyMeets(filter, userDetails.getUser(), page, size);
     }
 }

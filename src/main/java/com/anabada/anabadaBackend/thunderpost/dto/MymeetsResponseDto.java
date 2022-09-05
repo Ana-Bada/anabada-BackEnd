@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.mypage.Mymeet;
+package com.anabada.anabadaBackend.thunderpost.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

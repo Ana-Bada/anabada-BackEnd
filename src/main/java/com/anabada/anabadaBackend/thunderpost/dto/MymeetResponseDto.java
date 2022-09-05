@@ -1,4 +1,4 @@
-package com.anabada.anabadaBackend.mypage.Mymeet;
+package com.anabada.anabadaBackend.thunderpost.dto;
 
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;

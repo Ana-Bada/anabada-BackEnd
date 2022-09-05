@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.post;
 
+import com.anabada.anabadaBackend.post.dto.ResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostDetailsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
@@ -60,5 +61,14 @@ public class PostController {
                                          @RequestParam int page, @RequestParam int size,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.searchPosts(area, keyword, page, size, userDetails);
+    }
+
+    @GetMapping("/api/myposts")
+    public ResponseEntity<ResponseDto> getMyPosts(
+            @RequestParam String filter,
+            @RequestParam int page,
+            @RequestParam int size,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPosts(filter, userDetails.getUser(), page, size);
     }
 }

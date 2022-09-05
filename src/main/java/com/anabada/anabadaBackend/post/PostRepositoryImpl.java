@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.post;
 
 
 import com.anabada.anabadaBackend.like.QLikeEntity;
+import com.anabada.anabadaBackend.post.dto.MypostsResponseDto;
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
@@ -152,4 +153,54 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                     .where(post.postId.eq(postId))
                     .execute();
         }
+
+    @Override
+    public Slice<MypostsResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
+        List<MypostsResponseDto> returnPost;
+
+        if (filter.equals("myWritePost")) {
+            returnPost = queryFactory.select(Projections.fields(
+                            MypostsResponseDto.class,
+                            post.postId,
+                            post.title,
+                            post.user.nickname,
+                            post.thumbnailUrl
+                    ))
+                    .from(post)
+                    .where(post.user.userId.eq(userId))
+                    .orderBy(post.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            boolean hasNext = false;
+            if (returnPost.size() > pageable.getPageSize()) {
+                returnPost.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+            return new SliceImpl<>(returnPost, pageable, hasNext);
+        } else {
+            returnPost = queryFactory.select(Projections.fields(
+                            MypostsResponseDto.class,
+                            post.postId,
+                            post.title,
+                            post.user.nickname,
+                            post.thumbnailUrl
+                    ))
+                    .from(post)
+                    .join(post.likeList, like)
+                    .where(like.post.postId.eq(post.postId))
+                    .orderBy(post.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            boolean hasNext = false;
+            if (returnPost.size() > pageable.getPageSize()) {
+                returnPost.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+            return new SliceImpl<>(returnPost, pageable, hasNext);
+        }
+    }
     }

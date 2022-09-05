@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.thunderpost;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.thunderlike.ThunderLikeRepositoryImpl;
+import com.anabada.anabadaBackend.thunderpost.dto.MymeetResponseDto;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
 import com.anabada.anabadaBackend.thunderrequest.ThunderRequestEntity;
@@ -142,5 +143,14 @@ public class ThunderPostService {
         }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
 
+    }
+
+    public ResponseEntity<MymeetResponseDto> getMyMeets(String filter, UserEntity user, int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return new ResponseEntity<>(new MymeetResponseDto(
+                true,
+                user.getNickname(),
+                thunderPostRepositoryImpl.findAllByFilter(filter, user.getUserId(), pageable)
+        ), HttpStatus.OK);
     }
 }
