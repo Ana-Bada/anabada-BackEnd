@@ -126,4 +126,12 @@ public class PostService {
 
         return new ResponseEntity<>(postResponseDtoList, HttpStatus.OK);
     }
+
+    // 내가 작성한(또는 좋아요 한) 게시글 조회
+    public ResponseEntity<?> getMyPosts(String filter, UserEntity user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(
+                postrepositoryImpl.findAllByFilter(filter, user.getUserId(), pageable)
+                ,HttpStatus.OK);
+    }
 }
