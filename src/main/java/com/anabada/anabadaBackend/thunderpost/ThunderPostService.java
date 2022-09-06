@@ -146,8 +146,8 @@ public class ThunderPostService {
 
     public ResponseEntity<?> getMyMeets(String filter, UserEntity user, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(new ThunderPostResponseDto(
+        return new ResponseEntity<>(
                 thunderPostRepositoryImpl.findAllByFilter(filter, user.getUserId(), pageable)
-        ), HttpStatus.OK);
+        , HttpStatus.OK);
     }
 }

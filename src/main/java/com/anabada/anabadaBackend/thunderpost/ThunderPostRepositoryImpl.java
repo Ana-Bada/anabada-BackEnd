@@ -1,7 +1,6 @@
 package com.anabada.anabadaBackend.thunderpost;
 
 import com.anabada.anabadaBackend.thunderlike.QThunderLikeEntity;
-import com.anabada.anabadaBackend.thunderpost.dto.MymeetsResponseDto;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
 import com.anabada.anabadaBackend.thunderrequest.QThunderRequestEntity;
 import com.querydsl.core.types.ExpressionUtils;
@@ -248,12 +247,12 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     }
 
     @Override
-    public Slice<MymeetsResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
-        List<MymeetsResponseDto> returnPost;
+    public Slice<ThunderPostResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
+        List<ThunderPostResponseDto> returnPost;
 
         if (filter.equals("myHostMeet")) {
             returnPost = queryFactory.select(Projections.fields(
-                            MymeetsResponseDto.class,
+                            ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
                             thunderPost.user.nickname,
@@ -279,7 +278,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
 
         } else if (filter.equals("myJoinMeet")) {
             returnPost = queryFactory.select(Projections.fields(
-                            MymeetsResponseDto.class,
+                            ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
                             thunderPost.user.nickname,
@@ -291,7 +290,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     ))
                     .from(thunderPost)
                     .join(thunderPost.requestList, thunderRequest)
-                    .where(thunderRequest.thunderPost.thunderPostId.eq(thunderPost.thunderPostId))
+                    .where(thunderRequest.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderRequest.user.userId.eq(thunderPost.user.userId)))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)
@@ -306,7 +305,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
 
         } else {
             returnPost = queryFactory.select(Projections.fields(
-                            MymeetsResponseDto.class,
+                            ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
                             thunderPost.user.nickname,
@@ -318,7 +317,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     ))
                     .from(thunderPost)
                     .join(thunderPost.likeList, thunderLike)
-                    .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId))
+                    .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderLike.user.userId.eq(thunderPost.user.userId)))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)
