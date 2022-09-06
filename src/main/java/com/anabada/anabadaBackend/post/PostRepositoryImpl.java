@@ -139,20 +139,20 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
         }
     }
 
-        private BooleanExpression areaEq (String area){
-            return area.equals("ALL") ? null : post.area.eq(area);
+    private BooleanExpression areaEq(String area) {
+        return area.equals("ALL") ? null : post.area.eq(area);
 
-        }
+    }
 
-        @Transactional
-        @Modifying
-        public long addViewCount (Long postId){
-            return queryFactory
-                    .update(post)
-                    .set(post.viewCount, post.viewCount.add(1))
-                    .where(post.postId.eq(postId))
-                    .execute();
-        }
+    @Transactional
+    @Modifying
+    public long addViewCount(Long postId) {
+        return queryFactory
+                .update(post)
+                .set(post.viewCount, post.viewCount.add(1))
+                .where(post.postId.eq(postId))
+                .execute();
+    }
 
     @Override
     public Slice<MypostsResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
@@ -203,4 +203,4 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
             return new SliceImpl<>(returnPost, pageable, hasNext);
         }
     }
-    }
+}

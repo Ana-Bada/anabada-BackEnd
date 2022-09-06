@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,6 +46,16 @@ public class ThunderPostResponseDto {
     private LocalDateTime createdAt;
 
     private List<UserInfoResponseDto> members;
+
+    private Slice<ThunderPostEntity> meets;
+
+    private Slice<MymeetsResponseDto> thunderposts;
+
+    private MymeetsResponseDto meet;
+
+    public ThunderPostResponseDto(Slice<MymeetsResponseDto> mymeetResponseDtoSlice) {
+        this.thunderposts = mymeetResponseDtoSlice;
+    }
 
     public ThunderPostResponseDto(ThunderPostEntity thunderPost, List<UserInfoResponseDto> users) {
         this.title = thunderPost.getTitle();
