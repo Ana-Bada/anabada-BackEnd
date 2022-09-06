@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user/app/
+    overwrite: yes
 
 permissions:
   - object: /
