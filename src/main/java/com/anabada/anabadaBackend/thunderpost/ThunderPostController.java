@@ -50,8 +50,8 @@ public class ThunderPostController {
     @GetMapping("/api/meets/search")
     public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area, @RequestParam String keyword,
                                          @RequestParam int page, @RequestParam int size,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return thunderPostService.searchPosts(area, keyword, page, size, userDetails);
+                                         @RequestHeader(value = "Authorization") String token) {
+        return thunderPostService.searchPosts(area, keyword, page, size, token);
     }
 
     @GetMapping("/api/meets/hot")
