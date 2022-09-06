@@ -1,10 +1,12 @@
 package com.anabada.anabadaBackend;
 
-//@SpringBootTest
-//class AnabadaBackendApplicationTests {
-//
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class AnabadaBackendApplicationTests {
+
 //	@Test
 //	void contextLoads() {
 //	}
 
-//}
+}

@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/api/profileimages")
-    public ResponseEntity<?> updateProfileImage(@RequestBody ProfileimageRequestDto profileimageRequestDto,
+    public ResponseEntity<?> updateProfileImage(@RequestBody @Valid ProfileimageRequestDto profileimageRequestDto,
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.updateProfileImage(profileimageRequestDto, userDetails);
     }
