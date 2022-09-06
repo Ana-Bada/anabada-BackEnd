@@ -1,9 +1,15 @@
 package com.anabada.anabadaBackend.user.dto;
 
 import com.anabada.anabadaBackend.user.UserEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserInfoResponseDto {
     private Long userId;
     private String email;
