@@ -10,5 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class AnabadaBackendApplication {
 
     public static void main(String[] args) {SpringApplication.run(AnabadaBackendApplication.class, args);
+        //
     }
 }
