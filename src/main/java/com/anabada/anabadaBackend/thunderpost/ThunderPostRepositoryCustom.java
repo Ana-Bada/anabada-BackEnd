@@ -13,6 +13,4 @@ public interface ThunderPostRepositoryCustom {
     Slice<ThunderPostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable);
 
     List<ThunderPostResponseDto> findHotPost(String area);
-
-    Slice<ThunderPostResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable);
 }
