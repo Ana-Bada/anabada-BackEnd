@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -35,12 +36,12 @@ public class UserService {
 
         Optional<UserEntity> usernameUserFound = userRepository.findByEmail(email);
         if(usernameUserFound.isPresent()){
-            throw new IllegalArgumentException("중복된 email이 존재합니다");
+            throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 이메일이 존재합니다");
         }
 
         Optional<UserEntity> nicknameUserFound = userRepository.findByNickname(nickname);
         if(nicknameUserFound.isPresent()){
-            throw new IllegalArgumentException("중복된 nickname이 존재합니다");
+            throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 닉네임이 존재합니다");
         }
         if(!password.equals(confirmPassword)){
             throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
@@ -69,7 +70,7 @@ public class UserService {
 
     public ResponseEntity<?> checkEmail(String email) {
         if(userRepository.findByEmail(email).isPresent())
-            return new ResponseEntity<>(HttpStatus.valueOf(409));
+            return new ResponseEntity<>("중복된 이메일이 존재합니다", HttpStatus.valueOf(409));
         else return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
@@ -81,7 +82,7 @@ public class UserService {
 
     public ResponseEntity<?> checkNickname(String nickname) {
         if(userRepository.findByNickname(nickname).isPresent())
-            return new ResponseEntity<>(HttpStatus.valueOf(409));
+            return new ResponseEntity<>("중복된 닉네임이 존재합니다", HttpStatus.valueOf(409));
         else return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
