@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.like;
 
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,12 @@ public class LikeEntity {
     @Id
     private Long likeId;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private UserEntity user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "POST_ID", nullable = false)
     private PostEntity post;

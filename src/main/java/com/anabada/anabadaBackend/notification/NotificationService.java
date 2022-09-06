@@ -27,12 +27,14 @@ public class NotificationService {
                 .findByPostUserId(userDetails.getUser().getUserId());
 
         int notificationSize = notificationBadgeResponseDtoList.size();
-        if (notificationBadgeResponseDtoList.get(notificationSize - 1).isBadge() == false) {
-            return new NotificationBadgeResponseDto(false);
-        } else if ( notificationSize == 0 ) {
-            return new NotificationBadgeResponseDto(true);
+        if ( notificationSize > 0 ) {
+            if (notificationBadgeResponseDtoList.get(notificationSize - 1).isBadge() == false) {
+                return new NotificationBadgeResponseDto(false);
+            } else {
+                return new NotificationBadgeResponseDto(true);
+            }
         } else {
-            return new NotificationBadgeResponseDto(true);
+            return new NotificationBadgeResponseDto( true );
         }
     }
 
@@ -42,7 +44,7 @@ public class NotificationService {
         //List로 불러와서 먼저 먼저 isBadge 수정
         List<NotificationEntity> notificationEntityList = notificationRepositoryImpl
                 .findByPostUserIdEntity(userDetails.getUser().getUserId());
-        for ( NotificationEntity notification : notificationEntityList ){
+        for (NotificationEntity notification : notificationEntityList) {
             notification.badgeOff();
             notificationRepository.save(notification);
         }
