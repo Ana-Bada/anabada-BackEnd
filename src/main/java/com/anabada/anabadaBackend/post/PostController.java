@@ -61,13 +61,4 @@ public class PostController {
                                          @RequestHeader(value = "Authorization") String token) {
         return postService.searchPosts(area, keyword, page, size, token);
     }
-
-    @GetMapping("/api/myposts")
-    public ResponseEntity<?> getMyPosts(
-            @RequestParam String filter,
-            @RequestParam int page,
-            @RequestParam int size,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getMyPosts(filter, userDetails.getUser(), page, size);
-    }
 }

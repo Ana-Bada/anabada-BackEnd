@@ -30,7 +30,6 @@ public class PostResponseDto {
     private String amenity;
 
     //////////////
-
     private long likeCount;
 
     private boolean isLiked;

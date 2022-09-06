@@ -138,68 +138,18 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
         }
     }
 
-    private BooleanExpression areaEq(String area) {
-        return area.equals("ALL") ? null : post.area.eq(area);
+        private BooleanExpression areaEq (String area){
+            return area.equals("ALL") ? null : post.area.eq(area);
 
-    }
+        }
 
-    @Transactional
-    @Modifying
-    public long addViewCount(Long postId) {
-        return queryFactory
-                .update(post)
-                .set(post.viewCount, post.viewCount.add(1))
-                .where(post.postId.eq(postId))
-                .execute();
-    }
-
-    @Override
-    public Slice<PostResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
-        List<PostResponseDto> returnPost;
-
-        if (filter.equals("myWritePost")) {
-            returnPost = queryFactory.select(Projections.fields(
-                            PostResponseDto.class,
-                            post.postId,
-                            post.title,
-                            post.user.nickname,
-                            post.thumbnailUrl
-                    ))
-                    .from(post)
-                    .where(post.user.userId.eq(userId))
-                    .orderBy(post.createdAt.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize() + 1)
-                    .fetch();
-
-            boolean hasNext = false;
-            if (returnPost.size() > pageable.getPageSize()) {
-                returnPost.remove(pageable.getPageSize());
-                hasNext = true;
-            }
-            return new SliceImpl<>(returnPost, pageable, hasNext);
-        } else {
-            returnPost = queryFactory.select(Projections.fields(
-                            PostResponseDto.class,
-                            post.postId,
-                            post.title,
-                            post.user.nickname,
-                            post.thumbnailUrl
-                    ))
-                    .from(post)
-                    .join(post.likeList, like)
-                    .where(like.post.postId.eq(post.postId).and(like.user.userId.eq(post.user.userId)))
-                    .orderBy(post.createdAt.desc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize() + 1)
-                    .fetch();
-
-            boolean hasNext = false;
-            if (returnPost.size() > pageable.getPageSize()) {
-                returnPost.remove(pageable.getPageSize());
-                hasNext = true;
-            }
-            return new SliceImpl<>(returnPost, pageable, hasNext);
+        @Transactional
+        @Modifying
+        public long addViewCount (Long postId){
+            return queryFactory
+                    .update(post)
+                    .set(post.viewCount, post.viewCount.add(1))
+                    .where(post.postId.eq(postId))
+                    .execute();
         }
     }
-}
