@@ -49,10 +49,6 @@ public class ThunderPostResponseDto {
 
     private Slice<ThunderPostEntity> meets;
 
-    private Slice<MymeetsResponseDto> thunderposts;
-
-    private MymeetsResponseDto meet;
-
     public ThunderPostResponseDto(ThunderPostEntity thunderPost, List<UserInfoResponseDto> users) {
         this.title = thunderPost.getTitle();
         this.nickname = thunderPost.getUser().getNickname();
