@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.thunderpost;
 
+import com.anabada.anabadaBackend.thunderpost.dto.MymeetsResponseDto;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -13,4 +14,6 @@ public interface ThunderPostRepositoryCustom {
     Slice<ThunderPostResponseDto> findAllByAreaAndKeyword(String area, String keyword, Pageable pageable);
 
     List<ThunderPostResponseDto> findHotPost(String area);
+
+    Slice<MymeetsResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable);
 }
