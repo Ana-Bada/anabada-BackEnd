@@ -245,6 +245,93 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .where(thunderPost.thunderPostId.eq(thunderPostId))
                 .execute();
     }
+
+    @Override
+    public Slice<ThunderPostResponseDto> findAllByFilter(String filter, Long userId, Pageable pageable) {
+        List<ThunderPostResponseDto> returnPost;
+
+        if (filter.equals("myHostMeet")) {
+            returnPost = queryFactory.select(Projections.fields(
+                            ThunderPostResponseDto.class,
+                            thunderPost.thunderPostId,
+                            thunderPost.title,
+                            thunderPost.user.nickname,
+                            thunderPost.goalMember,
+                            thunderPost.currentMember,
+                            thunderPost.thumbnailUrl,
+                            thunderPost.endDate,
+                            thunderPost.createdAt
+                    ))
+                    .from(thunderPost)
+                    .where(thunderPost.user.userId.eq(userId))
+                    .orderBy(thunderPost.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize() + 1)
+                    .fetch();
+
+            boolean hasNext = false;
+            if (returnPost.size() > pageable.getPageSize()) {
+                returnPost.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+            return new SliceImpl<>(returnPost, pageable, hasNext);
+
+        } else if (filter.equals("myJoinMeet")) {
+            returnPost = queryFactory.select(Projections.fields(
+                            ThunderPostResponseDto.class,
+                            thunderPost.thunderPostId,
+                            thunderPost.title,
+                            thunderPost.user.nickname,
+                            thunderPost.goalMember,
+                            thunderPost.currentMember,
+                            thunderPost.thumbnailUrl,
+                            thunderPost.endDate,
+                            thunderPost.createdAt
+                    ))
+                    .from(thunderPost)
+                    .join(thunderPost.requestList, thunderRequest)
+                    .where(thunderRequest.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderRequest.user.userId.eq(thunderPost.user.userId)))
+                    .orderBy(thunderPost.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize() + 1)
+                    .fetch();
+
+            boolean hasNext = false;
+            if (returnPost.size() > pageable.getPageSize()) {
+                returnPost.remove(pageable.getPageSize());
+                hasNext = true;
+            }
+            return new SliceImpl<>(returnPost, pageable, hasNext);
+
+        } else {
+            returnPost = queryFactory.select(Projections.fields(
+                            ThunderPostResponseDto.class,
+                            thunderPost.thunderPostId,
+                            thunderPost.title,
+                            thunderPost.user.nickname,
+                            thunderPost.goalMember,
+                            thunderPost.currentMember,
+                            thunderPost.thumbnailUrl,
+                            thunderPost.endDate,
+                            thunderPost.createdAt
+                    ))
+                    .from(thunderPost)
+                    .join(thunderPost.likeList, thunderLike)
+                    .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderLike.user.userId.eq(thunderPost.user.userId)))
+                    .orderBy(thunderPost.createdAt.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize() + 1)
+                    .fetch();
+        }
+
+        boolean hasNext = false;
+        if (returnPost.size() > pageable.getPageSize()) {
+            returnPost.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+        return new SliceImpl<>(returnPost, pageable, hasNext);
+    }
+
     private BooleanExpression areaEq(String area) {
         return area.equals("ALL") ? null : thunderPost.area.eq(area);
     }

@@ -59,4 +59,13 @@ public class ThunderPostController {
                                          @RequestHeader(value = "Authorization") String token) {
         return thunderPostService.getHotPosts(area, token);
     }
+
+    @GetMapping("/api/mymeets")
+    public ResponseEntity<?> getMyMeets(
+            @RequestParam String filter,
+            @RequestParam int page,
+            @RequestParam int size,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return thunderPostService.getMyMeets(filter, userDetails.getUser(), page, size);
+    }
 }
