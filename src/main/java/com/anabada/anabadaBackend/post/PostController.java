@@ -61,4 +61,13 @@ public class PostController {
                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.searchPosts(area, keyword, page, size, userDetails);
     }
+
+    @GetMapping("/api/myposts")
+    public ResponseEntity<?> getMyPosts(
+            @RequestParam String filter,
+            @RequestParam int page,
+            @RequestParam int size,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getMyPosts(filter, userDetails.getUser(), page, size);
+    }
 }

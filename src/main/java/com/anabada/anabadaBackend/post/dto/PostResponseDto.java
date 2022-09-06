@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDateTime;
 
@@ -30,6 +31,7 @@ public class PostResponseDto {
     private String amenity;
 
     //////////////
+
     private long likeCount;
 
     private boolean isLiked;
@@ -38,6 +40,16 @@ public class PostResponseDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
+
+    //////////////
+
+    private Slice<MypostsResponseDto> posts;
+
+    private MypostsResponseDto post;
+
+    public PostResponseDto(Slice<MypostsResponseDto> mypostsResponseDtoSlice) {
+        this.posts = mypostsResponseDtoSlice;
+    }
 
     public PostResponseDto(PostEntity postEntity) {
         this.postId = postEntity.getPostId();
