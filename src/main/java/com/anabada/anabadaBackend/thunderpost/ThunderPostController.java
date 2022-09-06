@@ -1,6 +1,5 @@
 package com.anabada.anabadaBackend.thunderpost;
 
-import com.anabada.anabadaBackend.thunderpost.dto.MymeetResponseDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class ThunderPostController {
     }
 
     @GetMapping("/api/mymeets")
-    public ResponseEntity<MymeetResponseDto> getMyMeets(
+    public ResponseEntity<?> getMyMeets(
             @RequestParam String filter,
             @RequestParam int page,
             @RequestParam int size,

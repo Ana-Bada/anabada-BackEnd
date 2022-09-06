@@ -170,7 +170,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                     .where(post.user.userId.eq(userId))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
@@ -192,7 +192,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                     .where(like.post.postId.eq(post.postId))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;

@@ -145,8 +145,8 @@ public class ThunderPostService {
 
     }
 
-    public ResponseEntity<MymeetResponseDto> getMyMeets(String filter, UserEntity user, int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+    public ResponseEntity<?> getMyMeets(String filter, UserEntity user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(new MymeetResponseDto(
                 true,
                 user.getNickname(),

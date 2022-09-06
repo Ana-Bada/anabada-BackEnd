@@ -267,7 +267,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .where(thunderPost.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
@@ -294,7 +294,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .where(thunderRequest.thunderPost.thunderPostId.eq(thunderPost.thunderPostId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
 
             boolean hasNext = false;
@@ -321,7 +321,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
+                    .limit(pageable.getPageSize() + 1)
                     .fetch();
         }
 

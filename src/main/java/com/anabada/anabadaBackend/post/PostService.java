@@ -97,8 +97,8 @@ public class PostService {
     }
 
     // 내가 작성한(또는 좋아요 한) 게시글 조회
-    public ResponseEntity<ResponseDto> getMyPosts(String filter, UserEntity user, int page, int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+    public ResponseEntity<?> getMyPosts(String filter, UserEntity user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(new ResponseDto(
                 true,
                 user.getNickname(),
