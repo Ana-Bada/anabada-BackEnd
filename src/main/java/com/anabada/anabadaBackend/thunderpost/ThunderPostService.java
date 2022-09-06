@@ -113,14 +113,23 @@ public class ThunderPostService {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, UserDetailsImpl userDetails) {
+    public ResponseEntity<?> searchPosts(String area, String keyword, int page, int size, String token) {
         Pageable pageable = PageRequest.of(page, size);
+
         Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByAreaAndKeyword(area, keyword, pageable);
+
+        if(token.equals("null")){
+            return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+        }
+        String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+
         for(ThunderPostResponseDto responseDto : responseDtos) {
             responseDto.setLiked(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(responseDto.getThunderPostId(),
-                    userDetails.getUser().getUserId()) != null);
+                    user.getUserId()) != null);
             responseDto.setJoined(thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(
-                    responseDto.getThunderPostId(), userDetails.getUser().getUserId()) != null);
+                    responseDto.getThunderPostId(), user.getUserId()) != null);
         }
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
