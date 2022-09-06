@@ -70,6 +70,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+tasks.named("jar") {
+	enabled = false
+}
+
 /*
  * queryDSL 설정 추가
  */
