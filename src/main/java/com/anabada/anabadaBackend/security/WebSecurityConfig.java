@@ -101,7 +101,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-// 회원 관리 처리 API 전부를 login 없이 허용
+                // 회원 관리 처리 API 전부를 login 없이 허용
                 .antMatchers(HttpMethod.POST ,"/api/users/signup").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/beaches").permitAll()
@@ -118,18 +118,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/comments/**").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
-// 그 외 어떤 요청이든 '인증'
+                // 그 외 어떤 요청이든 '인증'
                 .anyRequest().authenticated()
                 .and()
-// [로그아웃 기능]
+                // 로그아웃 기능
                 .logout()
-// 로그아웃 요청 처리 URL
+                // 로그아웃 요청 처리 URL
                 .logoutUrl("/api/logout")
                 .logoutSuccessUrl("/")
                 .logoutSuccessHandler(new customLogoutSuccessHandler())
                 .permitAll();
-// "접근 불가" 페이지 URL 설정
-
+                // "접근 불가" 페이지 URL 설정
 
         http
                 .exceptionHandling()
@@ -213,6 +212,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://ohanabada.com");
+        configuration.addAllowedOrigin("http://www.ohanabada.com");
+        configuration.addAllowedOrigin("https://ohanabada.com");
+        configuration.addAllowedOrigin("https://www.ohanabada.com");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.addExposedHeader("Authorization");
