@@ -17,6 +17,8 @@ public class BeachDataRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws IOException {
+        beachRepository.deleteAll();
+
         ClassPathResource resource = new ClassPathResource("data/beach.txt");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
         String line;
