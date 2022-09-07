@@ -255,12 +255,25 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
+                            thunderPost.content,
                             thunderPost.user.nickname,
+                            thunderPost.user.profileImg,
+                            thunderPost.area,
+                            thunderPost.address,
                             thunderPost.goalMember,
                             thunderPost.currentMember,
                             thunderPost.thumbnailUrl,
+                            thunderPost.meetDate,
                             thunderPost.endDate,
-                            thunderPost.createdAt
+                            thunderPost.viewCount,
+                            thunderPost.createdAt.as("after"),
+                            thunderPost.createdAt,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(thunderLike.count())
+                                            .from(thunderLike)
+                                            .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                            )
                     ))
                     .from(thunderPost)
                     .where(thunderPost.user.userId.eq(userId))
@@ -281,16 +294,29 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
+                            thunderPost.content,
                             thunderPost.user.nickname,
+                            thunderPost.user.profileImg,
+                            thunderPost.area,
+                            thunderPost.address,
                             thunderPost.goalMember,
                             thunderPost.currentMember,
                             thunderPost.thumbnailUrl,
+                            thunderPost.meetDate,
                             thunderPost.endDate,
-                            thunderPost.createdAt
+                            thunderPost.viewCount,
+                            thunderPost.createdAt.as("after"),
+                            thunderPost.createdAt,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(thunderLike.count())
+                                            .from(thunderLike)
+                                            .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                            )
                     ))
                     .from(thunderPost)
                     .join(thunderPost.requestList, thunderRequest)
-                    .where(thunderRequest.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderRequest.user.userId.eq(thunderPost.user.userId)))
+                    .where(thunderRequest.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)
@@ -308,16 +334,29 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             ThunderPostResponseDto.class,
                             thunderPost.thunderPostId,
                             thunderPost.title,
+                            thunderPost.content,
                             thunderPost.user.nickname,
+                            thunderPost.user.profileImg,
+                            thunderPost.area,
+                            thunderPost.address,
                             thunderPost.goalMember,
                             thunderPost.currentMember,
                             thunderPost.thumbnailUrl,
+                            thunderPost.meetDate,
                             thunderPost.endDate,
-                            thunderPost.createdAt
+                            thunderPost.viewCount,
+                            thunderPost.createdAt.as("after"),
+                            thunderPost.createdAt,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(thunderLike.count())
+                                            .from(thunderLike)
+                                            .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId)), "likeCount"
+                            )
                     ))
                     .from(thunderPost)
                     .join(thunderPost.likeList, thunderLike)
-                    .where(thunderLike.thunderPost.thunderPostId.eq(thunderPost.thunderPostId).and(thunderLike.user.userId.eq(thunderPost.user.userId)))
+                    .where(thunderLike.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)

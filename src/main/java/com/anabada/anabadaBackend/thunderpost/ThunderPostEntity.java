@@ -18,6 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @AllArgsConstructor
+@Table (name = "thunderPost")
 public class ThunderPostEntity extends TimeStamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
