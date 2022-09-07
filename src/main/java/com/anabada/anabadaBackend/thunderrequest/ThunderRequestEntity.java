@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ThunderRequestEntity {
     @GeneratedValue
     @Id
-    private Long ThunderRequestId;
+    private Long thunderRequestId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
