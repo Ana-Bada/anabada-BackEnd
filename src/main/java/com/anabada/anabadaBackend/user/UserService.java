@@ -63,7 +63,6 @@ public class UserService {
     }
 
     public String checkRefreshToken(String email) {
-        System.out.println(redisService.getValues(email));
         return redisService.getValues(email);
     }
 
