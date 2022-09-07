@@ -162,8 +162,19 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             PostResponseDto.class,
                             post.postId,
                             post.title,
+                            post.area,
+                            post.thumbnailUrl,
                             post.user.nickname,
-                            post.thumbnailUrl
+                            post.user.profileImg,
+                            post.createdAt.as("after"),
+                            post.createdAt,
+                            post.amenity,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(like.count())
+                                            .from(like)
+                                            .where(like.post.postId.eq(post.postId)), "likeCount"
+                            )
                     ))
                     .from(post)
                     .where(post.user.userId.eq(userId))
@@ -183,8 +194,19 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             PostResponseDto.class,
                             post.postId,
                             post.title,
+                            post.area,
+                            post.thumbnailUrl,
                             post.user.nickname,
-                            post.thumbnailUrl
+                            post.user.profileImg,
+                            post.createdAt.as("after"),
+                            post.createdAt,
+                            post.amenity,
+                            ExpressionUtils.as(
+                                    JPAExpressions
+                                            .select(like.count())
+                                            .from(like)
+                                            .where(like.post.postId.eq(post.postId)), "likeCount"
+                            )
                     ))
                     .from(post)
                     .join(post.likeList, like)

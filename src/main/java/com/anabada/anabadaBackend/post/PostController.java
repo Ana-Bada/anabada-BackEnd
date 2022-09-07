@@ -24,8 +24,8 @@ public class PostController {
     @GetMapping("/api/posts")
     public ResponseEntity<?> getAllPosts(@RequestHeader(value = "Authorization") String token,
                                          @RequestParam(defaultValue = "ALL") String area,
-                                         @RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "20") int size) {
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size) {
         return postService.getAllPosts(token, area, page, size);
     }
 
@@ -33,7 +33,7 @@ public class PostController {
 //    게시글 상세보기
     @GetMapping("/api/posts/{postId}")
     public ResponseEntity<?> getPostDetails(@PathVariable Long postId,
-                                                 @RequestHeader(value = "Authorization") String token) {
+                                            @RequestHeader(value = "Authorization") String token) {
         return postService.getPostDetails(postId, token);
     }
 
@@ -57,16 +57,17 @@ public class PostController {
     @GetMapping("/api/posts/search")
     public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area,
                                          @RequestParam String keyword,
-                                         @RequestParam int page, @RequestParam int size,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
                                          @RequestHeader(value = "Authorization") String token) {
         return postService.searchPosts(area, keyword, page, size, token);
     }
 
     @GetMapping("/api/myposts")
     public ResponseEntity<?> getMyPosts(
-            @RequestParam String filter,
-            @RequestParam int page,
-            @RequestParam int size,
+            @RequestParam(defaultValue = "myWritePost") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.getMyPosts(filter, userDetails.getUser(), page, size);
     }

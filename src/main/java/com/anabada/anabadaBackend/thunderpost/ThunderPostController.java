@@ -17,7 +17,7 @@ public class ThunderPostController {
     @GetMapping("/api/meets")
     public ResponseEntity<?> getThunderPosts(@RequestParam(defaultValue = "ALL") String area,
                                              @RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "5") int size,
+                                             @RequestParam(defaultValue = "10") int size,
                                              @RequestHeader(value = "Authorization") String token) {
         return thunderPostService.getThunderPosts(area, page, size, token);
     }
@@ -48,8 +48,10 @@ public class ThunderPostController {
     }
 
     @GetMapping("/api/meets/search")
-    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area, @RequestParam String keyword,
-                                         @RequestParam int page, @RequestParam int size,
+    public ResponseEntity<?> searchPosts(@RequestParam(defaultValue = "ALL") String area,
+                                         @RequestParam String keyword,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
                                          @RequestHeader(value = "Authorization") String token) {
         return thunderPostService.searchPosts(area, keyword, page, size, token);
     }
@@ -62,9 +64,9 @@ public class ThunderPostController {
 
     @GetMapping("/api/mymeets")
     public ResponseEntity<?> getMyMeets(
-            @RequestParam String filter,
-            @RequestParam int page,
-            @RequestParam int size,
+            @RequestParam(defaultValue = "myHostMeet") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return thunderPostService.getMyMeets(filter, userDetails.getUser(), page, size);
     }
