@@ -19,6 +19,7 @@ public class TestDataRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws IOException {
+        userRepository.deleteAll();
 
         UserEntity testUser1 = new UserEntity("donggyu@gmail.com","안동규", passwordEncoder.encode("qla3456Q!"));
         UserEntity testUser2 = new UserEntity("donggyu1@gmail.com", "동규안", passwordEncoder.encode("qla3456Q!"));
