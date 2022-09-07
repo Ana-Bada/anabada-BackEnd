@@ -188,7 +188,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                     ))
                     .from(post)
                     .join(post.likeList, like)
-                    .where(like.post.postId.eq(post.postId).and(like.user.userId.eq(post.user.userId)))
+                    .where(like.user.userId.eq(userId))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)
