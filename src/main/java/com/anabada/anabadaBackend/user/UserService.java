@@ -32,12 +32,10 @@ public class UserService {
         String nickname = signupRequestDto.getNickname();
         String password = signupRequestDto.getPassword();
         String confirmPassword = signupRequestDto.getConfirmPassword();
-
         Optional<UserEntity> usernameUserFound = userRepository.findByEmail(email);
         if(usernameUserFound.isPresent()){
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 이메일이 존재합니다");
         }
-
         Optional<UserEntity> nicknameUserFound = userRepository.findByNickname(nickname);
         if(nicknameUserFound.isPresent()){
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 닉네임이 존재합니다");
@@ -50,6 +48,7 @@ public class UserService {
         userRepository.save(user);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
+
     public ResponseEntity<?> reissueAccessToken(String token, String refreshToken) {
         String email = jwtDecoder.decodeEmail(token);
         if(jwtDecoder.isValidRefreshToken(refreshToken))
