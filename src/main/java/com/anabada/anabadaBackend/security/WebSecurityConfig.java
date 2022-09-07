@@ -6,7 +6,6 @@ import com.anabada.anabadaBackend.security.filter.JwtAuthFilter;
 import com.anabada.anabadaBackend.security.jwt.HeaderTokenExtractor;
 import com.anabada.anabadaBackend.security.provider.FormLoginAuthProvider;
 import com.anabada.anabadaBackend.security.provider.JwtAuthProvider;
-import com.anabada.anabadaBackend.user.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +31,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -47,18 +45,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
     private final RedisService redisService;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     public WebSecurityConfig(
             JwtAuthProvider jwtAuthProvider,
             HeaderTokenExtractor headerTokenExtractor,
-            RedisService redisService,
-            RefreshTokenRepository refreshTokenRepository
+            RedisService redisService
     ) {
         this.jwtAuthProvider = jwtAuthProvider;
         this.headerTokenExtractor = headerTokenExtractor;
         this.redisService = redisService;
-        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Bean
@@ -154,7 +149,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FormLoginSuccessHandler formLoginSuccessHandler() {
-        return new FormLoginSuccessHandler(redisService, refreshTokenRepository);
+        return new FormLoginSuccessHandler(redisService);
     }
 
     @Bean
@@ -218,7 +213,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://dryblack.shop.s3-website.ap-northeast-2.amazonaws.com");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.addExposedHeader("Authorization");
@@ -235,7 +229,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
         @Override
-        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
             response.setStatus(HttpStatus.OK.value());
             response.setCharacterEncoding("UTF-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -250,7 +244,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
         private final ObjectMapper objectMapper = new ObjectMapper();
         @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");

@@ -25,7 +25,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtDecoder jwtDecoder;
     private final RedisService redisService;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
@@ -64,8 +63,7 @@ public class UserService {
     }
 
     public String checkRefreshToken(String email) {
-//        return redisService.getValues(email);
-        return refreshTokenRepository.findByEmail(email).getRefreshToken();
+        return redisService.getValues(email);
     }
 
     public ResponseEntity<?> checkEmail(String email) {
