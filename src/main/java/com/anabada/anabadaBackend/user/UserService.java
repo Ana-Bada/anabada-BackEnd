@@ -28,22 +28,18 @@ public class UserService {
 
     @Transactional
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
-        String email = signupRequestDto.getEmail();
-        String nickname = signupRequestDto.getNickname();
-        String password = signupRequestDto.getPassword();
-        String confirmPassword = signupRequestDto.getConfirmPassword();
-        Optional<UserEntity> usernameUserFound = userRepository.findByEmail(email);
+        Optional<UserEntity> usernameUserFound = userRepository.findByEmail(signupRequestDto.getEmail());
         if(usernameUserFound.isPresent()){
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 이메일이 존재합니다");
         }
-        Optional<UserEntity> nicknameUserFound = userRepository.findByNickname(nickname);
+        Optional<UserEntity> nicknameUserFound = userRepository.findByNickname(signupRequestDto.getNickname());
         if(nicknameUserFound.isPresent()){
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 닉네임이 존재합니다");
         }
-        if(!password.equals(confirmPassword)){
+        if(!signupRequestDto.getPassword().equals(signupRequestDto.getConfirmPassword())){
             throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
-        UserEntity user = new UserEntity(email,nickname,passwordEncoder.encode(password));
+        UserEntity user = new UserEntity(signupRequestDto, passwordEncoder.encode(signupRequestDto.getPassword()));
 
         userRepository.save(user);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
