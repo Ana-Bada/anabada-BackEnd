@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table (name = "chatRoom")
 public class ChatRoomEntity extends TimeStamped {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

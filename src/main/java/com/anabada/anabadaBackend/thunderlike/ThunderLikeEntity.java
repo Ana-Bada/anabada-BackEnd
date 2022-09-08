@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
+@Table (name = "thunderLike")
 public class ThunderLikeEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
