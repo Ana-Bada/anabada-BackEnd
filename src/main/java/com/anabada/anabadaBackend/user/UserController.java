@@ -48,4 +48,5 @@ public class UserController {
                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.updateProfileImage(profileimageRequestDto, userDetails);
     }
+
 }
