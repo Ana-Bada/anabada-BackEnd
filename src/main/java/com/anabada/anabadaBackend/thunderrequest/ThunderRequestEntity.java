@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
+@Table (name = "thunderRequest")
 public class ThunderRequestEntity {
     @GeneratedValue
     @Id

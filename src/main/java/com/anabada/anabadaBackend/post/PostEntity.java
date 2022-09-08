@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @AllArgsConstructor
+@Table (name = "post")
 public class PostEntity extends TimeStamped {
-
 
     // 이미지 url?????????
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,7 @@ public class PostEntity extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private UserEntity user;
+
     @Column(nullable = false)
     private String title;
 
@@ -47,6 +48,7 @@ public class PostEntity extends TimeStamped {
 
     @Column(nullable = false)
     private String address;
+
     @Column
     private int viewCount;
 

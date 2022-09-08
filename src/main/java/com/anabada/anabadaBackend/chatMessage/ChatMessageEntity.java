@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Entity
+@Table (name = "chatMessage")
 public class ChatMessageEntity extends TimeStamped {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
+@Table (name = "beach")
 public class BeachEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,6 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table (name = "S3ImageUpload")
 public class S3ImageUploadEntity {
     @Id
     @Column(name = "id", nullable = false)

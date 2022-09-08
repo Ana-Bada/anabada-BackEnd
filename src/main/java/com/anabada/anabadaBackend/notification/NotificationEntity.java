@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table (name = "notification")
 public class NotificationEntity extends TimeStamped {
-
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
