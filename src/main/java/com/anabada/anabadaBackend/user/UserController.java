@@ -1,5 +1,6 @@
 package com.anabada.anabadaBackend.user;
 
+import com.anabada.anabadaBackend.user.dto.NicknameChkRequestDto;
 import com.anabada.anabadaBackend.user.dto.ProfileimageRequestDto;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.dto.EmailChkRequestDto;
@@ -27,9 +28,9 @@ public class UserController {
         return userService.checkEmail(emailChkRequestDto.getEmail());
     }
 
-    @PostMapping("/api/users/validation/nickname/{nickname}")
-    public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
-        return userService.checkNickname(nickname);
+    @PostMapping("/api/users/validation/nickname")
+    public ResponseEntity<?> checkNickname(@RequestBody @Valid NicknameChkRequestDto nicknameChkRequestDto) {
+        return userService.checkNickname(nicknameChkRequestDto.getNickname());
     }
 
     @GetMapping("/api/users/info")

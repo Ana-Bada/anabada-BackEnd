@@ -32,6 +32,11 @@ public class UserService {
 
     @Transactional
     public ResponseEntity<?> registerUser(SignupRequestDto signupRequestDto) {
+        if (signupRequestDto.getNickname().contains(" ")) {
+            return new ResponseEntity<>("닉네임에 빈 칸을 사용할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        } else if (signupRequestDto.getNickname().length() > 8) {
+            return new ResponseEntity<>("닉네임은 8자 이하로 설정해 주세요", HttpStatus.BAD_REQUEST);
+        }
         Optional<UserEntity> usernameUserFound = userRepository.findByEmail(signupRequestDto.getEmail());
         if(usernameUserFound.isPresent()){
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 이메일이 존재합니다");
@@ -78,9 +83,14 @@ public class UserService {
     }
 
     public ResponseEntity<?> checkNickname(String nickname) {
+        System.out.println(nickname);
         if(userRepository.findByNickname(nickname).isPresent())
             return new ResponseEntity<>("중복된 닉네임이 존재합니다", HttpStatus.valueOf(409));
-        else return new ResponseEntity<>(HttpStatus.valueOf(200));
+        else if (nickname.contains(" ")) {
+            return new ResponseEntity<>("닉네임에 빈 칸을 사용할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        } else if (nickname.length() > 8) {
+            return new ResponseEntity<>("닉네임은 8자 이하로 설정해 주세요", HttpStatus.BAD_REQUEST);
+        } else return new ResponseEntity<>(HttpStatus.valueOf(200));
     }
 
     @Transactional
