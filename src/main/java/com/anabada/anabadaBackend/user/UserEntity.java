@@ -29,7 +29,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String profileImg;
 
     public UserEntity(SignupRequestDto requestDto, String password, String profileImg) {

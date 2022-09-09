@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.user;
 
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.dto.EmailChkRequestDto;
+import com.anabada.anabadaBackend.user.dto.NicknameChkRequestDto;
 import com.anabada.anabadaBackend.user.dto.ProfileimageRequestDto;
 import com.anabada.anabadaBackend.user.dto.SignupRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -181,8 +182,16 @@ class UserControllerTest {
         public void test1() throws Exception {
             String nickname = "닉네임";
 
-            mockMvc.perform(post("/api/users/validation/nickname/" + nickname)
-                            .with(csrf()))
+            NicknameChkRequestDto chkRequest = NicknameChkRequestDto.builder()
+                    .nickname(nickname)
+                    .build();
+
+            String requestBody = mapper.writeValueAsString(chkRequest);
+
+            mockMvc.perform(post("/api/users/validation/nickname")
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
                     .andExpect(status().isOk());
 
         }
@@ -229,7 +238,7 @@ class UserControllerTest {
 
         @Test
         @Order(2)
-        @DisplayName("프로필 이미지 수정요청 실패(이미지 URL 빈값)")
+        @DisplayName("프로필 이미지 수정요청 실패(이미지 URL 빈 값인 경우)")
         public void test2() throws Exception {
             ProfileimageRequestDto profileimageRequest = ProfileimageRequestDto.builder()
                     .build();
