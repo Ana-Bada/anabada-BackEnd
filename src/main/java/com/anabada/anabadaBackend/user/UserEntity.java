@@ -32,18 +32,18 @@ public class UserEntity {
     @Column
     private String profileImg;
 
-    public UserEntity(SignupRequestDto requestDto, String password) {
+    public UserEntity(SignupRequestDto requestDto, String password, String profileImg) {
         this.email = requestDto.getEmail();
         this.nickname = requestDto.getNickname();
         this.password = password;
-        this.profileImg = "https://applesong.s3.ap-northeast-2.amazonaws.com/97b77cab-712c-422c-b114-2d9faea04a2b_%EC%9C%A0%EC%A0%80%EA%B8%B0%EB%B3%B8%ED%94%84%EC%82%AC.JPG";
+        this.profileImg = profileImg;
     }
 
-    public UserEntity(String email, String nickname, String password) {
+    public UserEntity(String email, String nickname, String password, String profileImg) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
-        this.profileImg = "https://applesong.s3.ap-northeast-2.amazonaws.com/97b77cab-712c-422c-b114-2d9faea04a2b_%EC%9C%A0%EC%A0%80%EA%B8%B0%EB%B3%B8%ED%94%84%EC%82%AC.JPG";
+        this.profileImg = profileImg;
     }
 
     public void updateProfileImage(ProfileimageRequestDto profileimageRequestDto) {
