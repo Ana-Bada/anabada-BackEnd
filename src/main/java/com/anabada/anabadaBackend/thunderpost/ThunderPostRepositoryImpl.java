@@ -215,7 +215,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                 .from(thunderPost)
                 .where(areaEq(area))
                 .orderBy(thunderPost.viewCount.desc())
-                .limit(5)
+                .limit(10)
                 .fetch();
     }
 

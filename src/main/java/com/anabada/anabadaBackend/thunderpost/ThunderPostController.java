@@ -17,7 +17,7 @@ public class ThunderPostController {
     @GetMapping("/api/meets")
     public ResponseEntity<?> getThunderPosts(@RequestParam(defaultValue = "ALL") String area,
                                              @RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "10") int size,
+                                             @RequestParam(defaultValue = "5") int size,
                                              @RequestHeader(value = "Authorization") String token) {
         return thunderPostService.getThunderPosts(area, page, size, token);
     }
