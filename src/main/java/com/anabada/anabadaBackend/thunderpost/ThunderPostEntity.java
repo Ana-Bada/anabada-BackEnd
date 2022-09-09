@@ -27,7 +27,7 @@ public class ThunderPostEntity extends TimeStamped {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(nullable = false)
@@ -42,7 +42,7 @@ public class ThunderPostEntity extends TimeStamped {
     @Column(nullable = false)
     private long currentMember;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String thumbnailUrl;
 
     @Column
