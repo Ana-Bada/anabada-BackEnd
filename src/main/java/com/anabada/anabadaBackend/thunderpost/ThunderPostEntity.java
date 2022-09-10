@@ -7,6 +7,7 @@ import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import com.anabada.anabadaBackend.thunderrequest.ThunderRequestEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 @Table (name = "thunderPost")
 public class ThunderPostEntity extends TimeStamped {
