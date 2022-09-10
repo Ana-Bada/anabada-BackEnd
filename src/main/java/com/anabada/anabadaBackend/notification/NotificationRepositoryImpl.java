@@ -33,7 +33,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryCustom{
         ))
                 .from(notification)
                 .where(notification.post.user.userId.eq(userId))
-                .orderBy(notification.isRead.desc(),notification.createdAt.desc())
+                .orderBy(notification.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
