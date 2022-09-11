@@ -34,7 +34,7 @@ public class PostEntity extends TimeStamped {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String thumbnailUrl;
 
     @Column(nullable = false)
