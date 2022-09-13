@@ -4,15 +4,15 @@ import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.dto.UserInfoResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
 public class ThunderPostResponseDto {
