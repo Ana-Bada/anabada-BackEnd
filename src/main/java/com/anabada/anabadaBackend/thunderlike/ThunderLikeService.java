@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +17,7 @@ public class ThunderLikeService {
     private final ThunderLikeRepositoryImpl thunderLikeRepositoryImpl;
     public ResponseEntity<?> registerLike(Long thunderpostId, UserDetailsImpl userDetails) {
         ThunderPostEntity thunderPost = thunderPostRepository.findById(thunderpostId)
-                .orElseThrow( () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글이 존재하지 않습니다."));
 
         if(thunderPost.getUser().getUserId().equals(userDetails.getUser().getUserId()))
             throw new IllegalArgumentException("자신의 게시글은 좋아요 등록이 불가능합니다.");
@@ -32,6 +33,9 @@ public class ThunderLikeService {
     }
 
     public ResponseEntity<?> deleteLike(Long thunderpostId, UserDetailsImpl userDetails) {
+        if(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(thunderpostId, userDetails.getUser().getUserId()) == null)
+            throw new IllegalArgumentException("좋아요 등록된 글이 아닙니다.");
+
         thunderLikeRepository.deleteById(thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(thunderpostId,userDetails.getUser().getUserId()));
         return new ResponseEntity<>("좋아요 삭제 성공", HttpStatus.OK);
     }

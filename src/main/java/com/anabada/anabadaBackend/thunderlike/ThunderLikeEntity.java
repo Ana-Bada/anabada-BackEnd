@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.thunderlike;
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 @Table (name = "thunderLike")
 public class ThunderLikeEntity {
