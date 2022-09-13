@@ -15,6 +15,7 @@ public class S3ImageUploadEntity {
     @Column(name = "id", nullable = false)
     private Long S3ImageUploadId;
 
+    @Column(columnDefinition = "TEXT")
     private String url;
 
     private String filename;
