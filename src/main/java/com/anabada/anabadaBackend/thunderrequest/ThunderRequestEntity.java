@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.thunderrequest;
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @AllArgsConstructor
+@Builder
 @Table (name = "thunderRequest")
 public class ThunderRequestEntity {
     @GeneratedValue
