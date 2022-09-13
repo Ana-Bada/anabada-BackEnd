@@ -3,11 +3,13 @@ package com.anabada.anabadaBackend.thunderpost;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,12 +21,12 @@ public class ThunderPostController {
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "5") int size,
                                              @RequestHeader(value = "Authorization") String token) {
-        return thunderPostService.getThunderPosts(area, page, size, token);
+        return new ResponseEntity<>(thunderPostService.getThunderPosts(area, page, size, token), HttpStatus.valueOf(200));
     }
 
     @PostMapping("/api/meets")
     public ResponseEntity<?> createThunderPost(@RequestBody @Valid ThunderPostRequestDto thunderPostRequestDto,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) throws ParseException {
         return thunderPostService.createThunderPost(thunderPostRequestDto, userDetails);
     }
 
