@@ -3,8 +3,6 @@ package com.anabada.anabadaBackend.thunderlike;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.thunderpost.ThunderPostEntity;
 import com.anabada.anabadaBackend.thunderpost.ThunderPostRepository;
-import com.anabada.anabadaBackend.thunderpost.ThunderPostRepositoryImpl;
-import com.anabada.anabadaBackend.thunderrequest.ThunderRequestRepository;
 import com.anabada.anabadaBackend.user.UserEntity;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,19 +27,10 @@ public class ThunderLikeServiceTest {
     private ThunderLikeService thunderLikeService;
 
     @Mock
-    private ThunderLikeRepository thunderLikeRepository;
-
-    @Mock
     private ThunderLikeRepositoryImpl thunderLikeRepositoryImpl;
 
     @Mock
-    private ThunderRequestRepository thunderRequestRepository;
-
-    @Mock
     private ThunderPostRepository thunderPostRepository;
-
-    @Mock
-    private ThunderPostRepositoryImpl thunderPostRepositoryImpl;
 
     @Nested
     @DisplayName("모임 참여 요청")
