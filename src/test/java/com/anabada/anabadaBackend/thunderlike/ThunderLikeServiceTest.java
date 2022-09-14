@@ -30,6 +30,9 @@ public class ThunderLikeServiceTest {
     private ThunderLikeRepositoryImpl thunderLikeRepositoryImpl;
 
     @Mock
+    private ThunderLikeRepository thunderLikeRepository;
+
+    @Mock
     private ThunderPostRepository thunderPostRepository;
 
     @Nested

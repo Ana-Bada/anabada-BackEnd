@@ -144,8 +144,9 @@ public class ThunderPostRepositoryTest {
     @Test
     void test4() {
 
-        ThunderPostResponseDto responseDto = thunderPostRepositoryImpl.findByThunderPostId(1L);
-        assertThat(responseDto.getThunderPostId()).isEqualTo(1L);
+        ThunderPostResponseDto responseDto = thunderPostRepositoryImpl.findByThunderPostId(10L);
+
+        assertThat(responseDto.getThunderPostId()).isEqualTo(10L);
         assertThat(responseDto.getArea()).isEqualTo("강원");
         assertThat(responseDto.getNickname()).isEqualTo("test");
     }
@@ -199,13 +200,12 @@ public class ThunderPostRepositoryTest {
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of(page, size);
-
-        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByFilter("myHostMeet", 1L, pageable);
+        Slice<ThunderPostResponseDto> responseDtos = thunderPostRepositoryImpl.findAllByFilter("myHostMeet", 19L, pageable);
         assertThat(responseDtos.getSize()).isEqualTo(10);
         assertThat(responseDtos.getNumberOfElements()).isEqualTo(1);
         assertThat(responseDtos.getContent().get(0).getNickname()).isEqualTo("test");
 
-        Slice<ThunderPostResponseDto> responseDtos1 = thunderPostRepositoryImpl.findAllByFilter("myHostMeet", 3L, pageable);
+        Slice<ThunderPostResponseDto> responseDtos1 = thunderPostRepositoryImpl.findAllByFilter("myHostMeet", 21L, pageable);
         assertThat(responseDtos1.getSize()).isEqualTo(10);
         assertThat(responseDtos1.getNumberOfElements()).isEqualTo(1);
         assertThat(responseDtos1.getContent().get(0).getNickname()).isEqualTo("test2");

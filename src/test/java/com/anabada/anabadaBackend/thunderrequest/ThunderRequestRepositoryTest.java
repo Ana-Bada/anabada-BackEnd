@@ -103,9 +103,9 @@ public class ThunderRequestRepositoryTest {
     @DisplayName("게시글 번호로 조회 성공")
     @Test
     void test1() {
-        List<ThunderRequestEntity> thunderRequests = thunderRequestRepository.findAllByThunderPostThunderPostId(1L);
+        List<ThunderRequestEntity> thunderRequests = thunderRequestRepository.findAllByThunderPostThunderPostId(32L);
         assertThat(thunderRequests.size()).isEqualTo(2);
-        List<ThunderRequestEntity> thunderRequests2 = thunderRequestRepository.findAllByThunderPostThunderPostId(2L);
+        List<ThunderRequestEntity> thunderRequests2 = thunderRequestRepository.findAllByThunderPostThunderPostId(33L);
         assertThat(thunderRequests2.size()).isEqualTo(1);
     }
 
@@ -113,8 +113,8 @@ public class ThunderRequestRepositoryTest {
     @DisplayName("게시글 번호, 유저 아이디로 조회 성공")
     @Test
     void test2() {
-        ThunderRequestEntity thunderRequest = thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(1L, 1L);
-        assertThat(thunderRequest.getThunderPost().getThunderPostId()).isEqualTo(1L);
-        assertThat(thunderRequest.getThunderPost().getUser().getUserId()).isEqualTo(1L);
+        ThunderRequestEntity thunderRequest = thunderRequestRepository.findByThunderPostThunderPostIdAndUserUserId(34L, 34L);
+        assertThat(thunderRequest.getThunderPost().getThunderPostId()).isEqualTo(34L);
+        assertThat(thunderRequest.getThunderPost().getUser().getUserId()).isEqualTo(34L);
     }
 }

@@ -161,7 +161,7 @@ public class ThunderLikeRepositoryTest {
                 .title("제목")
                 .content("내용")
                 .area("강원")
-                .address("강원 양양")
+                .address("강원 양양 죽도해변")
                 .goalMember(15)
                 .currentMember(0)
                 .thumbnailUrl(".jpeg")
@@ -179,11 +179,11 @@ public class ThunderLikeRepositoryTest {
                 .build();
 
         thunderLikeRepository.save(thunderLike);
-        Optional<ThunderLikeEntity> foundLike = thunderLikeRepository.findById(6L);
-        assertThat(foundLike.get().getThunderLikeId()).isEqualTo(6L);
+        Optional<ThunderLikeEntity> foundLike = thunderLikeRepository.findById(11L);
+        assertThat(foundLike.get().getThunderLikeId()).isEqualTo(11L);
         assertThat(foundLike.get().getThunderPost().getTitle()).isEqualTo("제목");
-        assertThat(foundLike.get().getThunderPost().getAddress()).isEqualTo("강원 양양");
-        assertThat(foundLike.get().getUser().getUserId()).isEqualTo(4L);
+        assertThat(foundLike.get().getThunderPost().getAddress()).isEqualTo("강원 양양 죽도해변");
+        assertThat(foundLike.get().getUser().getUserId()).isEqualTo(28L);
         assertThat(foundLike.get().getUser().getNickname()).isEqualTo("test4");
     }
 
@@ -191,9 +191,10 @@ public class ThunderLikeRepositoryTest {
     @DisplayName("게시글 아이디, 유저 아이디 값으로 조회 성공")
     @Test
     void test3() {
-        Long id = thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(1L, 1L);
-        Long id2 = thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(2L, 1L);
-        assertThat(id).isEqualTo(1L);
-        assertThat(id2).isEqualTo(4L);
+        System.out.println(thunderLikeRepository.findAll().get(0).getThunderPost().getThunderPostId());
+        Long id = thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(29L, 29L);
+        Long id2 = thunderLikeRepositoryImpl.findByThunderPostIdAndUserId(30L, 30L);
+        assertThat(id).isEqualTo(12L);
+        assertThat(id2).isEqualTo(16L);
     }
 }
