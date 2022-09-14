@@ -3,7 +3,6 @@ package com.anabada.anabadaBackend.thunderpost;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,7 @@ public class ThunderPostController {
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "5") int size,
                                              @RequestHeader(value = "Authorization") String token) {
-        return new ResponseEntity<>(thunderPostService.getThunderPosts(area, page, size, token), HttpStatus.valueOf(200));
+        return thunderPostService.getThunderPosts(area, page, size, token);
     }
 
     @PostMapping("/api/meets")
