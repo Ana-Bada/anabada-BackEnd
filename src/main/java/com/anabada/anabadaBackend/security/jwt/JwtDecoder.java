@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,13 @@ public class JwtDecoder {
 
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    public static String secretKey;
+
+    @Value("${jwt.token.key}")
+    public void setSecretKey(String key) {
+        secretKey = key;
+    }
 
     public String decodeUsername(String token) {
 
@@ -47,7 +55,7 @@ public class JwtDecoder {
         DecodedJWT jwt = null;
 
         try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
             JWTVerifier verifier = JWT
                     .require(algorithm)
                     .build();

@@ -3,9 +3,11 @@ package com.anabada.anabadaBackend.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public final class JwtTokenUtils {
 
     private static final int SEC = 1;
@@ -20,17 +22,13 @@ public final class JwtTokenUtils {
 
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
-    //TODO : 시크릿키 변경 properties + @Value
 
-    @Value("${secret-key}")
-    private static String secret;
+    public static String secretKey;
 
-    public static final String JWT_SECRET = secret;
-//    private final RedisService redisService;
-//
-//    public JwtTokenUtils(RedisService redisService) {
-//        this.redisService = redisService;
-//    }
+    @Value("${jwt.token.key}")
+    public void setSecretKey(String key) {
+        secretKey = key;
+    }
 
     public static String generateJwtToken(String email) {
         String token = null;
@@ -65,6 +63,6 @@ public final class JwtTokenUtils {
     }
 
     private static Algorithm generateAlgorithm() {
-        return Algorithm.HMAC256(JWT_SECRET);
+        return Algorithm.HMAC256(secretKey);
     }
 }
