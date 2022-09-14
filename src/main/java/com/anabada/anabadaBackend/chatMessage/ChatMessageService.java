@@ -16,6 +16,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -30,8 +31,6 @@ public class ChatMessageService {
 
     private final UserRepository userRepository;
 
-    private final RedisRepository redisRepository;
-
     private final JwtDecoder jwtDecoder;
 
     private final ChannelTopic channelTopic;
@@ -40,16 +39,15 @@ public class ChatMessageService {
 
     public ResponseEntity<?> getMessages(Long roomId, int page, int size, UserDetailsImpl userDetails) {
         ChatRoomEntity chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 존재하지 않습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 채팅방입니다."));
         Pageable pageable = PageRequest.of(page, size);
         Slice<MessageDto> messageDtos = chatMessageRepositoryImpl.findAll(roomId, pageable);
-//        Slice<RedisChat> redisChats = redisRepository.findAllByRoomId(Long.toString(roomId), pageable);
         return new ResponseEntity<>(messageDtos, HttpStatus.OK);
     }
 
     public ResponseEntity<?> sendMessage(String token, MessageDto message, Long roomId) {
         ChatRoomEntity room = chatRoomRepository.findById(roomId)
-                .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 채팅방입니다."));
         String email = jwtDecoder.decodeEmail(token.split(" ")[1]);
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow( () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
@@ -58,8 +56,6 @@ public class ChatMessageService {
         message.setRoomId(roomId);
         message.setNickname(user.getNickname());
         redisPublisher.publish(channelTopic, message);
-//        RedisChat redisChat = new RedisChat(room, message.getContent(), user);
-//        redisRepository.save(redisChat);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
