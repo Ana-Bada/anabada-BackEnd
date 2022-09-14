@@ -5,6 +5,7 @@ import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.common.TimeStamped;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 @Entity
 @Table (name = "chatMessage")
 public class ChatMessageEntity extends TimeStamped {

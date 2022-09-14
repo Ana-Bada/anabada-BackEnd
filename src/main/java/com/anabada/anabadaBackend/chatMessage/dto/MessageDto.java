@@ -1,13 +1,13 @@
 package com.anabada.anabadaBackend.chatMessage.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
