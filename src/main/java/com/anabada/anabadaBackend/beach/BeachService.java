@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public class BeachService {
     private final BeachRepository beachRepository;
 
-    public BeachResponseDto getBeachWeather(Long beachId){
+    public ResponseEntity<?> getBeachWeather(Long beachId){
         BeachEntity beach = beachRepository.findById(beachId)
-                .orElseThrow( ()-> new IllegalArgumentException("해변이 존재하지 않습니다."));
-        return new BeachResponseDto(beach);
+                .orElseThrow( ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "해변이 존재하지 않습니다."));
+        return new ResponseEntity<>(new BeachResponseDto(beach), HttpStatus.OK);
     }
 
     public ResponseEntity<?> getBeach() {
