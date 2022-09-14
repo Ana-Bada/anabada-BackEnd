@@ -12,6 +12,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -27,7 +28,8 @@ public class ChatRoomService {
 
     public ResponseEntity<?> getRooms(UserDetailsImpl userDetails, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        UserEntity user = userRepository.findById(userDetails.getUser().getUserId()).get();
+        UserEntity user = userRepository.findById(userDetails.getUser().getUserId())
+                .orElseThrow( () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
         Slice<RoomResponseDto> roomList = chatRoomRepositoryImpl
                 .findByUser(user.getUserId(), pageable);
         for(RoomResponseDto room : roomList) {
@@ -61,7 +63,7 @@ public class ChatRoomService {
 
     public ResponseEntity<?> getRoomDetails(UserDetailsImpl userDetails, Long roomId) {
         ChatRoomEntity chatRoom = chatRoomRepository.findById(roomId)
-                .orElseThrow( () -> new IllegalArgumentException("방이 존재하지 않습니다"));
+                .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "방이 존재하지 않습니다"));
         if (!chatRoom.getSender().equals(userDetails.getUser()) && !chatRoom.getReceiver().equals(userDetails.getUser())){
             return new ResponseEntity<>("해당 채팅방에 속한 유저만 채팅방을 조회할 수 있습니다", HttpStatus.BAD_REQUEST);
         }
