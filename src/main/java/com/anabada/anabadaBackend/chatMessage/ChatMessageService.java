@@ -4,7 +4,6 @@ import com.anabada.anabadaBackend.chatMessage.dto.MessageDto;
 import com.anabada.anabadaBackend.chatRoom.ChatRoomEntity;
 import com.anabada.anabadaBackend.chatRoom.ChatRoomRepository;
 import com.anabada.anabadaBackend.redis.RedisPublisher;
-import com.anabada.anabadaBackend.redis.RedisRepository;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.security.jwt.JwtDecoder;
 import com.anabada.anabadaBackend.user.UserEntity;
