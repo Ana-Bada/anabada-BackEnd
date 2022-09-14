@@ -218,8 +218,8 @@ public class ChatRoomServiceTest {
                     .receiver(receiver)
                     .build();
 
-            when(userRepository.findById(userDetails.getUser().getUserId()))
-                    .thenReturn(Optional.empty());
+            when(chatRoomRepository.findById(1L))
+                    .thenReturn(Optional.of(chatRoom));
 
             ResponseEntity<?> response = chatRoomService.getRoomDetails(userDetails, 1L);
 

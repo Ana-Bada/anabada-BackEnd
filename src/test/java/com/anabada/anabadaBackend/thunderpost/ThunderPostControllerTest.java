@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,6 +25,9 @@ public class ThunderPostControllerTest {
 
     @InjectMocks
     private ThunderPostController thunderPostController;
+
+    @Mock
+    private ThunderPostService thunderPostService;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
