@@ -216,6 +216,10 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                     .limit(pageable.getPageSize() + 1)
                     .fetch();
 
+            for (PostResponseDto responseDto : returnPost) {
+                responseDto.setLiked(true);
+            }
+
             boolean hasNext = false;
             if (returnPost.size() > pageable.getPageSize()) {
                 returnPost.remove(pageable.getPageSize());
