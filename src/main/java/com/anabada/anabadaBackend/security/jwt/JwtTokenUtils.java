@@ -2,6 +2,7 @@ package com.anabada.anabadaBackend.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
@@ -20,7 +21,11 @@ public final class JwtTokenUtils {
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
     //TODO : 시크릿키 변경 properties + @Value
-    public static final String JWT_SECRET = "jwt_secret_!@#$%";
+
+    @Value("${secret-key}")
+    private static String secret;
+
+    public static final String JWT_SECRET = secret;
 //    private final RedisService redisService;
 //
 //    public JwtTokenUtils(RedisService redisService) {
