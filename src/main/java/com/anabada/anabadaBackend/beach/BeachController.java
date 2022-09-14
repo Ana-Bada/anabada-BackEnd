@@ -13,11 +13,6 @@ public class BeachController {
 
     private final BeachService beachService;
 
-    @GetMapping("/api/beaches")
-    public ResponseEntity<?> getBeaches(){
-        return beachService.getBeaches();
-    }
-
     @GetMapping("/api/beaches/{beachId}")
     public ResponseEntity<?> getBeachWeather(@PathVariable Long beachId){
         return new ResponseEntity<>(beachService.getBeachWeather(beachId), HttpStatus.OK);
