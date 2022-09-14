@@ -322,6 +322,10 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .limit(pageable.getPageSize() + 1)
                     .fetch();
 
+            for (ThunderPostResponseDto responseDto : returnPost) {
+                responseDto.setJoined(true);
+            }
+
             boolean hasNext = false;
             if (returnPost.size() > pageable.getPageSize()) {
                 returnPost.remove(pageable.getPageSize());
@@ -361,6 +365,11 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize() + 1)
                     .fetch();
+
+            for (ThunderPostResponseDto responseDto : returnPost) {
+                responseDto.setLiked(true);
+            }
+
         }
 
         boolean hasNext = false;
