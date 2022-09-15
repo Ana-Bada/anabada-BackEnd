@@ -15,7 +15,7 @@ plugins {
 
 group = 'com.anabada'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = "11"
 
 configurations {
 	compileOnly {
@@ -57,11 +57,21 @@ dependencies {
 	// 테스트 코드를 위한 Lombok 라이브러리
 	testCompileOnly 'org.projectlombok:lombok:1.18.12'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+	//JSON simple
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	//Aws S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// 유효성 검사
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named("jar") {
+	enabled = false
 }
 
 /*
@@ -89,3 +99,5 @@ configurations {
 	}
 	querydsl.extendsFrom compileClasspath
 }
+
+targetCompatibility = JavaVersion.VERSION_11

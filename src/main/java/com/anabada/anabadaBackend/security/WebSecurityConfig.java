@@ -1,6 +1,6 @@
 package com.anabada.anabadaBackend.security;
 
-import com.anabada.anabadaBackend.common.RedisService;
+import com.anabada.anabadaBackend.redis.RedisService;
 import com.anabada.anabadaBackend.security.filter.FormLoginFilter;
 import com.anabada.anabadaBackend.security.filter.JwtAuthFilter;
 import com.anabada.anabadaBackend.security.jwt.HeaderTokenExtractor;
@@ -31,7 +31,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -102,23 +101,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-// 회원 관리 처리 API 전부를 login 없이 허용
+                // 회원 관리 처리 API 전부를 login 없이 허용
                 .antMatchers(HttpMethod.POST ,"/api/users/signup").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/users/login").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beaches").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beach").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/beaches/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/users/reissue").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/validation/email").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/users/validation/nickname/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/meets").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/meets/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/posts").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/posts/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/comments").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/comments/**").permitAll()
                 .antMatchers("/socket").permitAll()
                 .antMatchers("/socket/**").permitAll()
-// 그 외 어떤 요청이든 '인증'
+                // 그 외 어떤 요청이든 '인증'
                 .anyRequest().authenticated()
                 .and()
-// [로그아웃 기능]
+                // 로그아웃 기능
                 .logout()
-// 로그아웃 요청 처리 URL
+                // 로그아웃 요청 처리 URL
                 .logoutUrl("/api/logout")
                 .logoutSuccessUrl("/")
                 .logoutSuccessHandler(new customLogoutSuccessHandler())
                 .permitAll();
-// "접근 불가" 페이지 URL 설정
-
+                // "접근 불가" 페이지 URL 설정
 
         http
                 .exceptionHandling()
@@ -163,6 +173,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST,/api/users/reissue");
         skipPathList.add("GET,/socket");
         skipPathList.add("GET,/socket/**");
+        skipPathList.add("GET,/api/beaches");
+        skipPathList.add("GET,/api/beaches/**");
+        skipPathList.add("POST,/api/users/reissue");
+        skipPathList.add("GET,/api/beach");
+        skipPathList.add("POST,/api/users/validation/email");
+        skipPathList.add("POST,/api/users/validation/nickname/**");
+        skipPathList.add("GET,/api/meets");
+        skipPathList.add("GET,/api/meets/**");
+        skipPathList.add("GET,/api/posts");
+        skipPathList.add("GET,/api/posts/**");
+        skipPathList.add("GET,/api/comments");
+        skipPathList.add("GET,/api/comments/**");
+
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
@@ -189,9 +212,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://dryblack.shop.s3-website.ap-northeast-2.amazonaws.com");
+        configuration.addAllowedOrigin("http://ohanabada.com");
+        configuration.addAllowedOrigin("http://www.ohanabada.com");
+        configuration.addAllowedOrigin("https://ohanabada.com");
+        configuration.addAllowedOrigin("https://www.ohanabada.com");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("RefreshToken");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -204,7 +232,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
         @Override
-        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
             response.setStatus(HttpStatus.OK.value());
             response.setCharacterEncoding("UTF-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -219,7 +247,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
         private final ObjectMapper objectMapper = new ObjectMapper();
         @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
