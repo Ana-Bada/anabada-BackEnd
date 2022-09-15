@@ -33,11 +33,11 @@ jobs:
         run: touch ./src/main/resources/application.properties
         shell: bash
 
-      - name: make application.properties
+      - name: make application-API-KEY.properties
         run: touch ./src/main/resources/application-API-KEY.properties
         shell: bash
 
-      - name: make application.properties
+      - name: make cloud-aws.properties
         run: touch ./src/main/resources/cloud-aws.properties
         shell: bash
 
@@ -46,11 +46,11 @@ jobs:
         shell: bash
 
       - name: deliver application-API-KEY.properties
-        run: echo "${{ secrets.API_KEY }}" > ./src/test/resources/application-API-KEY.properties
+        run: echo "${{ secrets.API_KEY }}" > ./src/main/resources/application-API-KEY.properties
         shell: bash
 
-      - name: deliver application-API-KEY.properties
-        run: echo "${{ secrets.CLOUD_AWS }}" > ./src/test/resources/cloud.aws.properties
+      - name: deliver cloud.aws.properties
+        run: echo "${{ secrets.CLOUD_AWS }}" > ./src/main/resources/cloud.aws.properties
         shell: bash
 
       - name: Grant execute permission for gradlew
