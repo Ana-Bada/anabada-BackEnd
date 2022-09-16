@@ -3,6 +3,8 @@ package com.anabada.anabadaBackend.post.dto;
 import com.anabada.anabadaBackend.S3ImageUpload.S3ImageUploadEntity;
 import com.anabada.anabadaBackend.post.PostEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class PostDetailsResponseDto {
 
     private Long postId;
@@ -61,7 +65,11 @@ public class PostDetailsResponseDto {
         this.viewCount = postEntity.getViewCount();
         this.likeCount = postEntity.getLikeList().size();
         this.isLiked = false;
-        this.after = getAfter(postEntity.getCreatedAt());
+         if(getCreatedAt() != null){
+             this.after = getAfter(postEntity.getCreatedAt());
+        } else {
+             this.after = "? 전";
+         }
         this.createdAt = postEntity.getCreatedAt();
     }
 
@@ -72,7 +80,6 @@ public class PostDetailsResponseDto {
     public String getAfter(LocalDateTime after) {
         LocalDateTime now = LocalDateTime.now();
         String timestamp = "";
-
         if(now.getYear() != after.getYear()){
             timestamp = timestamp + (now.getYear()-after.getYear()) + "년 전";
         }else if(now.getMonthValue() != after.getMonthValue()){
