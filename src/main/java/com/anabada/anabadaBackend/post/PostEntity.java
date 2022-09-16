@@ -6,6 +6,7 @@ import com.anabada.anabadaBackend.like.LikeEntity;
 import com.anabada.anabadaBackend.post.dto.PostRequestDto;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 public class PostEntity extends TimeStamped {
 
@@ -90,5 +92,6 @@ public class PostEntity extends TimeStamped {
                     .collect(Collectors.toList());
         }
     }
+
 
 }
