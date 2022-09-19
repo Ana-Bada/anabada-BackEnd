@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.thunderpost;
 import com.anabada.anabadaBackend.thunderlike.QThunderLikeEntity;
 import com.anabada.anabadaBackend.thunderpost.dto.ThunderPostResponseDto;
 import com.anabada.anabadaBackend.thunderrequest.QThunderRequestEntity;
+import com.anabada.anabadaBackend.user.QUserEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -25,6 +26,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
     QThunderPostEntity thunderPost = QThunderPostEntity.thunderPostEntity;
     QThunderLikeEntity thunderLike = QThunderLikeEntity.thunderLikeEntity;
     QThunderRequestEntity thunderRequest = QThunderRequestEntity.thunderRequestEntity;
+    QUserEntity user = QUserEntity.userEntity;
 
     @Override
     public Slice<ThunderPostResponseDto> findAllByArea(String area, Pageable pageable) {
@@ -53,6 +55,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         )
                 ))
                 .from(thunderPost)
+                .innerJoin(thunderPost.user, user)
                 .where(areaEq(area))
                 .orderBy(thunderPost.createdAt.desc())
                 .offset(pageable.getOffset())
@@ -95,6 +98,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         )
                 ))
                 .from(thunderPost)
+                .innerJoin(thunderPost.user, user)
                 .where(thunderPost.thunderPostId.eq(thunderPostId))
                 .fetchOne();
     }
@@ -127,6 +131,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             )
                     ))
                     .from(thunderPost)
+                    .innerJoin(thunderPost.user, user)
                     .where(thunderPost.title.contains(keyword).or(thunderPost.content.contains(keyword))
                             .or(thunderPost.address.contains(keyword)))
                     .orderBy(thunderPost.createdAt.desc())
@@ -168,6 +173,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             )
                     ))
                     .from(thunderPost)
+                    .innerJoin(thunderPost.user, user)
                     .where(areaEq(area).and(thunderPost.title.contains(keyword))
                             .or(areaEq(area).and(thunderPost.content.contains(keyword)))
                             .or(areaEq(area).and(thunderPost.address.contains(keyword))))
@@ -213,6 +219,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                         )
                 ))
                 .from(thunderPost)
+                .innerJoin(thunderPost.user, user)
                 .where(areaEq(area))
                 .orderBy(thunderPost.viewCount.desc())
                 .limit(10)
@@ -276,6 +283,7 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             )
                     ))
                     .from(thunderPost)
+                    .innerJoin(thunderPost.user, user)
                     .where(thunderPost.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
@@ -315,7 +323,8 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             )
                     ))
                     .from(thunderPost)
-                    .join(thunderPost.requestList, thunderRequest)
+                    .innerJoin(thunderPost.user, user)
+                    .innerJoin(thunderPost.requestList, thunderRequest)
                     .where(thunderRequest.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
@@ -359,7 +368,8 @@ public class ThunderPostRepositoryImpl implements ThunderPostRepositoryCustom {
                             )
                     ))
                     .from(thunderPost)
-                    .join(thunderPost.likeList, thunderLike)
+                    .innerJoin(thunderPost.user, user)
+                    .innerJoin(thunderPost.likeList, thunderLike)
                     .where(thunderLike.user.userId.eq(userId))
                     .orderBy(thunderPost.createdAt.desc())
                     .offset(pageable.getOffset())
