@@ -3,6 +3,7 @@ package com.anabada.anabadaBackend.post;
 
 import com.anabada.anabadaBackend.like.QLikeEntity;
 import com.anabada.anabadaBackend.post.dto.PostResponseDto;
+import com.anabada.anabadaBackend.user.QUserEntity;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,6 +27,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
     QPostEntity post = QPostEntity.postEntity;
 
     QLikeEntity like = QLikeEntity.likeEntity;
+    QUserEntity user = QUserEntity.userEntity;
 
     @Override
     public Slice<PostResponseDto> findAllByArea(String area, Pageable pageable) {
@@ -48,6 +50,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                         )
                 ))
                 .from(post)
+                .innerJoin(post.user, user)
                 .where(areaEq(area))
                 .orderBy(post.createdAt.desc())
                 .offset(pageable.getOffset())
@@ -87,6 +90,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             )
                     ))
                     .from(post)
+                    .innerJoin(post.user, user)
                     .where(post.title.contains(keyword).or(post.content.contains(keyword))
                             .or(post.address.contains(keyword)))
                     .orderBy(post.createdAt.desc())
@@ -121,6 +125,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             )
                     ))
                     .from(post)
+                    .innerJoin(post.user, user)
                     .where(areaEq(area).and(post.title.contains(keyword)).or(areaEq(area).and(post.content.contains(keyword)))
                             .or(areaEq(area).and(post.address.contains(keyword))))
                     .orderBy(post.createdAt.desc())
@@ -177,6 +182,7 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             )
                     ))
                     .from(post)
+                    .innerJoin(post.user, user)
                     .where(post.user.userId.eq(userId))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
@@ -209,7 +215,8 @@ public class PostRepositoryImpl implements PostRepositoryCutsom {
                             )
                     ))
                     .from(post)
-                    .join(post.likeList, like)
+                    .innerJoin(post.user, user)
+                    .innerJoin(post.likeList, like)
                     .where(like.user.userId.eq(userId))
                     .orderBy(post.createdAt.desc())
                     .offset(pageable.getOffset())
