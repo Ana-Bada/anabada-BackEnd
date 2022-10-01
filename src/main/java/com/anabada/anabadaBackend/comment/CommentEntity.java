@@ -6,6 +6,7 @@ import com.anabada.anabadaBackend.post.PostEntity;
 import com.anabada.anabadaBackend.security.UserDetailsImpl;
 import com.anabada.anabadaBackend.user.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 @Table (name = "comment")
 public class CommentEntity extends TimeStamped {
